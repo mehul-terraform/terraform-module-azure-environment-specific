@@ -1,0 +1,5 @@
+az group create --location eastus --name terraform
+
+az storage account create --name projectbackendstorage01 --resource-group terraform --location eastus --sku Standard_ZRS --encryption-services blob
+
+az storage container create --account-name projectbackendstorage01 --name projectbackendstorage01

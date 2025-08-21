@@ -1,0 +1,153 @@
+resource "azurerm_cdn_frontdoor_profile" "frontdoor_profile" {
+  name                = var.front_door_name
+  resource_group_name = var.resource_group_name
+  sku_name            = var.front_door_sku_name
+ 
+  tags = merge(var.tags, var.extra_tags)
+}
+ 
+resource "azurerm_cdn_frontdoor_endpoint" "frontend_endpoint" {
+  name                     = var.frontend_endpoint_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+ 
+  tags = merge(var.tags, var.extra_tags)
+}
+
+resource "azurerm_cdn_frontdoor_endpoint" "backend_endpoint" {
+  name                     = var.backend_endpoint_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+ 
+  tags = merge(var.tags, var.extra_tags)
+}
+ 
+resource "azurerm_cdn_frontdoor_origin_group" "frontend_origin_group" {
+  name                     = var.frontend_origin_group_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+  session_affinity_enabled = true
+ 
+  load_balancing {
+    sample_size                        = 4
+    successful_samples_required        = 2
+    additional_latency_in_milliseconds = 1000
+  }
+ 
+  health_probe {
+    path                = "/"
+    request_type        = "HEAD"
+    protocol            = "Https"
+    interval_in_seconds = 60
+  }
+}
+ 
+resource "azurerm_cdn_frontdoor_origin" "frontend_origin" {
+  name                          = var.frontend_origin_name
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.frontend_origin_group.id
+  host_name                      = var.host_frontend_domain_name
+  origin_host_header             = var.host_frontend_domain_name
+  http_port                      = 80
+  https_port                     = 443
+  certificate_name_check_enabled = true
+  enabled                        = true
+}
+ 
+resource "azurerm_cdn_frontdoor_origin_group" "backend_origin_group" {
+  name                     = var.backend_origin_group_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+  session_affinity_enabled = false
+ 
+  load_balancing {
+    sample_size                        = 2
+    successful_samples_required        = 1
+    additional_latency_in_milliseconds = 1000
+  }
+ 
+  health_probe {
+    path                = "/api/ping"
+    request_type        = "GET"
+    protocol            = "Https"
+    interval_in_seconds = 255
+  }
+}
+ 
+resource "azurerm_cdn_frontdoor_origin" "backend_origin" {
+  name                          = var.backend_origin_name
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.backend_origin_group.id
+ 
+  host_name                      = var.host_backend_domain_name
+  origin_host_header             = var.host_backend_domain_name
+  http_port                      = 80
+  https_port                     = 443
+  certificate_name_check_enabled = true
+  enabled                        = true
+}
+ 
+resource "azurerm_cdn_frontdoor_route" "frontend" {
+  name                            = var.frontend_route_name
+  cdn_frontdoor_endpoint_id       = azurerm_cdn_frontdoor_endpoint.frontend_endpoint.id
+  cdn_frontdoor_origin_group_id   = azurerm_cdn_frontdoor_origin_group.frontend_origin_group.id
+  cdn_frontdoor_origin_ids        = [azurerm_cdn_frontdoor_origin.frontend_origin.id]
+  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.frontend_domain.id]
+  
+  supported_protocols    = ["Http", "Https"]
+  patterns_to_match      = ["/*"]
+  forwarding_protocol    = "HttpsOnly"
+  https_redirect_enabled = true
+  link_to_default_domain = true
+  enabled                = true
+}
+ 
+resource "azurerm_cdn_frontdoor_route" "backend" {
+  name                            = var.backend_route_name
+  cdn_frontdoor_endpoint_id       = azurerm_cdn_frontdoor_endpoint.backend_endpoint.id
+  cdn_frontdoor_origin_group_id   = azurerm_cdn_frontdoor_origin_group.backend_origin_group.id
+  cdn_frontdoor_origin_ids        = [azurerm_cdn_frontdoor_origin.backend_origin.id]
+  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.backend_domain.id]
+ 
+  supported_protocols    = ["Http", "Https"]
+  patterns_to_match      = ["/api/*"]
+  forwarding_protocol    = "HttpsOnly"
+  https_redirect_enabled = true
+  link_to_default_domain = true
+  enabled                = true
+}
+ 
+resource "azurerm_cdn_frontdoor_custom_domain" "frontend_domain" {
+  name                     = var.frontend_domain_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+  host_name                = var.host_frontend_domain_name
+ 
+  tls {
+    certificate_type = "ManagedCertificate"
+  }
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain" "backend_domain" {
+  name                     = var.backend_domain_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+  host_name                = var.host_backend_domain_name
+ 
+  tls {
+    certificate_type = "ManagedCertificate"
+  }
+}
+/**  
+# Creating Web Application Firewall policy for Frontdoor
+resource "azurerm_cdn_frontdoor_security_policy" "example" {
+  name                     = "${var.front_door_name}-security-policy"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+ 
+  security_policies {
+    firewall {
+      cdn_frontdoor_firewall_policy_id = var.waf_policy_link_id
+ 
+ 
+      association {
+        domain {
+          cdn_frontdoor_domain_id = azurerm_cdn_frontdoor_custom_domain.frontend_domain.id
+        }
+        patterns_to_match = ["/*"]
+      }
+    }
+  }
+}
+**/

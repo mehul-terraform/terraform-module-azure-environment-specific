@@ -1,0 +1,13 @@
+
+MssqlServer/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.36.0/windows_amd64/terraform-provider-azurerm_v2.36.0_x5.exe
+MssqlServer/.terraform.lock.hcl
+MssqlServer/.terraform/terraform.tfstate
+Default/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.40.0/windows_amd64/terraform-provider-azurerm_v2.40.0_x5.exe
+Default/terraform.tfstate
+.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.40.0/windows_amd64/terraform-provider-azurerm_v2.40.0_x5.exe
+04-VirtualMachine/terraform.tfstate
+*.tfstate
+*.backup
+terraform.tfstate.backup
+Terraform/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.40.0/windows_amd64/terraform-provider-azurerm_v2.40.0_x5.exe
+Terraform/.terraform.lock.hcl
