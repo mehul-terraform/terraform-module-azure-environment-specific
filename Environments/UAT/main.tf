@@ -22,7 +22,7 @@ provider "azurerm" {
 # 01-ResourceGroup
 
 module "resource_group" {
-  source = "./Modules/01-ResourceGroup"
+  source = "./Terraform/01-ResourceGroup"
   resource_group_name = var.resource_group_name
   location            = var.location
   tags                = local.tags  
@@ -32,7 +32,7 @@ module "resource_group" {
 # 02-VirtualNetwork
 
 module "virtual_network" {
-  source = "./Modules/02-VirtualNetwork"
+  source = "./Terraform/02-VirtualNetwork"
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
   virtual_network_name = var.virtual_network_name 
@@ -45,7 +45,7 @@ module "virtual_network" {
 # 03-NetworkSecurityGroup
 
 module "network_security_group" {
-  source                                = "./Modules/03-NetworkSecurityGroup"
+  source                                = "./Terraform/03-NetworkSecurityGroup"
   resource_group_name                   = module.resource_group.name
   location                              = module.resource_group.location 
   network_security_group_name           = var.network_security_group_name  
@@ -58,7 +58,7 @@ module "network_security_group" {
 # 04-AppServicePlan
 
 module "service_plan" {
-  source              = "./Modules/04-AppServicePlan"
+  source              = "./Terraform/04-AppServicePlan"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_name   = var.service_plan_name    
@@ -72,7 +72,7 @@ module "service_plan" {
 # 05-WebApp
 
 module "azurerm_linux_web_app" {
-  source                   = "./Modules/05-WebApp"
+  source                   = "./Terraform/05-WebApp"
   resource_group_name      = module.resource_group.name
   location                 = module.resource_group.location  
   linux_web_app_name       = var.linux_web_app_name
@@ -89,7 +89,7 @@ module "azurerm_linux_web_app" {
 # 06-StorageAccount
 
 module "storage_account" {
-  source                             = "./Modules/06-StorageAccount"
+  source                             = "./Terraform/06-StorageAccount"
   resource_group_name                = module.resource_group.name
   location                           = module.resource_group.location
   storage_account_name               = var.storage_account_name
@@ -103,7 +103,7 @@ module "storage_account" {
 # 07-PostgresSQLFlexible
 
 module "postgre_sql" {
-  source                          = "./Modules/07-PostgresSQL"  
+  source                          = "./Terraform/07-PostgresSQL"  
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   postgresql_flexible_server_name = var.postgresql_flexible_server_name
@@ -120,7 +120,7 @@ module "postgre_sql" {
 # 08-PrivateEndPoint (PostgresSQLFelxible) 
 
 module "private_endpoint_postgres" {
-  source                          = "./Modules/08-PrivateEndPoint"
+  source                          = "./Terraform/08-PrivateEndPoint"
   private_endpoint_name           = var.private_endpoint_name
   private_dns_zone_ids            = [module.private_dns_zone.private_dns_zone_id]
   virtual_network_id              = module.virtual_network.virtual_network_id
@@ -140,7 +140,7 @@ module "private_endpoint_postgres" {
 # 09-PrivateDNSZone
 
 module "private_dns_zone" {
-  source                    = "./Modules/09-PrivateDNSZone"
+  source                    = "./Terraform/09-PrivateDNSZone"
   private_dns_zone_name     = var.private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
   virtual_network_link_name = var.virtual_network_link_name
@@ -152,7 +152,7 @@ module "private_dns_zone" {
 # 10-CacheRedis
 /*
 module "redis" {
-  source = "./Modules/10-CacheRedis"
+  source = "./Terraform/10-CacheRedis"
 
   cache_name      = "myexample-stage-rediscache"
   location        = module.resource_group.location
@@ -174,7 +174,7 @@ module "redis" {
 # 14-CommunicationsService
 
 module "communication_services" {
-  source                          = "./Modules/14-CommunicationServices"
+  source                          = "./Terraform/14-CommunicationServices"
   communication_service_name      = var.communication_service_name
   email_service_name              = var.email_service_name
   domain_name                     = var.domain_name
@@ -188,7 +188,7 @@ module "communication_services" {
 # 15-FrontDoorStandard
 
 module "azure_front_door" {
-  source                        = "./Modules/15-FrontDoor"
+  source                        = "./Terraform/15-FrontDoor"
   front_door_name               = var.front_door_name
   resource_group_name           = module.resource_group.name
   location                      = module.resource_group.location
@@ -219,7 +219,7 @@ module "azure_front_door" {
 # 16-Virtual Machine
 
 module "virtual_machine" {
-  source                          = "./Modules/16-VirtualMachine"
+  source                          = "./Terraform/16-VirtualMachine"
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   virtual_machine_name            = var.virtual_machine_name
@@ -245,7 +245,7 @@ module "virtual_machine" {
 # 17-ContainerRegistry
 
 module "azurerm_container_registry" {
-  source = "./Modules/17-ContainerRegistry"
+  source = "./Terraform/17-ContainerRegistry"
 
   container_registry_name        = var.container_registry_name
   resource_group_name            = module.resource_group.name
