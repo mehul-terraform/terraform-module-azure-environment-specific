@@ -172,7 +172,7 @@ host_backend_domain_name   = "api-stage.myexample.co.in"
   
 virtual_machine_public_ip_name              = "myexample-stage-vm01-ip"
 virtual_machine_public_ip_allocation_method = "Static"
-virtual_machine_name                        = "myexamplestagevm"
+virtual_machine_name                        = "myexamplestgevm"
 virtual_machine_size                        = "Standard_F2"
 admin_username                              = "myexample"
 admin_password                              = "Admin@123456"  
