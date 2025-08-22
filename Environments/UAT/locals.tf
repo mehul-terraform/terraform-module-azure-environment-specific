@@ -1,6 +1,6 @@
 locals {
   tags = {
-    environment = "testing"
+    environment = "UAT"
     project     = "myexample"
   }
   extra_tags = {

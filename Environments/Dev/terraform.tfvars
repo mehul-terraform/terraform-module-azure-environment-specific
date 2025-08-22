@@ -150,23 +150,23 @@ data_location                   = "United States"
 front_door_name               = "myexample-dev-afd"
 front_door_sku_name           = "Standard_AzureFrontDoor"
     
-frontend_endpoint_name        = "myexample-frontend"
-backend_endpoint_name         = "myexample-backend"
+frontend_endpoint_name        = "myexample-dev-frontend"
+backend_endpoint_name         = "myexample-dev-backend"
 
-frontend_origin_group_name    = "frontend-origin-group"
-backend_origin_group_name     = "backend-origin-group"
+frontend_origin_group_name    = "frontend-dev-origin-group"
+backend_origin_group_name     = "backend-dev-origin-group"
 
-frontend_origin_name          = "frontend-origin"
-backend_origin_name           = "backend-origin"
+frontend_origin_name          = "frontend-dev-origin"
+backend_origin_name           = "backend-dev-origin"
 
-frontend_route_name           = "frontend-route"
-backend_route_name            = "backend-route"
+frontend_route_name           = "frontend-dev-route"
+backend_route_name            = "backend-dev-route"
 
-frontend_domain_name          = "myexample-frontend"
-backend_domain_name           = "myexample-backend"
+frontend_domain_name          = "myexample-dev-frontend"
+backend_domain_name           = "myexample-dev-backend"
 
-host_frontend_domain_name     = "web.myexample.co.in"
-host_backend_domain_name      = "api.myexample.co.in"
+host_frontend_domain_name     = "web-dev.myexample.co.in"
+host_backend_domain_name      = "api-dev.myexample.co.in"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
