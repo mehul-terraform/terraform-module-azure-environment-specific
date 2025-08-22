@@ -22,7 +22,7 @@ provider "azurerm" {
 # 01-ResourceGroup
 
 module "resource_group" {
-  source = "../../Modules/01-ResourceGroup"
+  source              = "../../Modules/01-ResourceGroup"
   resource_group_name = var.resource_group_name
   location            = var.location
   tags                = local.tags  
@@ -32,7 +32,7 @@ module "resource_group" {
 # 02-VirtualNetwork
 
 module "virtual_network" {
-  source = "../../Modules/02-VirtualNetwork"
+  source               = "../../Modules/02-VirtualNetwork"
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
   virtual_network_name = var.virtual_network_name 
@@ -45,14 +45,14 @@ module "virtual_network" {
 # 03-NetworkSecurityGroup
 
 module "network_security_group" {
-  source                                = "../../Modules/03-NetworkSecurityGroup"
-  resource_group_name                   = module.resource_group.name
-  location                              = module.resource_group.location 
-  network_security_group_name           = var.network_security_group_name  
-  network_security_group_rules          = var.network_security_group_rules  
-  vm_subnet_id                          = module.virtual_network.vm_subnets["vm"]  
-  db_subnet_id                          = module.virtual_network.db_subnets["db"]
-  tags                                  = local.tags
+  source                       = "../../Modules/03-NetworkSecurityGroup"
+  resource_group_name          = module.resource_group.name
+  location                     = module.resource_group.location 
+  network_security_group_name  = var.network_security_group_name  
+  network_security_group_rules = var.network_security_group_rules  
+  vm_subnet_id                 = module.virtual_network.vm_subnets["vm"]  
+  db_subnet_id                 = module.virtual_network.db_subnets["db"]
+  tags                         = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -190,31 +190,31 @@ module "communication_services" {
 # 15-FrontDoorStandard
 
 module "azure_front_door" {
-  source                        = "../../Modules/15-FrontDoor"
-  front_door_name               = var.front_door_name
-  resource_group_name           = module.resource_group.name
-  location                      = module.resource_group.location
-  front_door_sku_name           = var.front_door_sku_name
+  source                     = "../../Modules/15-FrontDoor"
+  front_door_name            = var.front_door_name
+  resource_group_name        = module.resource_group.name
+  location                   = module.resource_group.location
+  front_door_sku_name        = var.front_door_sku_name
     
-  frontend_endpoint_name        = var.frontend_endpoint_name
-  backend_endpoint_name         = var.backend_endpoint_name
+  frontend_endpoint_name     = var.frontend_endpoint_name
+  backend_endpoint_name      = var.backend_endpoint_name
 
-  frontend_origin_group_name    = var.frontend_origin_group_name
-  backend_origin_group_name     = var.backend_origin_group_name
+  frontend_origin_group_name = var.frontend_origin_group_name
+  backend_origin_group_name  = var.backend_origin_group_name
 
-  frontend_origin_name          = var.frontend_origin_name
-  backend_origin_name           = var.backend_origin_name
+  frontend_origin_name       = var.frontend_origin_name
+  backend_origin_name        = var.backend_origin_name
 
-  frontend_route_name           = var.frontend_route_name
-  backend_route_name            = var.backend_route_name
+  frontend_route_name        = var.frontend_route_name
+  backend_route_name         = var.backend_route_name
 
-  frontend_domain_name          = var.frontend_domain_name
-  backend_domain_name           = var.backend_domain_name
+  frontend_domain_name       = var.frontend_domain_name
+  backend_domain_name        = var.backend_domain_name
 
-  host_frontend_domain_name     = var.host_frontend_domain_name
-  host_backend_domain_name      = var.host_backend_domain_name
+  host_frontend_domain_name  = var.host_frontend_domain_name
+  host_backend_domain_name   = var.host_backend_domain_name
   
-  tags                          = local.tags
+  tags                       = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------------------
@@ -248,18 +248,17 @@ module "virtual_machine" {
 # 17-ContainerRegistry
 
 module "azurerm_container_registry" {
-  source = "../../Modules/17-ContainerRegistry"
-
-  container_registry_name        = var.container_registry_name
-  resource_group_name            = module.resource_group.name
-  location                       = module.resource_group.location
-  container_registry_sku         = var.container_registry_sku
-  admin_enabled                  = var.admin_enabled
-  public_network_access_enabled  = var.public_network_access_enabled
-  quarantine_policy_enabled      = var.quarantine_policy_enabled
-  zone_redundancy_enabled        = var.zone_redundancy_enabled
-  tags                           = var.tags
-  extra_tags                     = var.extra_tags
+  source                        = "../../Modules/17-ContainerRegistry"
+  container_registry_name       = var.container_registry_name
+  resource_group_name           = module.resource_group.name
+  location                      = module.resource_group.location
+  container_registry_sku        = var.container_registry_sku
+  admin_enabled                 = var.admin_enabled
+  public_network_access_enabled = var.public_network_access_enabled
+  quarantine_policy_enabled     = var.quarantine_policy_enabled
+  zone_redundancy_enabled       = var.zone_redundancy_enabled
+  tags                          = var.tags
+  extra_tags                    = var.extra_tags
 }
 
 #--------------------------------------------------------------------------------------------------

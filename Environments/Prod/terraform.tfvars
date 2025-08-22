@@ -146,26 +146,26 @@ data_location                   = "United States"
 #-----------------------------------------------------------------------------------------------  
 # 15-FrontDoor
 
-front_door_name               = "myexample-prod-afd"
-front_door_sku_name           = "Standard_AzureFrontDoor"
+front_door_name            = "myexample-prod-afd"
+front_door_sku_name        = "Standard_AzureFrontDoor"
     
-frontend_endpoint_name        = "myexample-frontend"
-backend_endpoint_name         = "myexample-backend"
+frontend_endpoint_name     = "myexample-frontend"
+backend_endpoint_name      = "myexample-backend"
 
-frontend_origin_group_name    = "frontend-origin-group"
-backend_origin_group_name     = "backend-origin-group"
+frontend_origin_group_name = "frontend-origin-group"
+backend_origin_group_name  = "backend-origin-group"
 
-frontend_origin_name          = "frontend-origin"
-backend_origin_name           = "backend-origin"
+frontend_origin_name       = "frontend-origin"
+backend_origin_name        = "backend-origin"
 
-frontend_route_name           = "frontend-route"
-backend_route_name            = "backend-route"
+frontend_route_name        = "frontend-route"
+backend_route_name         = "backend-route"
 
-frontend_domain_name          = "myexample-frontend"
-backend_domain_name           = "myexample-backend"
+frontend_domain_name       = "myexample-frontend"
+backend_domain_name        = "myexample-backend"
 
-host_frontend_domain_name     = "web.myexample.co.in"
-host_backend_domain_name      = "api.myexample.co.in"
+host_frontend_domain_name  = "web.myexample.co.in"
+host_backend_domain_name   = "api.myexample.co.in"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
@@ -190,12 +190,12 @@ virtual_machine_image_version               = "latest"
 #-------------------------------------------------------------------------------------------------
 # 17-ContainerRegistry
 
-container_registry_name        = "myexampleprodacr01"
-container_registry_sku         = "Premium"
-admin_enabled                  = true
-public_network_access_enabled  = true
-quarantine_policy_enabled      = true
-zone_redundancy_enabled        = true
+container_registry_name       = "myexampleprodacr01"
+container_registry_sku        = "Premium"
+admin_enabled                 = true
+public_network_access_enabled = true
+quarantine_policy_enabled     = true
+zone_redundancy_enabled       = true
 
 #-------------------------------------------------------------------------------------------------
 

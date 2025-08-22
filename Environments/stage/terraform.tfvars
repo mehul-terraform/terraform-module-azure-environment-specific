@@ -40,8 +40,8 @@ subnets = [
 #-------------------------------------------------------------------------------------------------
 # 03-NetworkSecurityGroup
 
-network_security_group_name = "myexample-stage-nsg01"
-network_security_group_rules = [
+network_security_group_name    = "myexample-stage-nsg01"
+network_security_group_rules   = [
   {
     name                       = "Allow-RDP"
     priority                   = 100
@@ -146,26 +146,26 @@ data_location                   = "United States"
 #-----------------------------------------------------------------------------------------------  
 # 15-FrontDoor
 
-front_door_name               = "myexample-stage-afd"
-front_door_sku_name           = "Standard_AzureFrontDoor"
+front_door_name            = "myexample-stage-afd"
+front_door_sku_name        = "Standard_AzureFrontDoor"
     
-frontend_endpoint_name        = "myexample-stage-frontend"
-backend_endpoint_name         = "myexample-stage-backend"
+frontend_endpoint_name     = "myexample-stage-frontend"
+backend_endpoint_name      = "myexample-stage-backend"
 
-frontend_origin_group_name    = "frontend-stage-origin-group"
-backend_origin_group_name     = "backend-stage-origin-group"
+frontend_origin_group_name = "frontend-stage-origin-group"
+backend_origin_group_name  = "backend-stage-origin-group"
 
-frontend_origin_name          = "frontend-stage-origin"
-backend_origin_name           = "backend-stage-origin"
+frontend_origin_name       = "frontend-stage-origin"
+backend_origin_name        = "backend-stage-origin"
 
-frontend_route_name           = "frontend-stage-route"
-backend_route_name            = "backend-stage-route"
+frontend_route_name        = "frontend-stage-route"
+backend_route_name         = "backend-stage-route"
 
-frontend_domain_name          = "myexample-stage-frontend"
-backend_domain_name           = "myexample-stage-backend"
+frontend_domain_name       = "myexample-stage-frontend"
+backend_domain_name        = "myexample-stage-backend"
 
-host_frontend_domain_name     = "web-stage.myexample.co.in"
-host_backend_domain_name      = "api-stage.myexample.co.in"
+host_frontend_domain_name  = "web-stage.myexample.co.in"
+host_backend_domain_name   = "api-stage.myexample.co.in"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  

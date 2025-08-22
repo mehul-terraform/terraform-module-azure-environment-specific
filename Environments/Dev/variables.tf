@@ -47,12 +47,13 @@ variable "dns_servers" {
 variable "subnets" {
   description = "List of subnets to create in the virtual network"
   type = list(object({
-    name                            = string
-    address_prefix                  = string
+    name                              = string
+    address_prefix                    = string
     private_endpoint_network_policies = optional(string)
-    service_endpoints              = optional(list(string))
+    service_endpoints                 = optional(list(string))
   }))
 }
+
 #-----------------------------------------------------------------------------------------------
 # Network Security Group
 
@@ -62,8 +63,8 @@ variable "network_security_group_name" {
 }
 
 variable "network_security_group_rules" {
-  description = "List of security rules to apply to the NSG."
-  type = list(object({
+  description                  = "List of security rules to apply to the NSG."
+  type                         = list(object({
     name                       = string
     priority                   = number
     direction                  = string
@@ -76,8 +77,6 @@ variable "network_security_group_rules" {
   }))
   default = []
 }
-
-
 
 #-----------------------------------------------------------------------------------------------
 # Container Registry
@@ -161,7 +160,7 @@ variable "active_directory_auth_setttings" {
 variable "linux_web_app_name" {
   description = "The name of the function app"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "app_settings" {
@@ -347,7 +346,7 @@ variable "postgres_tier" {
 variable "storage_mb" {
   description = "Storage allowed for PostgresSQL Flexible server. Possible values : https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server#storage_mb."
   type        = number
-  default = null
+  default     = null
 }
 
 variable "postgresql_version" {
@@ -365,7 +364,7 @@ variable "zone" {
 variable "standby_zone" {
   description = "Specify availability-zone to enable high_availability and create standby PostgreSQL Flexible Server. (Null to disable high-availability)"
   type        = number
-  default = null
+  default     = null
 }
 
 variable "postgre_administrator_login" {
@@ -418,7 +417,7 @@ variable "databases" {
     charset   = optional(string, "utf8")
     collation = optional(string, "en_US.utf8")
   }))
-  default = {}
+  default     = {}
 }
 
 variable "postgresql_configurations" {
@@ -436,14 +435,14 @@ variable "use_random_string" {
 variable "allowed_cidrs" {
   description = "Map of authorized cidrs."
   type        = map(string)
-  default = {}
+  default     = {}
 }
 
 variable "create_key_secret" {
-  description = "Map of key vault secrets to create"
-  type = map(object({
-    key_vault_id = string
-    content_type = optional(string, null)
+  description       = "Map of key vault secrets to create"
+  type              = map(object({
+    key_vault_id    = string
+    content_type    = optional(string, null)
     expiration_date = optional(string, null)
     not_before_date = optional(string, null)  
   }))
@@ -462,7 +461,6 @@ variable "virtual_network_link_name" {
   description = "Name for the virtual network link"
   type        = string
 }
-
 
 #-----------------------------------------------------------------------------------------------
 # PrivateEndpoint
