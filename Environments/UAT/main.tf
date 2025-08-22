@@ -52,6 +52,7 @@ module "network_security_group" {
   network_security_group_rules          = var.network_security_group_rules  
   vm_subnet_id                          = module.virtual_network.vm_subnets["vm"]  
   db_subnet_id                          = module.virtual_network.db_subnets["db"]
+  tags                                  = local.tags 
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -97,6 +98,7 @@ module "storage_account" {
   account_replication_type           = var.account_replication_type
   storage_account_index_document     = var.storage_account_index_document         
   storage_account_error_404_document = var.storage_account_error_404_document
+  tags                               = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -112,8 +114,8 @@ module "postgre_sql" {
   databases                       = var.databases
   postgre_administrator_login     = var.postgre_administrator_login
   postgre_administrator_password  = var.postgre_administrator_password
-  tags       = local.tags
-  extra_tags = local.extra_tags
+  tags                            = local.tags
+  extra_tags                      = local.extra_tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -146,6 +148,7 @@ module "private_dns_zone" {
   virtual_network_link_name = var.virtual_network_link_name
   virtual_network_id        = module.virtual_network.virtual_network_id
   location                  = module.resource_group.location 
+  tags                      = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -238,7 +241,8 @@ module "virtual_machine" {
   virtual_machine_image_publisher = var.virtual_machine_image_publisher
   virtual_machine_image_offer     = var.virtual_machine_image_offer
   virtual_machine_image_sku       = var.virtual_machine_image_sku
-  virtual_machine_image_version   = var.virtual_machine_image_version  
+  virtual_machine_image_version   = var.virtual_machine_image_version 
+  tags                            = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------

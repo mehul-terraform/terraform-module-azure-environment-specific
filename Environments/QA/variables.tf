@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # Tags
 
 variable "tags" {
@@ -25,7 +25,7 @@ variable "resource_group_name" {
   type        = string
 }
 
-#----------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 # Virtual Network
 
 variable "virtual_network_name" {
@@ -234,11 +234,6 @@ variable "identity_type" {
   description = "The Managed Service Identity Type of this Virtual Machine."
   type        = string
   default     = ""
-}
-
-variable "service_plan_id" {
-  description = "Id of the App Service Plan for Function App hosting"
-  type        = string
 }
 
 variable "settings" {

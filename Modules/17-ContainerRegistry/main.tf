@@ -7,6 +7,6 @@ resource "azurerm_container_registry" "acr" {
   public_network_access_enabled = var.public_network_access_enabled
   quarantine_policy_enabled     = var.quarantine_policy_enabled
   zone_redundancy_enabled       = var.zone_redundancy_enabled
-  tags                          = local.tags
+  tags                          = merge(var.tags)
 }
 

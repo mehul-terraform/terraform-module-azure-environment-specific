@@ -42,15 +42,8 @@ resource "azurerm_redis_cache" "redis-cache" {
       maintenance_window = patch_schedule.value.maintenance_window
     }
   }
-
-  tags = merge(
-    {
-      "Environment" = var.tags.environment,
-      "Project"     = var.tags.project
-    },
-    var.extra_tags
-  )
-
+  tags                = merge(var.tags) 
+  
   lifecycle {
     ignore_changes = [redis_configuration[0].rdb_storage_connection_string]
   }

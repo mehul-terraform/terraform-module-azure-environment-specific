@@ -1,10 +1,10 @@
 locals {
   tags = {
-    environment = "testing"
+    environment = "Developement"
     project     = "myexample"
   }
   extra_tags = {
-    owner = "user1"
+    owner = "myexample"
   }
 }
 

@@ -4,7 +4,7 @@ resource "azurerm_storage_account" "storage_account" {
   location                 = var.location
   account_tier             = var.account_tier
   account_replication_type = var.account_replication_type  
-  tags                     = local.tags
+  tags                     = merge(var.tags)
 }
 
 resource "azurerm_storage_account_static_website" "static_website" {

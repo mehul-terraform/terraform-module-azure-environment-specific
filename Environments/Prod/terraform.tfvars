@@ -90,7 +90,6 @@ asp_sku_name      = "B2"
 # 05-WebApp
 
 linux_web_app_name       = "myexample-prod-webapp01"
-service_plan_id          = "myexample-stage"
 docker_image_name        = "nginx"
 docker_image_tag         = "latest"
 docker_registry_url      = "myexampleprodacr01.azurecr.io"

@@ -104,3 +104,11 @@ variable "virtual_machine_image_version" {
   type        = string
   default     = "latest"
 }
+
+variable "tags" {
+  description = "Tags to be applied to resources (inclusive)"
+  type = object({
+    environment = string
+    project     = string
+  })
+}

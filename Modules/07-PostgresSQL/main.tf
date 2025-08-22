@@ -92,13 +92,7 @@ resource "azurerm_key_vault_secret" "secret" {
 
   content_type = each.value.content_type
 
-  tags = merge(
-    {
-      "Environment" = var.tags.environment,
-      "Project"     = var.tags.project
-    },
-    var.extra_tags
-  )
+  tags         = merge(var.tags)
 
   expiration_date = each.value.expiration_date
   not_before_date = each.value.not_before_date

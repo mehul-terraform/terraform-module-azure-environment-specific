@@ -236,11 +236,6 @@ variable "identity_type" {
   default     = ""
 }
 
-variable "service_plan_id" {
-  description = "Id of the App Service Plan for Function App hosting"
-  type        = string
-}
-
 variable "settings" {
   description = "Specifies the Authentication enabled or not"
   default     = false

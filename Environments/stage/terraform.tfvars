@@ -1,13 +1,13 @@
 #-------------------------------------------------------------------------------------
 # 01-ResourceGroup
 
-resource_group_name  = "myexample-dev-rg"
+resource_group_name  = "myexample-stage-rg"
 location             = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
 
-virtual_network_name  = "myexample-dev-vnet"
+virtual_network_name  = "myexample-stage-vnet"
 address_space         = ["10.0.0.0/8"]
 
 subnets = [
@@ -40,7 +40,7 @@ subnets = [
 #-------------------------------------------------------------------------------------------------
 # 03-NetworkSecurityGroup
 
-network_security_group_name = "myexample-dev-nsg01"
+network_security_group_name = "myexample-stage-nsg01"
 network_security_group_rules = [
   {
     name                       = "Allow-RDP"
@@ -82,24 +82,23 @@ network_security_group_rules = [
 #-----------------------------------------------------------------------------------------------
 # 04-AppServicePlan
 
-service_plan_name = "myexample-dev-asp01"  
+service_plan_name = "myexample-stage-asp01"  
 asp_os_type       = "Linux"
 asp_sku_name      = "B2"
 
 #-----------------------------------------------------------------------------------------------
 # 05-WebApp
 
-linux_web_app_name       = "myexample-dev-webapp01"
-service_plan_id          = "myexample-stage"
+linux_web_app_name       = "myexample-stage-webapp01"
 docker_image_name        = "nginx"
 docker_image_tag         = "latest"
-docker_registry_url      = "myexampledevacr01.azurecr.io"
-docker_registry_username = "myexample-dev-user"
+docker_registry_url      = "myexamplestageacr01.azurecr.io"
+docker_registry_username = "myexample-stage-user"
 docker_registry_password = "Passwor@1234"
 
 #-----------------------------------------------------------------------------------------------
 # 07-StorageAccount
-storage_account_name               = "myexampledevstorage01" # must be globally unique
+storage_account_name               = "myexamplestagestorage01" # must be globally unique
 account_tier                       = "Standard"
 account_replication_type           = "LRS"
 storage_account_index_document     = "index.html"
@@ -108,7 +107,7 @@ storage_account_error_404_document = "404.html"
 #-----------------------------------------------------------------------------------------------
 # 06-PostgreSQLDatabase
 
-postgresql_flexible_server_name = "myexample-dev-db-pg"
+postgresql_flexible_server_name = "myexample-stage-db-pg"
   postgres_sku_name             = "B_Standard_B1ms"
   storage_mb                    = 32768
   databases = {
@@ -124,22 +123,22 @@ postgresql_flexible_server_name = "myexample-dev-db-pg"
 # 08-PrivateDNSZone
 
 private_dns_zone_name     = "myexample.co.in"
-virtual_network_link_name = "myexample-dev-vnet-link"
+virtual_network_link_name = "myexample-stage-vnet-link"
 
 #-----------------------------------------------------------------------------------------------
 # 09-PrivateEndpoint
 
-private_endpoint_name           = "myexample-dev-db-pg-pep"
+private_endpoint_name           = "myexample-stage-db-pg-pep"
 private_dns_zone_group_name     = "myexample.co.in"
-private_service_connection_name = "myexample-dev-db-pg-connection"
+private_service_connection_name = "myexample-stage-db-pg-connection"
 is_manual_connection            = false
 subresource_names               = ["postgresqlServer"]
 
 #-----------------------------------------------------------------------------------------------
 # 14-CommunicationService
 
-communication_service_name      = "myexample-dev-acs"
-email_service_name              = "myexample-dev-acs-email"
+communication_service_name      = "myexample-stage-acs"
+email_service_name              = "myexample-stage-acs-email"
 domain_name                     = "myexample.co.in"
 enable_user_engagement_tracking = true
 data_location                   = "United States"
@@ -147,39 +146,39 @@ data_location                   = "United States"
 #-----------------------------------------------------------------------------------------------  
 # 15-FrontDoor
 
-front_door_name               = "myexample-dev-afd"
+front_door_name               = "myexample-stage-afd"
 front_door_sku_name           = "Standard_AzureFrontDoor"
     
-frontend_endpoint_name        = "myexample-dev-frontend"
-backend_endpoint_name         = "myexample-dev-backend"
+frontend_endpoint_name        = "myexample-stage-frontend"
+backend_endpoint_name         = "myexample-stage-backend"
 
-frontend_origin_group_name    = "frontend-dev-origin-group"
-backend_origin_group_name     = "backend-dev-origin-group"
+frontend_origin_group_name    = "frontend-stage-origin-group"
+backend_origin_group_name     = "backend-stage-origin-group"
 
-frontend_origin_name          = "frontend-dev-origin"
-backend_origin_name           = "backend-dev-origin"
+frontend_origin_name          = "frontend-stage-origin"
+backend_origin_name           = "backend-stage-origin"
 
-frontend_route_name           = "frontend-dev-route"
-backend_route_name            = "backend-dev-route"
+frontend_route_name           = "frontend-stage-route"
+backend_route_name            = "backend-stage-route"
 
-frontend_domain_name          = "myexample-dev-frontend"
-backend_domain_name           = "myexample-dev-backend"
+frontend_domain_name          = "myexample-stage-frontend"
+backend_domain_name           = "myexample-stage-backend"
 
-host_frontend_domain_name     = "web-dev.myexample.co.in"
-host_backend_domain_name      = "api-dev.myexample.co.in"
+host_frontend_domain_name     = "web-stage.myexample.co.in"
+host_backend_domain_name      = "api-stage.myexample.co.in"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
   
-virtual_machine_public_ip_name              = "myexample-dev-vm01-ip"
+virtual_machine_public_ip_name              = "myexample-stage-vm01-ip"
 virtual_machine_public_ip_allocation_method = "Static"
-virtual_machine_name                        = "myexampledevvm"
+virtual_machine_name                        = "myexamplestagevm"
 virtual_machine_size                        = "Standard_F2"
 admin_username                              = "myexample"
 admin_password                              = "Admin@123456"  
-network_interface_name                      = "myexample-dev-vm01-nic"
+network_interface_name                      = "myexample-stage-vm01-nic"
 private_ip_address_allocation               = "Static"
-private_ip_address_name                     = "myexample-dev-vm01-private-ip"
+private_ip_address_name                     = "myexample-stage-vm01-private-ip"
 private_ip_address                          = "10.251.0.11"
 os_disk_caching                             = "ReadWrite"
 os_disk_storage_account_type                = "Standard_LRS"
@@ -191,7 +190,7 @@ virtual_machine_image_version               = "latest"
 #-------------------------------------------------------------------------------------------------
 # 17-ContainerRegistry
 
-container_registry_name        = "myexampledevacr01"
+container_registry_name        = "myexamplestageacr01"
 container_registry_sku         = "Premium"
 admin_enabled                  = true
 public_network_access_enabled  = true

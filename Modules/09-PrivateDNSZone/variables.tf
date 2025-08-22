@@ -22,3 +22,9 @@ variable "location" {
   description = "Azure region"
   type        = string
 }
+
+variable "tags" {
+  description = "Tags for the Private Endpoint"
+  type        = map(string)
+  default     = {}
+}

@@ -16,5 +16,5 @@ resource "azurerm_private_endpoint" "private_endpoint" {
     private_dns_zone_ids           = var.private_dns_zone_ids
   }
 
-  tags = local.tags
+  tags = merge(var.tags)
 }

@@ -239,6 +239,7 @@ module "virtual_machine" {
   virtual_machine_image_offer     = var.virtual_machine_image_offer
   virtual_machine_image_sku       = var.virtual_machine_image_sku
   virtual_machine_image_version   = var.virtual_machine_image_version  
+  tags                            = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -254,10 +255,7 @@ module "azurerm_container_registry" {
   admin_enabled                  = var.admin_enabled
   public_network_access_enabled  = var.public_network_access_enabled
   quarantine_policy_enabled      = var.quarantine_policy_enabled
-  zone_redundancy_enabled        = var.zone_redundancy_enabled
-
-  tags                           = var.tags
-  extra_tags                     = var.extra_tags
+  zone_redundancy_enabled        = var.zone_redundancy_enabled  
 }
 
 #--------------------------------------------------------------------------------------------------
