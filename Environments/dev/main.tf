@@ -199,11 +199,11 @@ module "cosmosdb" {
 
 module "function_app" {
   source               = "../../Modules/13-Functionsapp"
-  resource_group_name  = azurerm_resource_group.rg.name
-  location             = azurerm_resource_group.rg.location
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
 
-  storage_account_name  = var.storage_account_name
-  app_service_plan_name = var.app_service_plan_name
+  storage_account_name  = module.storage_account.storage_account_name
+  app_service_plan_name = module.service_plan.id
   function_app_name     = var.function_app_name
 
   dotnet_version       = var.dotnet_version

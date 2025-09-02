@@ -170,7 +170,6 @@ enable_automatic_failover = false
 #-----------------------------------------------------------------------------------------------
 # 13-FunctionsApp
 
-app_service_plan_name  = "myappserviceplan"
 function_app_name      = "myexample-dev-funcapp01"
 dotnet_version        = "dotnet6"
 identity_type         = "SystemAssigned"

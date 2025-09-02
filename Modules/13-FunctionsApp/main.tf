@@ -2,18 +2,13 @@ resource "azurerm_function_app" "functionapp" {
   name                       = var.function_app_name
   location                   = var.location
   resource_group_name        = var.resource_group_name
-  app_service_plan_id        = azurerm_app_service_plan.asp.id
-  storage_account_name       = azurerm_storage_account.sa.name
-  storage_account_access_key = azurerm_storage_account.sa.primary_access_key
+  app_service_plan_id        = var.app_service_plan_name
+  storage_account_name       = var.storage_account_name
+  storage_account_access_key = var.storage_account_primary_access_key
   version                    = "~4"
   os_type                    = "linux"
 
-  site_config {
-    application_stack {
-      dotnet_version = var.dotnet_version
-    }
-  }
-
+ 
   identity {
     type = var.identity_type
   }

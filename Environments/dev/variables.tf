@@ -640,26 +640,6 @@ variable "enable_automatic_failover" {
 #-----------------------------------------------------------------------------------------------
 # 13-FunctionsApp
 
-variable "resource_group_name" {
-  type        = string
-  description = "Resource group name"
-}
-
-variable "location" {
-  type        = string
-  description = "Azure location"
-  default     = "East US"
-}
-
-variable "storage_account_name" {
-  type        = string
-  description = "Storage account name"
-}
-
-variable "app_service_plan_name" {
-  type        = string
-  description = "App Service plan name"
-}
 
 variable "function_app_name" {
   type        = string
@@ -669,11 +649,6 @@ variable "function_app_name" {
 variable "dotnet_version" {
   type        = string
   default     = "dotnet6"
-}
-
-variable "identity_type" {
-  type        = string
-  default     = "SystemAssigned"
 }
 
 variable "run_from_package" {
@@ -689,16 +664,6 @@ variable "worker_runtime" {
 variable "node_version" {
   type        = string
   default     = "~14"
-}
-
-variable "app_settings" {
-  type        = map(string)
-  default     = {}
-}
-
-variable "tags" {
-  type        = map(string)
-  default     = {}
 }
 
 #-----------------------------------------------------------------------------------------------
