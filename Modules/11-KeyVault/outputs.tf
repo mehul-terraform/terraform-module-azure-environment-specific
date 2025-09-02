@@ -1,4 +1,7 @@
-output "private_dns_zone_id" {
-  description = "ID of the Private DNS Zone"
-  value       = azurerm_private_dns_zone.private_dns_zone.id
+output "key_vault_id" {
+  value = azurerm_key_vault.keyvault.id
+}
+
+output "key_vault_uri" {
+  value = azurerm_key_vault.keyvault.vault_uri
 }

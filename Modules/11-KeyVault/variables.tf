@@ -1,30 +1,24 @@
-variable "private_dns_zone_name" {
-  description = "Private DNS zone name"
-  type        = string
-}
-
 variable "resource_group_name" {
-  description = "Resource group for DNS zone"
   type        = string
-}
-
-variable "virtual_network_link_name" {
-  description = "Name of the virtual network link"
-  type        = string
-}
-
-variable "virtual_network_id" {
-  description = "ID of the virtual network"
-  type        = string
+  description = "The name of the resource group"
 }
 
 variable "location" {
-  description = "Azure region"
   type        = string
+  description = "Azure region"
 }
 
-variable "tags" {
-  description = "Tags for the Private Endpoint"
-  type        = map(string)
-  default     = {}
+variable "key_vault_name" {
+  type        = string
+  description = "Globally unique key vault name"
+}
+
+variable "tenant_id" {
+  type        = string
+  description = "Azure AD tenant ID"
+}
+
+variable "object_id" {
+  type        = string
+  description = "Azure AD object ID for access policy"
 }

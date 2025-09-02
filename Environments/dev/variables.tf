@@ -13,7 +13,7 @@ variable "extra_tags" {
 }
 
 #----------------------------------------------------------------------------------------------
-# Resource Group
+# 01-ResourceGroup
 
 variable "location" {
   description = "Azure region for the virtual network"
@@ -26,7 +26,7 @@ variable "resource_group_name" {
 }
 
 #----------------------------------------------------------------------------------------------
-# Virtual Network
+# 02-VirtualNetwork
 
 variable "virtual_network_name" {
   description = "The name of the virtual network"
@@ -55,7 +55,7 @@ variable "subnets" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# Network Security Group
+# 03-NetworkSecurityGroup
 
 variable "network_security_group_name" {
   description = "The name of the Network Security Group."
@@ -79,44 +79,7 @@ variable "network_security_group_rules" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# Container Registry
-
-variable "container_registry_name" {
-  description = "Name of the Azure Container Registry (lowercase letters and numbers only)"
-  type        = string
-}
-
-variable "container_registry_sku" {
-  description = "SKU of the container registry (Basic, Standard, Premium)"
-  type        = string
-}
-
-variable "admin_enabled" {
-  description = "Enable admin user for ACR"
-  type        = bool
-  default     = true
-}
-
-variable "public_network_access_enabled" {
-  description = "Enable public network access"
-  type        = bool
-  default     = true
-}
-
-variable "quarantine_policy_enabled" {
-  description = "Enable quarantine policy"
-  type        = bool
-  default     = true
-}
-
-variable "zone_redundancy_enabled" {
-  description = "Enable zone redundancy"
-  type        = bool
-  default     = true
-}
-
-#-----------------------------------------------------------------------------------------------
-# App Service Plan
+# 04-App Service Plan
 
 variable "service_plan_name" {
   type        = string
@@ -149,7 +112,7 @@ variable "worker_count" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# Web App
+# 05-AppService
 
 variable "active_directory_auth_setttings" {
   description = "Active directory authentication provider settings for app service"
@@ -293,7 +256,7 @@ variable "docker_image_tag" {
 }
 
 #------------------------------------------------------------------------------------------------
-# Storage Account
+# 06-StorageAccount
 
 variable "storage_account_name" {
   type = string
@@ -320,7 +283,7 @@ variable "storage_account_error_404_document" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# PostgresSQLFlexible
+# 07-PostgresSQLFlexible
 
 variable "postgresql_flexible_server_name" {
   description = "A name which will be pre-pended to the resources created"
@@ -448,22 +411,8 @@ variable "create_key_secret" {
   }))
   default = {}
 }
-
-#-----------------------------------------------------------------------------------------------
-# Private DNS Zone
-
-variable "private_dns_zone_name" {
-  description = "Name of the private DNS zone"
-  type        = string
-}
-
-variable "virtual_network_link_name" {
-  description = "Name for the virtual network link"
-  type        = string
-}
-
-#-----------------------------------------------------------------------------------------------
-# PrivateEndpoint
+#-----------------------------------------------------------------------------------------
+# 08-PrivateEndpoint
 
 variable "private_endpoint_name" {
   description = "The name of the private endpoint"
@@ -489,9 +438,148 @@ variable "private_dns_zone_group_name" {
   description = "The ID of the subnet where the private endpoint will be deployed"
   type        = string
 }
+#----------------------------------------------------------------------------------------
+# 09-PrivateDNSZone
+
+variable "private_dns_zone_name" {
+  description = "Name of the private DNS zone"
+  type        = string
+}
+
+variable "virtual_network_link_name" {
+  description = "Name for the virtual network link"
+  type        = string
+}
+#-----------------------------------------------------------------------------------------
+# 10-RedisCache
+
+variable "cache_name" {
+  description = "The name of the Redis cache instance"
+  type        = string
+}
+
+variable "capacity" {
+  description = "The size of the Redis cache to deploy"
+  type        = number
+}
+
+variable "family" {
+  description = "The family of the Redis cache to deploy"
+  type        = string
+}
+
+variable "sku" {
+  description = "The SKU of the Redis cache to deploy. Must be [Basic/Standard/Premium]"
+  type        = string
+}
+
+variable "enable_non_ssl_port" {
+  description = "Enable non-SSL port on Redis cache"
+  type        = bool
+  default = false
+}
+
+variable "minimum_tls_version" {
+  description = "The minimum TLS version for the Redis cache"
+  type        = string
+  default = "1.0"
+}
+
+variable "cluster_shard_count" {
+  description = "The number of shards for the Redis cache"
+  type        = number
+  default     = 0
+}
+
+variable "private_static_ip_address" {
+  description = "The static IP address for the Redis cache"
+  type        = string
+  default = null
+}
+
+variable "subnet_id" {
+  description = "The ID of the subnet in which the Redis cache is deployed"
+  type        = string
+  default = null
+}
+
+variable "redis_cache_public_network_access_enabled" {
+  description = "Enable public network access for the Redis cache"
+  type        = bool
+  default = true
+}
+
+variable "redis_version" {
+  description = "The version of Redis to deploy"
+  type        = string
+}
+
+variable "zones" {
+  description = "The availability zones in which to create the Redis cache"
+  type        = list(string)
+  default = []
+}
+
+variable "redis_configurations" {
+  description = "A map of Redis configurations."
+  type = map(object({
+    aof_backup_enabled              = optional(bool)
+    aof_storage_connection_string_0 = optional(string)
+    aof_storage_connection_string_1 = optional(string)
+    enable_authentication           = optional(bool)
+    maxmemory_reserved              = optional(number)
+    maxmemory_delta                 = optional(number)
+    maxmemory_policy                = optional(string)
+    maxfragmentationmemory_reserved = optional(number)
+    rdb_backup_enabled              = optional(bool)
+    rdb_backup_frequency            = optional(number)
+    rdb_backup_max_snapshot_count   = optional(number)
+    rdb_storage_connection_string   = optional(string)
+  }))
+  default = {}
+}
+
+variable "patch_schedule" {
+  description = "A map of patch schedule settings for the Redis cache."
+  type = map(object({
+    day_of_week        = string
+    start_hour_utc     = optional(number)
+    maintenance_window = optional(string)
+  }))
+  default = {}
+}
+
+variable "redis_firewall_rule" {
+  type        = map(object({
+    name      = string
+    count     = number
+    start_ip  = string
+    end_ip    = string
+  }))
+  description = "A map of firewall rules for the Redis cache."
+  default = {}
+}
 
 #-----------------------------------------------------------------------------------------------
-# Communication Services
+# 11-KeyVault
+
+variable "key_vault_name" {
+  type        = string
+  description = "Globally unique key vault name"
+}
+
+variable "tenant_id" {
+  type        = string
+  description = "Azure AD tenant ID"
+}
+
+variable "object_id" {
+  type        = string
+  description = "Azure AD object ID for access policy"
+}
+
+#-----------------------------------------------------------------------------------------------
+# 14-CommunicationServices
 
 variable "communication_service_name" {
   description = "The name of the Azure Communication Service."
@@ -520,7 +608,7 @@ variable "enable_user_engagement_tracking" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# Front Door
+# 15-FrontDoor
 
 variable "front_door_sku_name" {
   description = "Azure SKU"
@@ -593,7 +681,7 @@ variable "host_backend_domain_name" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# Virtual Machine
+# 16-VirtualMachine
 
 # Public IP Variables
 variable "virtual_machine_public_ip_name" {
@@ -684,6 +772,43 @@ variable "virtual_machine_image_version" {
   description = "Version of the OS image"
   type        = string
   default     = "latest"
+}
+
+#-----------------------------------------------------------------------------------------------
+# 17-ContainerRegistry
+
+variable "container_registry_name" {
+  description = "Name of the Azure Container Registry (lowercase letters and numbers only)"
+  type        = string
+}
+
+variable "container_registry_sku" {
+  description = "SKU of the container registry (Basic, Standard, Premium)"
+  type        = string
+}
+
+variable "admin_enabled" {
+  description = "Enable admin user for ACR"
+  type        = bool
+  default     = true
+}
+
+variable "public_network_access_enabled" {
+  description = "Enable public network access"
+  type        = bool
+  default     = true
+}
+
+variable "quarantine_policy_enabled" {
+  description = "Enable quarantine policy"
+  type        = bool
+  default     = true
+}
+
+variable "zone_redundancy_enabled" {
+  description = "Enable zone redundancy"
+  type        = bool
+  default     = true
 }
 
 #-----------------------------------------------------------------------------------------------

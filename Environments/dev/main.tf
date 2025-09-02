@@ -144,34 +144,43 @@ module "private_dns_zone" {
   source                    = "../../Modules/09-PrivateDNSZone"
   private_dns_zone_name     = var.private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
+  location                  = module.resource_group.location
   virtual_network_link_name = var.virtual_network_link_name
-  virtual_network_id        = module.virtual_network.virtual_network_id
-  location                  = module.resource_group.location 
+  virtual_network_id        = module.virtual_network.virtual_network_id   
   tags                      = local.tags
+}
+#--------------------------------------------------------------------------------------------
+# 11-KeyVault
+
+module "keyvault" {
+  source              = "../../Modules/11-KeyVault"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  key_vault_name      = var.key_vault_name
+  tenant_id           = var.tenant_id
+  object_id           = var.object_id
 }
 
 #--------------------------------------------------------------------------------------------------
 # 10-CacheRedis
-/*
+
 module "redis" {
-  source = "./Terraform/10-CacheRedis"
-
-  cache_name      = "myexample-stage-rediscache"
-  location        = module.resource_group.location
-  resource_group_name = module.resource_group.name
-  capacity        = 0
-  family          = "C"
-  sku             = "Basic"
-  public_network_access_enabled  = true
-  redis_version                  = "6"
-  enable_non_ssl_port            = true
-  minimum_tls_version            = "1.2"
-  cluster_shard_count            = 0
-
-  tags                = local.tags
-  extra_tags          = local.extra_tags
+  source                        = "../../Modules/10-CacheRedis"
+  cache_name                    = var.cache_name
+  location                      = module.resource_group.location
+  resource_group_name           = module.resource_group.name
+  capacity                      = var.capacity
+  family                        = var.family
+  sku                           = var.sku
+  public_network_access_enabled = var.public_network_access_enabled
+  redis_version                 = var.redis_version
+  enable_non_ssl_port           = var.enable_non_ssl_port
+  minimum_tls_version           = var.minimum_tls_version
+  cluster_shard_count           = var.cluster_shard_count
+  tags                          = local.tags
+  extra_tags                    = local.extra_tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 14-CommunicationsService
 

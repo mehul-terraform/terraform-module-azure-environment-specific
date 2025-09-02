@@ -133,6 +133,24 @@ private_dns_zone_group_name     = "myexample.co.in"
 private_service_connection_name = "myexample-dev-db-pg-connection"
 is_manual_connection            = false
 subresource_names               = ["postgresqlServer"]
+#-----------------------------------------------------------------------------------------
+# 10-RedisCache
+cache_name                                = "myexample-dev-redis-cache"
+capacity                                  = 2
+family                                    = "C"
+sku                                       = "Standard"
+redis_cache_public_network_access_enabled = true
+redis_version                             = "6"
+enable_non_ssl_port                       = false
+minimum_tls_version                       = "1.2"
+cluster_shard_count                       = 1
+
+#------------------------------------------------------------------------------------------
+# 11-KeyVault
+
+key_vault_name = "myexample-dev-key-vault"
+tenant_id      = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
+object_id      = "0b1b5f15-31fa-4d10-97df-9f1b4a5f1f08"
 
 #-----------------------------------------------------------------------------------------------
 # 14-CommunicationService
