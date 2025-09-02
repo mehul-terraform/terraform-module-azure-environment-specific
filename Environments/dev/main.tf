@@ -65,8 +65,7 @@ module "service_plan" {
   service_plan_name   = var.service_plan_name    
   asp_os_type         = var.asp_os_type
   asp_sku_name        = var.asp_sku_name
-  tags                = local.tags
-  extra_tags          = local.extra_tags
+  tags                = local.tags 
 }
 
 #---------------------------------------------------------------------------------------------------
@@ -114,8 +113,7 @@ module "postgre_sql" {
   databases                       = var.databases
   postgre_administrator_login     = var.postgre_administrator_login
   postgre_administrator_password  = var.postgre_administrator_password
-  tags                            = local.tags
-  extra_tags                      = local.extra_tags
+  tags                            = local.tags  
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -159,6 +157,7 @@ module "keyvault" {
   key_vault_name      = var.key_vault_name
   tenant_id           = var.tenant_id
   object_id           = var.object_id
+  tags                = local.tags 
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -177,8 +176,7 @@ module "redis" {
   enable_non_ssl_port           = var.enable_non_ssl_port
   minimum_tls_version           = var.minimum_tls_version
   cluster_shard_count           = var.cluster_shard_count
-  tags                          = local.tags
-  extra_tags                    = local.extra_tags
+  tags                          = local.tags  
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -266,8 +264,7 @@ module "azurerm_container_registry" {
   public_network_access_enabled = var.public_network_access_enabled
   quarantine_policy_enabled     = var.quarantine_policy_enabled
   zone_redundancy_enabled       = var.zone_redundancy_enabled
-  tags                          = var.tags
-  extra_tags                    = var.extra_tags
+  tags                          = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------

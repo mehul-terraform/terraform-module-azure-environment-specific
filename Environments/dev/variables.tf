@@ -565,17 +565,35 @@ variable "redis_firewall_rule" {
 
 variable "key_vault_name" {
   type        = string
-  description = "Globally unique key vault name"
+  description = "The name of the Key Vault."
 }
 
 variable "tenant_id" {
   type        = string
-  description = "Azure AD tenant ID"
+  description = "The Tenant ID for Azure AD."
 }
 
 variable "object_id" {
   type        = string
-  description = "Azure AD object ID for access policy"
+  description = "The Object ID of the Azure AD user/service principal that will have access to the Key Vault."
+}
+
+variable "key_vault_sku_name" {
+  type        = string
+  default     = "standard"
+  description = "SKU Name of the Key Vault. Possible values are 'standard' and 'premium'."
+}
+
+variable "soft_delete_retention_days" {
+  type        = number
+  default     = 7
+  description = "Number of days to retain soft deleted key vault objects."
+}
+
+variable "purge_protection_enabled" {
+  type        = bool
+  default     = true
+  description = "Enable purge protection on the Key Vault."
 }
 
 #-----------------------------------------------------------------------------------------------

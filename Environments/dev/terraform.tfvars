@@ -133,6 +133,7 @@ private_dns_zone_group_name     = "myexample.co.in"
 private_service_connection_name = "myexample-dev-db-pg-connection"
 is_manual_connection            = false
 subresource_names               = ["postgresqlServer"]
+
 #-----------------------------------------------------------------------------------------
 # 10-RedisCache
 cache_name                                = "myexample-dev-redis-cache"
@@ -148,9 +149,13 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name = "myexample-dev-key-vault"
-tenant_id      = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
-object_id      = "0b1b5f15-31fa-4d10-97df-9f1b4a5f1f08"
+key_vault_name             = "myexample-dev-key-vault"
+tenant_id                  = "00000000-0000-0000-0000-000000000000"
+object_id                  = "11111111-1111-1111-1111-111111111111"
+key_vault_sku_name         = "standard"
+soft_delete_retention_days = 7
+purge_protection_enabled   = true
+
 
 #-----------------------------------------------------------------------------------------------
 # 14-CommunicationService
