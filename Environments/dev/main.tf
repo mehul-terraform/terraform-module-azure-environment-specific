@@ -5,7 +5,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">3.84.0"
+      version = ">= 3.0.0"
     }
   }
 }
@@ -72,7 +72,7 @@ module "service_plan" {
 # 05-WebApp
 
 module "azurerm_linux_web_app" {
-  source                   = "../../Modules/05-WebApp"
+  source                   = "../../Modules/05-AppServicesContainer"
   resource_group_name      = module.resource_group.name
   location                 = module.resource_group.location  
   linux_web_app_name       = var.linux_web_app_name
@@ -104,7 +104,7 @@ module "storage_account" {
 # 07-PostgresSQLFlexible
 
 module "postgre_sql" {
-  source                          = "../../Modules/07-PostgresSQL"
+  source                          = "../../Modules/07-PostgresSQLFlexible"
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   postgresql_flexible_server_name = var.postgresql_flexible_server_name
@@ -177,6 +177,42 @@ module "redis" {
   minimum_tls_version           = var.minimum_tls_version
   cluster_shard_count           = var.cluster_shard_count
   tags                          = local.tags  
+}
+#---------------------------------------------------------------------------------------------
+# 12 - CosmosDB
+
+module "cosmosdb" {
+  source                    = "../../Modules/12-CosmosDB"  # relative path to child module
+  resource_group_name       = module.resource_group.name
+  location                  = module.resource_group.location
+  cosmosdb_account_name     = var.cosmosdb_account_name
+  database_name             = var.database_name
+  consistency_level         = var.consistency_level
+  max_interval_in_seconds   = var.max_interval_in_seconds
+  max_staleness_prefix      = var.max_staleness_prefix
+  capabilities              = var.capabilities
+  enable_automatic_failover = var.enable_automatic_failover
+  tags                      = local.tags
+}
+#--------------------------------------------------------------------------------------------------
+# 13-FunctionsApp
+
+module "function_app" {
+  source               = "../../Modules/13-Functionsapp"
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
+
+  storage_account_name  = var.storage_account_name
+  app_service_plan_name = var.app_service_plan_name
+  function_app_name     = var.function_app_name
+
+  dotnet_version       = var.dotnet_version
+  identity_type        = var.identity_type
+  run_from_package     = var.run_from_package
+  worker_runtime       = var.worker_runtime
+  node_version         = var.node_version
+  app_settings         = var.app_settings
+  tags                 = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------

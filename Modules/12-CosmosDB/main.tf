@@ -1,13 +1,27 @@
-resource "azurerm_private_dns_zone" "private_dns_zone" {
-  name                = var.private_dns_zone_name
+resource "azurerm_cosmosdb_account" "cosmosdb" {
+  name                = var.cosmosdb_account_name
+  location            = var.location
   resource_group_name = var.resource_group_name
-  tags                = merge(var.tags) 
+  offer_type          = "Standard"
+  kind                = "GlobalDocumentDB"
+  tags = merge(var.tags)
+
+  consistency_policy {
+    consistency_level       = var.consistency_level
+    max_interval_in_seconds = var.max_interval_in_seconds
+    max_staleness_prefix    = var.max_staleness_prefix
+  }
+
+  geo_location {
+    location          = var.location
+    failover_priority = 0
+  } 
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "virtual_network_link" {
-  name                  = var.virtual_network_link_name
-  resource_group_name   = var.resource_group_name
-  private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone.name
-  virtual_network_id    = var.virtual_network_id
-  registration_enabled  = true
+resource "azurerm_cosmosdb_sql_database" "sqldb" {
+  name                = var.database_name
+  resource_group_name = var.resource_group_name
+  account_name        = azurerm_cosmosdb_account.cosmosdb.name
 }
+
+  

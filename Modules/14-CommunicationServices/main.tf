@@ -16,5 +16,5 @@ resource "azurerm_email_communication_service_domain" "custom_domain" {
   email_service_id                 = azurerm_email_communication_service.email.id
   domain_management                = "CustomerManaged"
   user_engagement_tracking_enabled = var.enable_user_engagement_tracking
-  tags                = merge(var.tags) 
+  tags                             = merge(var.tags) 
 }

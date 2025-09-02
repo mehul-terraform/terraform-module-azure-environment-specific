@@ -37,7 +37,7 @@ resource "azurerm_postgresql_flexible_server" "postgresql_flexible_server" {
   private_dns_zone_id = var.private_dns_zone_id
   delegated_subnet_id = var.delegated_subnet_id
 
-  tags = local.tags
+  tags = merge(var.tags)
 
   lifecycle {
     precondition {

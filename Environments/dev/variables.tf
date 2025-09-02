@@ -595,6 +595,111 @@ variable "purge_protection_enabled" {
   default     = true
   description = "Enable purge protection on the Key Vault."
 }
+#-----------------------------------------------------------------------------------------
+# 12-CosmosDB
+
+variable "cosmosdb_account_name" {
+  description = "Cosmos DB account name"
+  type        = string
+}
+
+variable "database_name" {
+  description = "Cosmos DB SQL database name"
+  type        = string
+}
+
+variable "consistency_level" {
+  description = "Consistency level"
+  type        = string
+  default     = "Session"
+}
+
+variable "max_interval_in_seconds" {
+  description = "Max interval for bounded staleness"
+  type        = number
+  default     = 5
+}
+
+variable "max_staleness_prefix" {
+  description = "Max staleness prefix"
+  type        = number
+  default     = 100
+}
+
+variable "capabilities" {
+  description = "Cosmos DB capabilities"
+  type        = list(string)
+  default     = []
+}
+
+variable "enable_automatic_failover" {
+  description = "Enable automatic failover"
+  type        = bool
+  default     = false
+}
+#-----------------------------------------------------------------------------------------------
+# 13-FunctionsApp
+
+variable "resource_group_name" {
+  type        = string
+  description = "Resource group name"
+}
+
+variable "location" {
+  type        = string
+  description = "Azure location"
+  default     = "East US"
+}
+
+variable "storage_account_name" {
+  type        = string
+  description = "Storage account name"
+}
+
+variable "app_service_plan_name" {
+  type        = string
+  description = "App Service plan name"
+}
+
+variable "function_app_name" {
+  type        = string
+  description = "Function app name"
+}
+
+variable "dotnet_version" {
+  type        = string
+  default     = "dotnet6"
+}
+
+variable "identity_type" {
+  type        = string
+  default     = "SystemAssigned"
+}
+
+variable "run_from_package" {
+  type        = string
+  default     = "1"
+}
+
+variable "worker_runtime" {
+  type        = string
+  default     = "dotnet"
+}
+
+variable "node_version" {
+  type        = string
+  default     = "~14"
+}
+
+variable "app_settings" {
+  type        = map(string)
+  default     = {}
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+}
 
 #-----------------------------------------------------------------------------------------------
 # 14-CommunicationServices

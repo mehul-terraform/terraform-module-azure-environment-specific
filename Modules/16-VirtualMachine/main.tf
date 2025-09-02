@@ -5,7 +5,7 @@ resource "azurerm_public_ip" "public_ip" {
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = var.public_ip_allocation_method
-  tags                = local.tags  
+  tags                = merge(var.tags)
 }
 
 # Network Interface
@@ -21,7 +21,7 @@ resource "azurerm_network_interface" "network_interface" {
     private_ip_address            = var.private_ip_address
     public_ip_address_id          = azurerm_public_ip.public_ip.id    
   }
-  tags = local.tags
+  tags = merge(var.tags)
 }
 
 # Virtual Machine
@@ -47,5 +47,5 @@ resource "azurerm_windows_virtual_machine" "virtual_machine" {
     version   = var.virtual_machine_image_version
   }
   
-  tags = local.tags
+  tags = merge(var.tags)
 }

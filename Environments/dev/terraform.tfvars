@@ -150,12 +150,36 @@ cluster_shard_count                       = 1
 # 11-KeyVault
 
 key_vault_name             = "myexample-dev-key-vault"
-tenant_id                  = "00000000-0000-0000-0000-000000000000"
+tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 object_id                  = "11111111-1111-1111-1111-111111111111"
 key_vault_sku_name         = "standard"
 soft_delete_retention_days = 7
 purge_protection_enabled   = true
 
+#-----------------------------------------------------------------------------------------------
+# 12-CosmosDB
+
+cosmosdb_account_name    = "myexample-dev-cosmosdb"
+database_name            = "myexampledb"
+consistency_level        = "Session"
+max_interval_in_seconds  = 5
+max_staleness_prefix     = 100
+capabilities             = []
+enable_automatic_failover = false
+
+#-----------------------------------------------------------------------------------------------
+# 13-FunctionsApp
+
+app_service_plan_name  = "myappserviceplan"
+function_app_name      = "myexample-dev-funcapp01"
+dotnet_version        = "dotnet6"
+identity_type         = "SystemAssigned"
+run_from_package      = "1"
+worker_runtime        = "dotnet"
+node_version          = "~14"
+app_settings          = {
+  "MyCustomSetting" = "value"
+}
 
 #-----------------------------------------------------------------------------------------------
 # 14-CommunicationService

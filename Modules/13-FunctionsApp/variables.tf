@@ -1,30 +1,66 @@
-variable "private_dns_zone_name" {
-  description = "Private DNS zone name"
-  type        = string
-}
-
 variable "resource_group_name" {
-  description = "Resource group for DNS zone"
   type        = string
-}
-
-variable "virtual_network_link_name" {
-  description = "Name of the virtual network link"
-  type        = string
-}
-
-variable "virtual_network_id" {
-  description = "ID of the virtual network"
-  type        = string
+  description = "Resource group name"
 }
 
 variable "location" {
-  description = "Azure region"
   type        = string
+  description = "Azure location"
+}
+
+variable "storage_account_name" {
+  type        = string
+  description = "Storage account name"
+}
+
+variable "app_service_plan_name" {
+  type        = string
+  description = "App Service plan name"
+}
+
+variable "function_app_name" {
+  type        = string
+  description = "Function app name"
+}
+
+variable "dotnet_version" {
+  type        = string
+  description = "Dotnet version"
+  default     = "dotnet6"
+}
+
+variable "identity_type" {
+  type        = string
+  description = "Identity type"
+  default     = "SystemAssigned"
+}
+
+variable "run_from_package" {
+  type        = string
+  description = "Run from package flag"
+  default     = "1"
+}
+
+variable "worker_runtime" {
+  type        = string
+  description = "Functions runtime"
+  default     = "dotnet"
+}
+
+variable "node_version" {
+  type        = string
+  description = "Node version"
+  default     = "~14"
+}
+
+variable "app_settings" {
+  type        = map(string)
+  description = "Additional app settings"
+  default     = {}
 }
 
 variable "tags" {
-  description = "Tags for the Private Endpoint"
   type        = map(string)
+  description = "Tags"
   default     = {}
 }
