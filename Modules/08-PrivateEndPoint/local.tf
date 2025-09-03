@@ -1,5 +1,5 @@
 locals {
   tags = {
-   Name = "myexample-dev-db-pg-enp"
-  }  
+    Name = "myexample-dev-db-pg-enp"
+  }
 }

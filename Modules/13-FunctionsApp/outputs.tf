@@ -9,6 +9,6 @@ output "function_app_default_hostname" {
 }
 
 output "function_app_identity_principal_id" {
-  description = "Function app managed identity principal ID"
-  value       = azurerm_function_app.functionapp.identity.principal_id
+  value = azurerm_function_app.functionapp.identity[0].principal_id
 }
+

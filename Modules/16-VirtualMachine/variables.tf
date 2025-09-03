@@ -1,23 +1,23 @@
 # Resource Group Variables
 variable "resource_group_name" {
   description = "The name of the resource group"
-  type        = string  
+  type        = string
 }
 
 variable "location" {
   description = "The Azure region to deploy resources"
-  type        = string  
+  type        = string
 }
 
 # Public IP Variables
 variable "virtual_machine_public_ip_name" {
   description = "The name of the public IP resource"
-  type        = string    
+  type        = string
 }
 
 variable "public_ip_allocation_method" {
   description = "The name of the public IP resource"
-  type        = string    
+  type        = string
 }
 
 # Network Interface Variables
@@ -33,17 +33,17 @@ variable "subnet_id" {
 
 variable "private_ip_address_name" {
   description = "The static private IP address for the VM"
-  type        = string  
+  type        = string
 }
 
 variable "private_ip_address" {
   description = "The static private IP address for the VM"
-  type        = string  
+  type        = string
 }
 
 variable "private_ip_address_allocation" {
   description = "The static private IP address for the VM"
-  type        = string  
+  type        = string
 }
 
 # Virtual Machine Variables

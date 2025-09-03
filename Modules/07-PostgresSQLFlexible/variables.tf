@@ -32,7 +32,7 @@ variable "tier" {
 variable "storage_mb" {
   description = "Storage allowed for PostgresSQL Flexible server. Possible values : https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server#storage_mb."
   type        = number
-  default = null
+  default     = null
 }
 
 variable "postgresql_version" {
@@ -50,7 +50,7 @@ variable "zone" {
 variable "standby_zone" {
   description = "Specify availability-zone to enable high_availability and create standby PostgreSQL Flexible Server. (Null to disable high-availability)"
   type        = number
-  default = null
+  default     = null
 }
 
 variable "postgre_administrator_login" {
@@ -135,16 +135,16 @@ variable "use_random_string" {
 variable "allowed_cidrs" {
   description = "Map of authorized cidrs."
   type        = map(string)
-  default = {}
+  default     = {}
 }
 
 variable "create_key_secret" {
   description = "Map of key vault secrets to create"
   type = map(object({
-    key_vault_id = string
-    content_type = optional(string, null)
+    key_vault_id    = string
+    content_type    = optional(string, null)
     expiration_date = optional(string, null)
-    not_before_date = optional(string, null)  
+    not_before_date = optional(string, null)
   }))
   default = {}
 }

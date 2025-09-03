@@ -25,7 +25,7 @@ module "resource_group" {
   source              = "../../Modules/01-ResourceGroup"
   resource_group_name = var.resource_group_name
   location            = var.location
-  tags                = local.tags  
+  tags                = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -35,10 +35,10 @@ module "virtual_network" {
   source               = "../../Modules/02-VirtualNetwork"
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
-  virtual_network_name = var.virtual_network_name 
-  address_space        = var.address_space   
+  virtual_network_name = var.virtual_network_name
+  address_space        = var.address_space
   subnets              = var.subnets
-  tags                 = local.tags  
+  tags                 = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -47,10 +47,10 @@ module "virtual_network" {
 module "network_security_group" {
   source                       = "../../Modules/03-NetworkSecurityGroup"
   resource_group_name          = module.resource_group.name
-  location                     = module.resource_group.location 
-  network_security_group_name  = var.network_security_group_name  
-  network_security_group_rules = var.network_security_group_rules  
-  vm_subnet_id                 = module.virtual_network.vm_subnets["vm"]  
+  location                     = module.resource_group.location
+  network_security_group_name  = var.network_security_group_name
+  network_security_group_rules = var.network_security_group_rules
+  vm_subnet_id                 = module.virtual_network.vm_subnets["vm"]
   db_subnet_id                 = module.virtual_network.db_subnets["db"]
   tags                         = local.tags
 }
@@ -62,10 +62,10 @@ module "service_plan" {
   source              = "../../Modules/04-AppServicePlan"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
-  service_plan_name   = var.service_plan_name    
+  service_plan_name   = var.service_plan_name
   asp_os_type         = var.asp_os_type
   asp_sku_name        = var.asp_sku_name
-  tags                = local.tags 
+  tags                = local.tags
 }
 
 #---------------------------------------------------------------------------------------------------
@@ -74,15 +74,15 @@ module "service_plan" {
 module "azurerm_linux_web_app" {
   source                   = "../../Modules/05-AppServicesContainer"
   resource_group_name      = module.resource_group.name
-  location                 = module.resource_group.location  
+  location                 = module.resource_group.location
   linux_web_app_name       = var.linux_web_app_name
-  service_plan_id          = module.service_plan.id  
+  service_plan_id          = module.service_plan.id
   docker_image_name        = var.docker_image_name
   docker_image_tag         = var.docker_image_tag
   docker_registry_url      = var.docker_registry_url
   docker_registry_username = var.docker_registry_username
   docker_registry_password = var.docker_registry_password
-  tags                     = local.tags  
+  tags                     = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -95,9 +95,9 @@ module "storage_account" {
   storage_account_name               = var.storage_account_name
   account_tier                       = var.account_tier
   account_replication_type           = var.account_replication_type
-  storage_account_index_document     = var.storage_account_index_document         
+  storage_account_index_document     = var.storage_account_index_document
   storage_account_error_404_document = var.storage_account_error_404_document
-  tags                               = local.tags 
+  tags                               = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ module "postgre_sql" {
   databases                       = var.databases
   postgre_administrator_login     = var.postgre_administrator_login
   postgre_administrator_password  = var.postgre_administrator_password
-  tags                            = local.tags  
+  tags                            = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ module "private_endpoint_postgres" {
   private_connection_resource_id  = module.postgre_sql.postgresql_flexible_server_id
   is_manual_connection            = var.is_manual_connection
   subresource_names               = var.subresource_names
-  tags                            = local.tags  
+  tags                            = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ module "private_dns_zone" {
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   virtual_network_link_name = var.virtual_network_link_name
-  virtual_network_id        = module.virtual_network.virtual_network_id   
+  virtual_network_id        = module.virtual_network.virtual_network_id
   tags                      = local.tags
 }
 #--------------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ module "keyvault" {
   key_vault_name      = var.key_vault_name
   tenant_id           = var.tenant_id
   object_id           = var.object_id
-  tags                = local.tags 
+  tags                = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -176,13 +176,13 @@ module "redis" {
   enable_non_ssl_port           = var.enable_non_ssl_port
   minimum_tls_version           = var.minimum_tls_version
   cluster_shard_count           = var.cluster_shard_count
-  tags                          = local.tags  
+  tags                          = local.tags
 }
 #---------------------------------------------------------------------------------------------
 # 12 - CosmosDB
 
 module "cosmosdb" {
-  source                    = "../../Modules/12-CosmosDB"  # relative path to child module
+  source                    = "../../Modules/12-CosmosDB" # relative path to child module
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   cosmosdb_account_name     = var.cosmosdb_account_name
@@ -198,21 +198,23 @@ module "cosmosdb" {
 # 13-FunctionsApp
 
 module "function_app" {
-  source               = "../../Modules/13-Functionsapp"
-  resource_group_name  = module.resource_group.name
-  location             = module.resource_group.location
+  source              = "../../Modules/13-Functionsapp"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
 
-  storage_account_name  = module.storage_account.storage_account_name
+  storage_account_name       = module.storage_account.storage_account_name
+  storage_account_access_key = module.storage_account.access_key
+
   app_service_plan_name = module.service_plan.id
   function_app_name     = var.function_app_name
 
-  dotnet_version       = var.dotnet_version
-  identity_type        = var.identity_type
-  run_from_package     = var.run_from_package
-  worker_runtime       = var.worker_runtime
-  node_version         = var.node_version
-  app_settings         = var.app_settings
-  tags                 = var.tags
+  dotnet_version   = var.dotnet_version
+  identity_type    = var.identity_type
+  run_from_package = var.run_from_package
+  worker_runtime   = var.worker_runtime
+  node_version     = var.node_version
+  app_settings     = var.app_settings
+  tags             = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -226,38 +228,38 @@ module "communication_services" {
   enable_user_engagement_tracking = var.enable_user_engagement_tracking
   resource_group_name             = module.resource_group.name
   data_location                   = var.data_location
-  tags                            = local.tags 
+  tags                            = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------
 # 15-FrontDoorStandard
 
 module "azure_front_door" {
-  source                     = "../../Modules/15-FrontDoor"
-  front_door_name            = var.front_door_name
-  resource_group_name        = module.resource_group.name
-  location                   = module.resource_group.location
-  front_door_sku_name        = var.front_door_sku_name
-    
-  frontend_endpoint_name     = var.frontend_endpoint_name
-  backend_endpoint_name      = var.backend_endpoint_name
+  source              = "../../Modules/15-FrontDoor"
+  front_door_name     = var.front_door_name
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  front_door_sku_name = var.front_door_sku_name
+
+  frontend_endpoint_name = var.frontend_endpoint_name
+  backend_endpoint_name  = var.backend_endpoint_name
 
   frontend_origin_group_name = var.frontend_origin_group_name
   backend_origin_group_name  = var.backend_origin_group_name
 
-  frontend_origin_name       = var.frontend_origin_name
-  backend_origin_name        = var.backend_origin_name
+  frontend_origin_name = var.frontend_origin_name
+  backend_origin_name  = var.backend_origin_name
 
-  frontend_route_name        = var.frontend_route_name
-  backend_route_name         = var.backend_route_name
+  frontend_route_name = var.frontend_route_name
+  backend_route_name  = var.backend_route_name
 
-  frontend_domain_name       = var.frontend_domain_name
-  backend_domain_name        = var.backend_domain_name
+  frontend_domain_name = var.frontend_domain_name
+  backend_domain_name  = var.backend_domain_name
 
-  host_frontend_domain_name  = var.host_frontend_domain_name
-  host_backend_domain_name   = var.host_backend_domain_name
-  
-  tags                       = local.tags
+  host_frontend_domain_name = var.host_frontend_domain_name
+  host_backend_domain_name  = var.host_backend_domain_name
+
+  tags = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------------------
@@ -270,7 +272,7 @@ module "virtual_machine" {
   virtual_machine_name            = var.virtual_machine_name
   virtual_machine_size            = var.virtual_machine_size
   admin_username                  = var.admin_username
-  admin_password                  = var.admin_password   
+  admin_password                  = var.admin_password
   network_interface_name          = var.network_interface_name
   subnet_id                       = module.virtual_network.vm_subnets["vm"]
   private_ip_address_allocation   = var.private_ip_address_allocation
@@ -283,7 +285,7 @@ module "virtual_machine" {
   virtual_machine_image_publisher = var.virtual_machine_image_publisher
   virtual_machine_image_offer     = var.virtual_machine_image_offer
   virtual_machine_image_sku       = var.virtual_machine_image_sku
-  virtual_machine_image_version   = var.virtual_machine_image_version  
+  virtual_machine_image_version   = var.virtual_machine_image_version
   tags                            = local.tags
 }
 

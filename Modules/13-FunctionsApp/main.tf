@@ -4,11 +4,11 @@ resource "azurerm_function_app" "functionapp" {
   resource_group_name        = var.resource_group_name
   app_service_plan_id        = var.app_service_plan_name
   storage_account_name       = var.storage_account_name
-  storage_account_access_key = var.storage_account_primary_access_key
+  storage_account_access_key = var.storage_account_access_key
   version                    = "~4"
   os_type                    = "linux"
 
- 
+
   identity {
     type = var.identity_type
   }

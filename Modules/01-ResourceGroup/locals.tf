@@ -1,5 +1,5 @@
 locals {
   tags = {
-   Name = "myexample-dev-rg"
-  }  
+    Name = "myexample-dev-rg"
+  }
 }

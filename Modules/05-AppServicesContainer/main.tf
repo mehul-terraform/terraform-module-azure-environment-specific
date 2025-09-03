@@ -5,14 +5,14 @@ resource "azurerm_linux_web_app" "web_app" {
   service_plan_id     = var.service_plan_id
 
   site_config {
-    always_on         = true
+    always_on = true
   }
 
   app_settings = {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-    docker_registry_url          = var.docker_registry_url
-    Ddocker_registry_username    = var.docker_registry_username
-    docker_registry_password     = var.docker_registry_password
+    docker_registry_url                 = var.docker_registry_url
+    Ddocker_registry_username           = var.docker_registry_username
+    docker_registry_password            = var.docker_registry_password
   }
 
   identity {

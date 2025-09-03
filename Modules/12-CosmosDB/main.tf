@@ -4,7 +4,7 @@ resource "azurerm_cosmosdb_account" "cosmosdb" {
   resource_group_name = var.resource_group_name
   offer_type          = "Standard"
   kind                = "GlobalDocumentDB"
-  tags = merge(var.tags)
+  tags                = merge(var.tags)
 
   consistency_policy {
     consistency_level       = var.consistency_level
@@ -15,7 +15,7 @@ resource "azurerm_cosmosdb_account" "cosmosdb" {
   geo_location {
     location          = var.location
     failover_priority = 0
-  } 
+  }
 }
 
 resource "azurerm_cosmosdb_sql_database" "sqldb" {

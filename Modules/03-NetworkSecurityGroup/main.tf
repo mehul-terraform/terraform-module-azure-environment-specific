@@ -2,7 +2,7 @@ resource "azurerm_network_security_group" "nsg" {
   name                = var.network_security_group_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  tags                = merge(var.tags)    
+  tags                = merge(var.tags)
 
   dynamic "security_rule" {
     for_each = var.network_security_group_rules
@@ -21,12 +21,12 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 
- resource "azurerm_subnet_network_security_group_association" "vm_subnet_nsg" {
+resource "azurerm_subnet_network_security_group_association" "vm_subnet_nsg" {
   subnet_id                 = var.vm_subnet_id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
- resource "azurerm_subnet_network_security_group_association" "db_subnet_nsg" {
+resource "azurerm_subnet_network_security_group_association" "db_subnet_nsg" {
   subnet_id                 = var.db_subnet_id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }

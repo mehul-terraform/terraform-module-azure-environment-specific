@@ -12,14 +12,14 @@ resource "azurerm_public_ip" "public_ip" {
 resource "azurerm_network_interface" "network_interface" {
   name                = var.network_interface_name
   location            = var.location
-  resource_group_name = var.resource_group_name  
+  resource_group_name = var.resource_group_name
 
   ip_configuration {
     name                          = var.private_ip_address_name
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = var.private_ip_address_allocation
     private_ip_address            = var.private_ip_address
-    public_ip_address_id          = azurerm_public_ip.public_ip.id    
+    public_ip_address_id          = azurerm_public_ip.public_ip.id
   }
   tags = merge(var.tags)
 }
@@ -34,7 +34,7 @@ resource "azurerm_windows_virtual_machine" "virtual_machine" {
   admin_password        = var.admin_password
   network_interface_ids = [azurerm_network_interface.network_interface.id]
   patch_mode            = "AutomaticByPlatform"
-  
+
   os_disk {
     caching              = var.os_disk_caching
     storage_account_type = var.os_disk_storage_account_type
@@ -46,6 +46,6 @@ resource "azurerm_windows_virtual_machine" "virtual_machine" {
     sku       = var.virtual_machine_image_sku
     version   = var.virtual_machine_image_version
   }
-  
+
   tags = merge(var.tags)
 }

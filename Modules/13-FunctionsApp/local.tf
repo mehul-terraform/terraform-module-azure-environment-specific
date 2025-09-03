@@ -1,5 +1,5 @@
 locals {
   tags = {
-   Name = "myexample.co.in"
-  }  
+    Name = "myexample.co.in"
+  }
 }

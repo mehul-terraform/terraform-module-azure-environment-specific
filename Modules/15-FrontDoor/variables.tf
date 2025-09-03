@@ -2,7 +2,7 @@ variable "resource_group_name" {
   description = "Resource Group Name"
   type        = string
 }
- 
+
 variable "location" {
   description = "Azure Region"
   type        = string
@@ -12,11 +12,11 @@ variable "front_door_sku_name" {
   description = "Azure SKU"
   type        = string
 }
- 
+
 variable "front_door_name" {
   description = "Azure Front Door Name"
   type        = string
-} 
+}
 
 variable "frontend_endpoint_name" {
   description = "backend domain"
@@ -62,17 +62,17 @@ variable "frontend_domain_name" {
   description = "Frontend Domain"
   type        = string
 }
- 
+
 variable "backend_domain_name" {
   description = "backend domain"
   type        = string
-} 
+}
 
 variable "host_frontend_domain_name" {
   description = "Frontend Domain"
   type        = string
 }
- 
+
 variable "host_backend_domain_name" {
   description = "backend domain"
   type        = string

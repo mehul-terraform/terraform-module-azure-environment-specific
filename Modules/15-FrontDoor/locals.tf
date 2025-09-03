@@ -1,5 +1,5 @@
 locals {
   tags = {
-   Name = "myexample-dev-fd"
-  }  
+    Name = "myexample-dev-fd"
+  }
 }

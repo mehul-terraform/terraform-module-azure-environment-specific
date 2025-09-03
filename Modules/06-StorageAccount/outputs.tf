@@ -17,3 +17,8 @@ output "static_website_url" {
   description = "Static website endpoint of the storage account"
   value       = azurerm_storage_account.storage_account.primary_web_endpoint
 }
+
+output "access_key" {
+  value     = azurerm_storage_account.storage_account.primary_access_key
+  sensitive = true
+}

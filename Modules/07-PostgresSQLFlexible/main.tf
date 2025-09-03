@@ -76,11 +76,11 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "firewall_rules" {
 resource "random_password" "password" {
   count = var.use_random_string ? 1 : 0
 
-  length  = 12
-  special = false
-  min_upper        = 4
-  min_lower        = 5
-  min_numeric      = 3
+  length      = 12
+  special     = false
+  min_upper   = 4
+  min_lower   = 5
+  min_numeric = 3
 }
 
 resource "azurerm_key_vault_secret" "secret" {
@@ -92,7 +92,7 @@ resource "azurerm_key_vault_secret" "secret" {
 
   content_type = each.value.content_type
 
-  tags         = merge(var.tags)
+  tags = merge(var.tags)
 
   expiration_date = each.value.expiration_date
   not_before_date = each.value.not_before_date

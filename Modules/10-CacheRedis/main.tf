@@ -1,10 +1,10 @@
 resource "azurerm_redis_cache" "redis-cache" {
-  name                          = var.cache_name
-  location                      = var.location
-  resource_group_name           = var.resource_group_name
-  capacity                      = var.capacity
-  family                        = var.family
-  sku_name                      = var.sku
+  name                = var.cache_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  capacity            = var.capacity
+  family              = var.family
+  sku_name            = var.sku
   #enable_non_ssl_port           = var.enable_non_ssl_port
   minimum_tls_version           = var.minimum_tls_version
   shard_count                   = var.sku == "Premium" ? var.cluster_shard_count : 0
@@ -42,8 +42,8 @@ resource "azurerm_redis_cache" "redis-cache" {
       maintenance_window = patch_schedule.value.maintenance_window
     }
   }
-  tags                = merge(var.tags) 
-  
+  tags = merge(var.tags)
+
   lifecycle {
     ignore_changes = [redis_configuration[0].rdb_storage_connection_string]
   }

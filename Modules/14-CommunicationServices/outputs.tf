@@ -9,6 +9,6 @@ output "email_service_id" {
 }
 
 output "custom_domain_id" {
- description = "The ID of the custom email domain."
+  description = "The ID of the custom email domain."
   value       = azurerm_email_communication_service_domain.custom_domain.id
 }

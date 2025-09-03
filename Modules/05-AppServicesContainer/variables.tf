@@ -7,7 +7,7 @@ variable "active_directory_auth_setttings" {
 variable "linux_web_app_name" {
   description = "The name of the function app"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "service_plan_name" {

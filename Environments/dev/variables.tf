@@ -63,8 +63,8 @@ variable "network_security_group_name" {
 }
 
 variable "network_security_group_rules" {
-  description                  = "List of security rules to apply to the NSG."
-  type                         = list(object({
+  description = "List of security rules to apply to the NSG."
+  type = list(object({
     name                       = string
     priority                   = number
     direction                  = string
@@ -380,7 +380,7 @@ variable "databases" {
     charset   = optional(string, "utf8")
     collation = optional(string, "en_US.utf8")
   }))
-  default     = {}
+  default = {}
 }
 
 variable "postgresql_configurations" {
@@ -402,12 +402,12 @@ variable "allowed_cidrs" {
 }
 
 variable "create_key_secret" {
-  description       = "Map of key vault secrets to create"
-  type              = map(object({
+  description = "Map of key vault secrets to create"
+  type = map(object({
     key_vault_id    = string
     content_type    = optional(string, null)
     expiration_date = optional(string, null)
-    not_before_date = optional(string, null)  
+    not_before_date = optional(string, null)
   }))
   default = {}
 }
@@ -476,13 +476,13 @@ variable "sku" {
 variable "enable_non_ssl_port" {
   description = "Enable non-SSL port on Redis cache"
   type        = bool
-  default = false
+  default     = false
 }
 
 variable "minimum_tls_version" {
   description = "The minimum TLS version for the Redis cache"
   type        = string
-  default = "1.0"
+  default     = "1.0"
 }
 
 variable "cluster_shard_count" {
@@ -494,19 +494,19 @@ variable "cluster_shard_count" {
 variable "private_static_ip_address" {
   description = "The static IP address for the Redis cache"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "subnet_id" {
   description = "The ID of the subnet in which the Redis cache is deployed"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "redis_cache_public_network_access_enabled" {
   description = "Enable public network access for the Redis cache"
   type        = bool
-  default = true
+  default     = true
 }
 
 variable "redis_version" {
@@ -517,7 +517,7 @@ variable "redis_version" {
 variable "zones" {
   description = "The availability zones in which to create the Redis cache"
   type        = list(string)
-  default = []
+  default     = []
 }
 
 variable "redis_configurations" {
@@ -550,14 +550,14 @@ variable "patch_schedule" {
 }
 
 variable "redis_firewall_rule" {
-  type        = map(object({
-    name      = string
-    count     = number
-    start_ip  = string
-    end_ip    = string
+  type = map(object({
+    name     = string
+    count    = number
+    start_ip = string
+    end_ip   = string
   }))
   description = "A map of firewall rules for the Redis cache."
-  default = {}
+  default     = {}
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -640,30 +640,29 @@ variable "enable_automatic_failover" {
 #-----------------------------------------------------------------------------------------------
 # 13-FunctionsApp
 
-
 variable "function_app_name" {
   type        = string
   description = "Function app name"
 }
 
 variable "dotnet_version" {
-  type        = string
-  default     = "dotnet6"
+  type    = string
+  default = "dotnet6"
 }
 
 variable "run_from_package" {
-  type        = string
-  default     = "1"
+  type    = string
+  default = "1"
 }
 
 variable "worker_runtime" {
-  type        = string
-  default     = "dotnet"
+  type    = string
+  default = "dotnet"
 }
 
 variable "node_version" {
-  type        = string
-  default     = "~14"
+  type    = string
+  default = "~14"
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -702,11 +701,11 @@ variable "front_door_sku_name" {
   description = "Azure SKU"
   type        = string
 }
- 
+
 variable "front_door_name" {
   description = "Azure Front Door Name"
   type        = string
-} 
+}
 
 variable "frontend_endpoint_name" {
   description = "backend domain"
@@ -752,17 +751,17 @@ variable "frontend_domain_name" {
   description = "Frontend Domain"
   type        = string
 }
- 
+
 variable "backend_domain_name" {
   description = "backend domain"
   type        = string
-} 
+}
 
 variable "host_frontend_domain_name" {
   description = "Frontend Domain"
   type        = string
 }
- 
+
 variable "host_backend_domain_name" {
   description = "backend domain"
   type        = string
@@ -774,12 +773,12 @@ variable "host_backend_domain_name" {
 # Public IP Variables
 variable "virtual_machine_public_ip_name" {
   description = "The name of the public IP resource"
-  type        = string    
+  type        = string
 }
 
 variable "virtual_machine_public_ip_allocation_method" {
   description = "The name of the public IP resource"
-  type        = string    
+  type        = string
 }
 
 # Network Interface Variables
@@ -790,17 +789,17 @@ variable "network_interface_name" {
 
 variable "private_ip_address_name" {
   description = "The static private IP address for the VM"
-  type        = string  
+  type        = string
 }
 
 variable "private_ip_address" {
   description = "The static private IP address for the VM"
-  type        = string  
+  type        = string
 }
 
 variable "private_ip_address_allocation" {
   description = "The static private IP address for the VM"
-  type        = string  
+  type        = string
 }
 
 # Virtual Machine Variables

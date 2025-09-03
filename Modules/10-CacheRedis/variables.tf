@@ -46,13 +46,13 @@ variable "sku" {
 variable "enable_non_ssl_port" {
   description = "Enable non-SSL port on Redis cache"
   type        = bool
-  default = false
+  default     = false
 }
 
 variable "minimum_tls_version" {
   description = "The minimum TLS version for the Redis cache"
   type        = string
-  default = "1.0"
+  default     = "1.0"
 }
 
 variable "cluster_shard_count" {
@@ -64,19 +64,19 @@ variable "cluster_shard_count" {
 variable "private_static_ip_address" {
   description = "The static IP address for the Redis cache"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "subnet_id" {
   description = "The ID of the subnet in which the Redis cache is deployed"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "public_network_access_enabled" {
   description = "Enable public network access for the Redis cache"
   type        = bool
-  default = true
+  default     = true
 }
 
 variable "redis_version" {
@@ -87,7 +87,7 @@ variable "redis_version" {
 variable "zones" {
   description = "The availability zones in which to create the Redis cache"
   type        = list(string)
-  default = []
+  default     = []
 }
 
 variable "redis_configurations" {
@@ -120,12 +120,12 @@ variable "patch_schedule" {
 }
 
 variable "redis_firewall_rule" {
-  type        = map(object({
-    name      = string
-    count     = number
-    start_ip  = string
-    end_ip    = string
+  type = map(object({
+    name     = string
+    count    = number
+    start_ip = string
+    end_ip   = string
   }))
   description = "A map of firewall rules for the Redis cache."
-  default = {}
+  default     = {}
 }

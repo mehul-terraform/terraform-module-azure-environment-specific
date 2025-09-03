@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------------
 # 01-ResourceGroup
 
-resource_group_name  = "myexample-dev-rg"
-location             = "WEST US 3"
+resource_group_name = "myexample-dev-rg"
+location            = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
 
-virtual_network_name  = "myexample-dev-vnet"
-address_space         = ["10.0.0.0/8"]
+virtual_network_name = "myexample-dev-vnet"
+address_space        = ["10.0.0.0/8"]
 
 subnets = [
   {
@@ -82,7 +82,7 @@ network_security_group_rules = [
 #-----------------------------------------------------------------------------------------------
 # 04-AppServicePlan
 
-service_plan_name = "myexample-dev-asp01"  
+service_plan_name = "myexample-dev-asp01"
 asp_os_type       = "Linux"
 asp_sku_name      = "B2"
 
@@ -108,16 +108,16 @@ storage_account_error_404_document = "404.html"
 # 06-PostgreSQLDatabase
 
 postgresql_flexible_server_name = "myexample-dev-db-pg"
-  postgres_sku_name             = "B_Standard_B1ms"
-  storage_mb                    = 32768
-  databases = {
-    testdb = {
-      charset   = "UTF8"
-      collation = "en_US.utf8"
-    }
+postgres_sku_name               = "B_Standard_B1ms"
+storage_mb                      = 32768
+databases = {
+  testdb = {
+    charset   = "UTF8"
+    collation = "en_US.utf8"
   }
-  postgre_administrator_login    = "myexampleadmin"
-  postgre_administrator_password = "Admin@123456"
+}
+postgre_administrator_login    = "myexampleadmin"
+postgre_administrator_password = "Admin@123456"
 
 #-----------------------------------------------------------------------------------------------  
 # 08-PrivateDNSZone
@@ -159,24 +159,24 @@ purge_protection_enabled   = true
 #-----------------------------------------------------------------------------------------------
 # 12-CosmosDB
 
-cosmosdb_account_name    = "myexample-dev-cosmosdb"
-database_name            = "myexampledb"
-consistency_level        = "Session"
-max_interval_in_seconds  = 5
-max_staleness_prefix     = 100
-capabilities             = []
+cosmosdb_account_name     = "myexample-dev-cosmosdb"
+database_name             = "myexampledb"
+consistency_level         = "Session"
+max_interval_in_seconds   = 5
+max_staleness_prefix      = 100
+capabilities              = []
 enable_automatic_failover = false
 
 #-----------------------------------------------------------------------------------------------
 # 13-FunctionsApp
 
-function_app_name      = "myexample-dev-funcapp01"
-dotnet_version        = "dotnet6"
-identity_type         = "SystemAssigned"
-run_from_package      = "1"
-worker_runtime        = "dotnet"
-node_version          = "~14"
-app_settings          = {
+function_app_name = "myexample-dev-funcapp01"
+dotnet_version    = "dotnet6"
+identity_type     = "SystemAssigned"
+run_from_package  = "1"
+worker_runtime    = "dotnet"
+node_version      = "~14"
+app_settings = {
   "MyCustomSetting" = "value"
 }
 
@@ -192,36 +192,36 @@ data_location                   = "United States"
 #-----------------------------------------------------------------------------------------------  
 # 15-FrontDoor
 
-front_door_name               = "myexample-dev-afd"
-front_door_sku_name           = "Standard_AzureFrontDoor"
-    
-frontend_endpoint_name        = "myexample-dev-frontend"
-backend_endpoint_name         = "myexample-dev-backend"
+front_door_name     = "myexample-dev-afd"
+front_door_sku_name = "Standard_AzureFrontDoor"
 
-frontend_origin_group_name    = "frontend-dev-origin-group"
-backend_origin_group_name     = "backend-dev-origin-group"
+frontend_endpoint_name = "myexample-dev-frontend"
+backend_endpoint_name  = "myexample-dev-backend"
 
-frontend_origin_name          = "frontend-dev-origin"
-backend_origin_name           = "backend-dev-origin"
+frontend_origin_group_name = "frontend-dev-origin-group"
+backend_origin_group_name  = "backend-dev-origin-group"
 
-frontend_route_name           = "frontend-dev-route"
-backend_route_name            = "backend-dev-route"
+frontend_origin_name = "frontend-dev-origin"
+backend_origin_name  = "backend-dev-origin"
 
-frontend_domain_name          = "myexample-dev-frontend"
-backend_domain_name           = "myexample-dev-backend"
+frontend_route_name = "frontend-dev-route"
+backend_route_name  = "backend-dev-route"
 
-host_frontend_domain_name     = "web-dev.myexample.co.in"
-host_backend_domain_name      = "api-dev.myexample.co.in"
+frontend_domain_name = "myexample-dev-frontend"
+backend_domain_name  = "myexample-dev-backend"
+
+host_frontend_domain_name = "web-dev.myexample.co.in"
+host_backend_domain_name  = "api-dev.myexample.co.in"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
-  
+
 virtual_machine_public_ip_name              = "myexample-dev-vm01-ip"
 virtual_machine_public_ip_allocation_method = "Static"
 virtual_machine_name                        = "myexampledevvm"
 virtual_machine_size                        = "Standard_F2"
 admin_username                              = "myexample"
-admin_password                              = "Admin@123456"  
+admin_password                              = "Admin@123456"
 network_interface_name                      = "myexample-dev-vm01-nic"
 private_ip_address_allocation               = "Static"
 private_ip_address_name                     = "myexample-dev-vm01-private-ip"
@@ -236,12 +236,12 @@ virtual_machine_image_version               = "latest"
 #-------------------------------------------------------------------------------------------------
 # 17-ContainerRegistry
 
-container_registry_name        = "myexampledevacr01"
-container_registry_sku         = "Premium"
-admin_enabled                  = true
-public_network_access_enabled  = true
-quarantine_policy_enabled      = true
-zone_redundancy_enabled        = true
+container_registry_name       = "myexampledevacr01"
+container_registry_sku        = "Premium"
+admin_enabled                 = true
+public_network_access_enabled = true
+quarantine_policy_enabled     = true
+zone_redundancy_enabled       = true
 
 #-------------------------------------------------------------------------------------------------
 
