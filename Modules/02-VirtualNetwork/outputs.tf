@@ -1,5 +1,5 @@
-output "virtual_network_id" {
-  value = azurerm_virtual_network.virtual_network.id
+output "id" {
+  value = azurerm_virtual_network.vnet.id
 }
 
 output "subnet_ids" {

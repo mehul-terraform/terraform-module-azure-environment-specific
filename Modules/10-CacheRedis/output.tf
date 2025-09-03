@@ -1,4 +1,4 @@
-output "redis_cache_instance_id" {
+output "instance_id" {
   description = "The Route ID of Redis Cache"
   value       = azurerm_redis_cache.redis-cache.id
 }

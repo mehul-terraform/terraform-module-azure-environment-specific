@@ -170,7 +170,7 @@ enable_automatic_failover = false
 #-----------------------------------------------------------------------------------------------
 # 13-FunctionsApp
 
-function_app_name = "myexample-dev-funcapp01"
+function_app_name = "myexample-dev-funcapp"
 dotnet_version    = "dotnet6"
 identity_type     = "SystemAssigned"
 run_from_package  = "1"

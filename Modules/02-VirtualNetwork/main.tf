@@ -1,4 +1,4 @@
-resource "azurerm_virtual_network" "virtual_network" {
+resource "azurerm_virtual_network" "vnet" {
   name                = var.virtual_network_name
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -11,6 +11,6 @@ resource "azurerm_subnet" "subnets" {
 
   name                 = each.value.name
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [each.value.address_prefix]
 }

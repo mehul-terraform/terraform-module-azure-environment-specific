@@ -1,7 +1,7 @@
-output "key_vault_id" {
+output "id" {
   value = azurerm_key_vault.keyvault.id
 }
 
-output "key_vault_uri" {
+output "uri" {
   value = azurerm_key_vault.keyvault.vault_uri
 }

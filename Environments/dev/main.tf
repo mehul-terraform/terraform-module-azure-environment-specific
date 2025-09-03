@@ -123,7 +123,7 @@ module "private_endpoint_postgres" {
   source                          = "../../Modules/08-PrivateEndPoint"
   private_endpoint_name           = var.private_endpoint_name
   private_dns_zone_ids            = [module.private_dns_zone.private_dns_zone_id]
-  virtual_network_id              = module.virtual_network.virtual_network_id
+  virtual_network_id              = module.virtual_network.id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
   location                        = module.resource_group.location
   resource_group_name             = module.resource_group.name
@@ -144,7 +144,7 @@ module "private_dns_zone" {
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   virtual_network_link_name = var.virtual_network_link_name
-  virtual_network_id        = module.virtual_network.virtual_network_id
+  virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
 #--------------------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ module "function_app" {
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
 
-  storage_account_name       = module.storage_account.storage_account_name
+  storage_account_name       = module.storage_account.name
   storage_account_access_key = module.storage_account.access_key
 
   app_service_plan_name = module.service_plan.id

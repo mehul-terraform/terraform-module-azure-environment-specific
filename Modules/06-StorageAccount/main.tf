@@ -1,4 +1,4 @@
-resource "azurerm_storage_account" "storage_account" {
+resource "azurerm_storage_account" "sa" {
   name                     = var.storage_account_name
   resource_group_name      = var.resource_group_name
   location                 = var.location
@@ -8,7 +8,7 @@ resource "azurerm_storage_account" "storage_account" {
 }
 
 resource "azurerm_storage_account_static_website" "static_website" {
-  storage_account_id = azurerm_storage_account.storage_account.id
+  storage_account_id = azurerm_storage_account.sa.id
 
   index_document     = var.storage_account_index_document
   error_404_document = var.storage_account_error_404_document

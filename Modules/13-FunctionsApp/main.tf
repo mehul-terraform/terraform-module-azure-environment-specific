@@ -1,13 +1,10 @@
-resource "azurerm_function_app" "functionapp" {
+resource "azurerm_linux_function_app" "functionapp" {
   name                       = var.function_app_name
   location                   = var.location
   resource_group_name        = var.resource_group_name
-  app_service_plan_id        = var.app_service_plan_name
+  service_plan_id            = var.app_service_plan_name
   storage_account_name       = var.storage_account_name
   storage_account_access_key = var.storage_account_access_key
-  version                    = "~4"
-  os_type                    = "linux"
-
 
   identity {
     type = var.identity_type
@@ -22,6 +19,15 @@ resource "azurerm_function_app" "functionapp" {
     },
     var.app_settings,
   )
+
+  site_config {
+    application_stack {
+      # Use this based on your runtime. For example:
+      node_version = "22"
+      # dotnet_version = "6"
+      # python_version = "3.11"
+    }
+  }
 
   tags = var.tags
 }
