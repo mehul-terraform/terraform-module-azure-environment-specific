@@ -175,7 +175,7 @@ module "redis" {
   resource_group_name           = module.resource_group.name
   capacity                      = var.capacity
   family                        = var.family
-  sku                           = var.sku
+  sku                           = var.redis_cache_sku
   public_network_access_enabled = var.public_network_access_enabled
   redis_version                 = var.redis_version
   enable_non_ssl_port           = var.enable_non_ssl_port
@@ -325,5 +325,22 @@ module "azurerm_container_registry" {
 }
 
 #--------------------------------------------------------------------------------------------------
+# 20-VirtualNetworkGateway
 
+module "virtual_network_gateway" {
+  source                       = "../../Modules/20-VirtualNetworkGateway"
+  resource_group_name          = module.resource_group.name
+  location                     = module.resource_group.location
+  virtual_network_gateway_name = var.virtual_network_gateway_name
+  virtual_network_id           = module.virtual_network.id
+  subnet_id                    = module.virtual_network.gateway_subnets["gateway"]
+  public_ip_address_id         = var.virtual_network_gateway_public_ip_name
+  allocation_method            = var.virtual_network_gateway_public_ip_allocation_method
+  gateway_type                 = var.gateway_type
+  vpn_type                     = var.vpn_type
+  active_active                = var.active_active
+  virtual_network_gateway_sku  = var.virtual_network_gateway_sku
+  tags                         = var.tags
+}
 
+#--------------------------------------------------------------------------------------------------

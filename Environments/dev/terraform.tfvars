@@ -146,7 +146,7 @@ subresource_names               = ["postgresqlServer"]
 cache_name                                = "myexample-dev-redis-cache"
 capacity                                  = 2
 family                                    = "C"
-sku                                       = "Standard"
+redis_cache_sku                           = "Basic"
 redis_cache_public_network_access_enabled = true
 redis_version                             = "6"
 enable_non_ssl_port                       = false
@@ -251,4 +251,14 @@ quarantine_policy_enabled     = true
 zone_redundancy_enabled       = true
 
 #-------------------------------------------------------------------------------------------------
+# 20-VirtualNetworkGateway
+
+virtual_network_gateway_name                        = "myexample-dev-vnet-gateway"
+virtual_network_gateway_public_ip_name              = "myexample-dev-vnet-gateway-ip"
+gateway_type                                        = "Vpn"
+vpn_type                                            = "RouteBased"
+active_active                                       = false
+virtual_network_gateway_sku                         = "VpnGw1"
+virtual_network_gateway_public_ip_allocation_method = "Static"
+#------------------------------------------------------------------------------------------------
 

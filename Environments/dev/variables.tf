@@ -483,7 +483,7 @@ variable "family" {
   type        = string
 }
 
-variable "sku" {
+variable "redis_cache_sku" {
   description = "The SKU of the Redis cache to deploy. Must be [Basic/Standard/Premium]"
   type        = string
 }
@@ -914,4 +914,47 @@ variable "zone_redundancy_enabled" {
 }
 
 #-----------------------------------------------------------------------------------------------
+# 20-VirtualNetworkGateway
 
+variable "virtual_network_gateway_name" {
+  description = "Name of the virtual network gateway"
+  type        = string
+  
+}
+
+variable "gateway_type" {
+  description = "Gateway type"
+  type        = string
+  
+}
+
+variable "vpn_type" {
+  description = "VPN type"
+  type        = string
+  
+}
+
+variable "active_active" {
+  description = "Active-active mode"
+  type        = bool
+  
+}
+
+variable "virtual_network_gateway_sku" {
+  description = "Gateway SKU"
+  type        = string
+  
+}
+
+variable "virtual_network_gateway_public_ip_name" {
+  description = "The name of the public IP resource"
+  type        = string
+}
+
+variable "virtual_network_gateway_public_ip_allocation_method" {
+  description = "Gateway SKU"
+  type        = string
+
+}
+
+#------------------------------------------------------------------------------------------------

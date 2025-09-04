@@ -1,55 +1,64 @@
-variable "container_registry_name" {
-  description = "Name of the Azure Container Registry (lowercase letters and numbers only)"
-  type        = string
-}
-
 variable "resource_group_name" {
   description = "Resource group name"
   type        = string
 }
 
 variable "location" {
-  description = "Azure location"
+  description = "Azure region"
   type        = string
 }
 
-variable "container_registry_sku" {
-  description = "SKU of the container registry (Basic, Standard, Premium)"
+variable "virtual_network_gateway_name" {
+  description = "Name of the virtual network gateway"
   type        = string
 }
 
-variable "admin_enabled" {
-  description = "Enable admin user for ACR"
-  type        = bool
-  default     = true
+variable "virtual_network_id" {
+  description = "ID of the virtual network"
+  type        = string
 }
 
-variable "public_network_access_enabled" {
-  description = "Enable public network access"
-  type        = bool
-  default     = true
+variable "public_ip_address_id" {
+  description = "ID of the public IP address resource"
+  type        = string
 }
 
-variable "quarantine_policy_enabled" {
-  description = "Enable quarantine policy"
-  type        = bool
-  default     = true
+variable "allocation_method" {
+  description = "ID of the public IP address resource"
+  type        = string
 }
 
-variable "zone_redundancy_enabled" {
-  description = "Enable zone redundancy"
+variable "gateway_type" {
+  description = "The type of this virtual network gateway. Possible values are 'Vpn' and 'ExpressRoute'"
+  type        = string
+  default     = "Vpn"
+}
+
+variable "vpn_type" {
+  description = "The type of VPN. Possible values are 'PolicyBased' and 'RouteBased'"
+  type        = string
+  default     = "RouteBased"
+}
+
+variable "active_active" {
+  description = "Whether active-active mode is enabled"
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "virtual_network_gateway_sku" {
+  description = "The SKU of the virtual network gateway. Possible values: 'Basic', 'VpnGw1', 'VpnGw2', etc."
+  type        = string
+  default     = "VpnGw1"
 }
 
 variable "tags" {
-  description = "Base tags"
+  description = "Tags for the resource"
   type        = map(string)
   default     = {}
 }
 
-variable "extra_tags" {
-  description = "Extra tags to merge"
-  type        = map(string)
-  default     = {}
+variable "subnet_id" {
+  description = "The subnet ID to associate with the network interface"
+  type        = string
 }

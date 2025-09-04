@@ -19,3 +19,9 @@ output "db_subnets" {
     db = azurerm_subnet.subnets["db"].id
   }
 }
+
+output "gateway_subnets" {
+  value = {
+    gateway = azurerm_subnet.subnets["GatewaySubnet"].id
+  }
+}
