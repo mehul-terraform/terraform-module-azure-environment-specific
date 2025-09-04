@@ -23,5 +23,5 @@ resource "azurerm_virtual_network_gateway" "vnet_gateway" {
     subnet_id            = var.subnet_id
   }
 
- tags = merge(var.tags)
+  tags = merge(var.tags)
 }

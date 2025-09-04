@@ -50,7 +50,11 @@ variable "worker_runtime" {
 variable "function_app_node_version" {
   type        = string
   description = "Node version"
-  default     = "~14"
+}
+
+variable "function_app_extension_version" {
+  type        = string
+  description = "Extension Version"
 }
 
 variable "app_settings" {

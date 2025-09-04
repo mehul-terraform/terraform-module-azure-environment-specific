@@ -12,7 +12,7 @@ resource "azurerm_linux_function_app" "functionapp" {
 
   app_settings = merge(
     {
-      FUNCTIONS_EXTENSION_VERSION  = "~4"
+      FUNCTIONS_EXTENSION_VERSION  = var.function_app_extension_version
       WEBSITE_RUN_FROM_PACKAGE     = var.run_from_package
       FUNCTIONS_WORKER_RUNTIME     = var.worker_runtime
       WEBSITE_NODE_DEFAULT_VERSION = var.function_app_node_version
@@ -28,6 +28,6 @@ resource "azurerm_linux_function_app" "functionapp" {
       # python_version = "3.11"
     }
   }
-
+  
   tags = var.tags
 }

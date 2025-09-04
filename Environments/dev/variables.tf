@@ -680,6 +680,11 @@ variable "function_app_node_version" {
   default = "~14"
 }
 
+variable "function_app_extension_version" {
+  type        = string
+  description = "Extension Version"
+}
+
 #-----------------------------------------------------------------------------------------------
 # 14-CommunicationServices
 

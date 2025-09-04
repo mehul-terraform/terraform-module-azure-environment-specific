@@ -40,7 +40,7 @@ variable "family" {
 
 variable "sku" {
   description = "The SKU of the Redis cache to deploy. Must be [Basic/Standard/Premium]"
-  type        = string  
+  type        = string
 }
 
 variable "enable_non_ssl_port" {

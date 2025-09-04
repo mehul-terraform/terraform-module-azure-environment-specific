@@ -6,7 +6,7 @@ resource "azurerm_linux_web_app" "app_service" {
 
   site_config {
     application_stack {
-      node_version = var.runtime  # e.g., "18-lts"
+      node_version = var.runtime # e.g., "18-lts"
     }
   }
 

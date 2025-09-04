@@ -227,13 +227,14 @@ module "function_app" {
   app_service_plan_name = module.service_plan.id
   function_app_name     = var.function_app_name
 
-  dotnet_version            = var.dotnet_version
-  identity_type             = var.identity_type
-  run_from_package          = var.run_from_package
-  worker_runtime            = var.worker_runtime
-  function_app_node_version = var.function_app_node_version
-  app_settings              = var.app_settings
-  tags                      = var.tags
+  dotnet_version                 = var.dotnet_version
+  identity_type                  = var.identity_type
+  run_from_package               = var.run_from_package
+  worker_runtime                 = var.worker_runtime
+  function_app_node_version      = var.function_app_node_version
+  function_app_extension_version = var.function_app_extension_version
+  app_settings                   = var.app_settings
+  tags                           = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------

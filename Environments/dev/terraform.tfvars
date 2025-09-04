@@ -155,7 +155,7 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name             = "myexample-dev-kv01"
+key_vault_name             = "myexampledevkv01"
 tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 object_id                  = "11111111-1111-1111-1111-111111111111"
 key_vault_sku_name         = "standard"
@@ -176,12 +176,13 @@ enable_automatic_failover = false
 #-----------------------------------------------------------------------------------------------
 # 13-FunctionApp
 
-function_app_name         = "myexample-dev-funcapp"
-dotnet_version            = "dotnet6"
-identity_type             = "SystemAssigned"
-run_from_package          = "1"
-worker_runtime            = "dotnet"
-function_app_node_version = "~14"
+function_app_name              = "myexample-dev-funcapp"
+dotnet_version                 = "dotnet6"
+identity_type                  = "SystemAssigned"
+run_from_package               = "1"
+worker_runtime                 = "dotnet"
+function_app_node_version      = "~14"
+function_app_extension_version = "~4"
 app_settings = {
   "MyCustomSetting" = "value"
 }
