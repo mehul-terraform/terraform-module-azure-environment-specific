@@ -79,7 +79,7 @@ variable "network_security_group_rules" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 04-App Service Plan
+# 04-AppServicePlan
 
 variable "service_plan_name" {
   type        = string
@@ -110,9 +110,24 @@ variable "worker_count" {
   default     = null
   description = "Number of workers"
 }
-
 #-----------------------------------------------------------------------------------------------
-# 05-AppService
+# 04-AppService
+
+variable "app_name" {
+  type = string
+}
+
+variable "runtime" {
+  type    = string
+  default = "DOTNETCORE|6.0"
+}
+
+variable "app_service_node_version" {
+  type    = string
+  default = "DOTNETCORE|6.0"
+}
+#-----------------------------------------------------------------------------------------------
+# 05-AppServiceContainer
 
 variable "active_directory_auth_setttings" {
   description = "Active directory authentication provider settings for app service"
@@ -127,7 +142,7 @@ variable "linux_web_app_name" {
 }
 
 variable "app_settings" {
-  description = "Function App application settings"
+  description = "App application settings"
   type        = map(any)
   default     = {}
 }
@@ -638,7 +653,7 @@ variable "enable_automatic_failover" {
   default     = false
 }
 #-----------------------------------------------------------------------------------------------
-# 13-FunctionsApp
+# 13-FunctionApp
 
 variable "function_app_name" {
   type        = string
@@ -660,7 +675,7 @@ variable "worker_runtime" {
   default = "dotnet"
 }
 
-variable "node_version" {
+variable "function_app_node_version" {
   type    = string
   default = "~14"
 }

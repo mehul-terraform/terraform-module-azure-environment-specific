@@ -15,7 +15,7 @@ resource "azurerm_linux_function_app" "functionapp" {
       FUNCTIONS_EXTENSION_VERSION  = "~4"
       WEBSITE_RUN_FROM_PACKAGE     = var.run_from_package
       FUNCTIONS_WORKER_RUNTIME     = var.worker_runtime
-      WEBSITE_NODE_DEFAULT_VERSION = var.node_version
+      WEBSITE_NODE_DEFAULT_VERSION = var.function_app_node_version
     },
     var.app_settings,
   )

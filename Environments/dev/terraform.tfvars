@@ -87,9 +87,16 @@ asp_os_type       = "Linux"
 asp_sku_name      = "B2"
 
 #-----------------------------------------------------------------------------------------------
-# 05-WebApp
+# 05-AppService
 
-linux_web_app_name       = "myexample-dev-webapp01"
+app_name = "myexample-dev-webapp01"
+runtime  = "NODE|14-lts"
+
+
+#-----------------------------------------------------------------------------------------------
+# 05-AppServiceContainer
+
+linux_web_app_name       = "myexample-dev-container-webapp01"
 docker_image_name        = "nginx"
 docker_image_tag         = "latest"
 docker_registry_url      = "myexampledevacr01.azurecr.io"
@@ -168,14 +175,14 @@ capabilities              = []
 enable_automatic_failover = false
 
 #-----------------------------------------------------------------------------------------------
-# 13-FunctionsApp
+# 13-FunctionApp
 
-function_app_name = "myexample-dev-funcapp"
-dotnet_version    = "dotnet6"
-identity_type     = "SystemAssigned"
-run_from_package  = "1"
-worker_runtime    = "dotnet"
-node_version      = "~14"
+function_app_name         = "myexample-dev-funcapp"
+dotnet_version            = "dotnet6"
+identity_type             = "SystemAssigned"
+run_from_package          = "1"
+worker_runtime            = "dotnet"
+function_app_node_version = "~14"
 app_settings = {
   "MyCustomSetting" = "value"
 }

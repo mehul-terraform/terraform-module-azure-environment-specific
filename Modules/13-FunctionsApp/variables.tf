@@ -47,7 +47,7 @@ variable "worker_runtime" {
   default     = "dotnet"
 }
 
-variable "node_version" {
+variable "function_app_node_version" {
   type        = string
   description = "Node version"
   default     = "~14"

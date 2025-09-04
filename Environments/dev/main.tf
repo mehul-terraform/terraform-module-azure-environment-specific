@@ -69,10 +69,10 @@ module "service_plan" {
 }
 
 #---------------------------------------------------------------------------------------------------
-# 05-WebApp
+# 05-AppServiceContainer
 
-module "azurerm_linux_web_app" {
-  source                   = "../../Modules/05-AppServicesContainer"
+module "azurerm_app_service_container" {
+  source                   = "../../Modules/05-AppServiceContainer"
   resource_group_name      = module.resource_group.name
   location                 = module.resource_group.location
   linux_web_app_name       = var.linux_web_app_name
@@ -83,6 +83,23 @@ module "azurerm_linux_web_app" {
   docker_registry_username = var.docker_registry_username
   docker_registry_password = var.docker_registry_password
   tags                     = local.tags
+}
+#--------------------------------------------------------------------------------------------------
+# 06-AppService
+
+module "azurerm_app_service" {
+  source = "../../Modules/05-AppService"
+
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  service_plan_id     = module.service_plan.id
+  app_name            = var.app_name
+  runtime             = var.runtime
+
+  app_settings = {
+    "WEBSITE_NODE_DEFAULT_VERSION"   = var.app_service_node_version
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = "some-key"
+  }
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -208,13 +225,13 @@ module "function_app" {
   app_service_plan_name = module.service_plan.id
   function_app_name     = var.function_app_name
 
-  dotnet_version   = var.dotnet_version
-  identity_type    = var.identity_type
-  run_from_package = var.run_from_package
-  worker_runtime   = var.worker_runtime
-  node_version     = var.node_version
-  app_settings     = var.app_settings
-  tags             = var.tags
+  dotnet_version            = var.dotnet_version
+  identity_type             = var.identity_type
+  run_from_package          = var.run_from_package
+  worker_runtime            = var.worker_runtime
+  function_app_node_version = var.function_app_node_version
+  app_settings              = var.app_settings
+  tags                      = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------
