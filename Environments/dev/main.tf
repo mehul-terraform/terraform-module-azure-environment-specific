@@ -68,24 +68,8 @@ module "service_plan" {
   tags                = local.tags
 }
 
-#---------------------------------------------------------------------------------------------------
-# 05-AppServiceContainer
-
-module "azurerm_app_service_container" {
-  source                   = "../../Modules/05-AppServiceContainer"
-  resource_group_name      = module.resource_group.name
-  location                 = module.resource_group.location
-  linux_web_app_name       = var.linux_web_app_name
-  service_plan_id          = module.service_plan.id
-  docker_image_name        = var.docker_image_name
-  docker_image_tag         = var.docker_image_tag
-  docker_registry_url      = var.docker_registry_url
-  docker_registry_username = var.docker_registry_username
-  docker_registry_password = var.docker_registry_password
-  tags                     = local.tags
-}
 #--------------------------------------------------------------------------------------------------
-# 06-AppService
+# 05-AppService
 
 module "azurerm_app_service" {
   source = "../../Modules/05-AppService"
@@ -102,11 +86,27 @@ module "azurerm_app_service" {
   }
 }
 
+#---------------------------------------------------------------------------------------------------
+# 06-AppServiceContainer
+
+module "azurerm_app_service_container" {
+  source                   = "../../Modules/06-AppServiceContainer"
+  resource_group_name      = module.resource_group.name
+  location                 = module.resource_group.location
+  linux_web_app_name       = var.linux_web_app_name
+  service_plan_id          = module.service_plan.id
+  docker_image_name        = var.docker_image_name
+  docker_image_tag         = var.docker_image_tag
+  docker_registry_url      = var.docker_registry_url
+  docker_registry_username = var.docker_registry_username
+  docker_registry_password = var.docker_registry_password
+  tags                     = local.tags
+}
 #--------------------------------------------------------------------------------------------------
-# 06-StorageAccount
+# 07-StorageAccount
 
 module "storage_account" {
-  source                             = "../../Modules/06-StorageAccount"
+  source                             = "../../Modules/07-StorageAccount"
   resource_group_name                = module.resource_group.name
   location                           = module.resource_group.location
   storage_account_name               = var.storage_account_name
@@ -118,10 +118,10 @@ module "storage_account" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 07-PostgresSQLFlexible
+# 08-PostgresSQLFlexible
 
 module "postgre_sql" {
-  source                          = "../../Modules/07-PostgresSQLFlexible"
+  source                          = "../../Modules/08-PostgresSQLFlexible"
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   postgresql_flexible_server_name = var.postgresql_flexible_server_name
@@ -134,10 +134,10 @@ module "postgre_sql" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 08-PrivateEndPoint (PostgresSQLFelxible) 
+# 09-PrivateEndPoint (PostgresSQLFelxible) 
 
 module "private_endpoint_postgres" {
-  source                          = "../../Modules/08-PrivateEndPoint"
+  source                          = "../../Modules/09-PrivateEndPoint"
   private_endpoint_name           = var.private_endpoint_name
   private_dns_zone_ids            = [module.private_dns_zone.private_dns_zone_id]
   virtual_network_id              = module.virtual_network.id
@@ -153,10 +153,10 @@ module "private_endpoint_postgres" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 09-PrivateDNSZone
+# 10-PrivateDNSZone
 
 module "private_dns_zone" {
-  source                    = "../../Modules/09-PrivateDNSZone"
+  source                    = "../../Modules/10-PrivateDNSZone"
   private_dns_zone_name     = var.private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
@@ -164,24 +164,12 @@ module "private_dns_zone" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
-#--------------------------------------------------------------------------------------------
-# 11-KeyVault
-
-module "keyvault" {
-  source              = "../../Modules/11-KeyVault"
-  resource_group_name = module.resource_group.name
-  location            = module.resource_group.location
-  key_vault_name      = var.key_vault_name
-  tenant_id           = var.tenant_id
-  object_id           = var.object_id
-  tags                = local.tags
-}
 
 #--------------------------------------------------------------------------------------------------
-# 10-CacheRedis
+# 11-CacheRedis
 
 module "redis" {
-  source                        = "../../Modules/10-CacheRedis"
+  source                        = "../../Modules/11-CacheRedis"
   cache_name                    = var.cache_name
   location                      = module.resource_group.location
   resource_group_name           = module.resource_group.name
@@ -195,11 +183,25 @@ module "redis" {
   cluster_shard_count           = var.cluster_shard_count
   tags                          = local.tags
 }
+
+#--------------------------------------------------------------------------------------------
+# 12-KeyVault
+
+module "keyvault" {
+  source              = "../../Modules/12-KeyVault"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  key_vault_name      = var.key_vault_name
+  tenant_id           = var.tenant_id
+  object_id           = var.object_id
+  tags                = local.tags
+}
+
 #---------------------------------------------------------------------------------------------
-# 12 - CosmosDB
+# 13-CosmosDB
 
 module "cosmosdb" {
-  source                    = "../../Modules/12-CosmosDB" # relative path to child module
+  source                    = "../../Modules/13-CosmosDB" 
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   cosmosdb_account_name     = var.cosmosdb_account_name
@@ -212,10 +214,10 @@ module "cosmosdb" {
   tags                      = local.tags
 }
 #--------------------------------------------------------------------------------------------------
-# 13-FunctionsApp
+# 14-FunctionsApp
 
 module "function_app" {
-  source              = "../../Modules/13-Functionsapp"
+  source              = "../../Modules/14-Functionsapp"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
 
@@ -235,10 +237,10 @@ module "function_app" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 14-CommunicationsService
+# 15-CommunicationsService
 
 module "communication_services" {
-  source                          = "../../Modules/14-CommunicationServices"
+  source                          = "../../Modules/15-CommunicationServices"
   communication_service_name      = var.communication_service_name
   email_service_name              = var.email_service_name
   domain_name                     = var.domain_name
@@ -249,10 +251,10 @@ module "communication_services" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 15-FrontDoorStandard
+# 16-FrontDoorStandard
 
 module "azure_front_door" {
-  source              = "../../Modules/15-FrontDoor"
+  source              = "../../Modules/16-FrontDoor"
   front_door_name     = var.front_door_name
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
@@ -280,10 +282,10 @@ module "azure_front_door" {
 }
 
 #--------------------------------------------------------------------------------------------------------------
-# 16-Virtual Machine
+# 17-VirtualMachine
 
 module "virtual_machine" {
-  source                          = "../../Modules/16-VirtualMachine"
+  source                          = "../../Modules/17-VirtualMachine"
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   virtual_machine_name            = var.virtual_machine_name
@@ -307,10 +309,10 @@ module "virtual_machine" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 17-ContainerRegistry
+# 18-ContainerRegistry
 
 module "azurerm_container_registry" {
-  source                        = "../../Modules/17-ContainerRegistry"
+  source                        = "../../Modules/18-ContainerRegistry"
   container_registry_name       = var.container_registry_name
   resource_group_name           = module.resource_group.name
   location                      = module.resource_group.location
