@@ -201,7 +201,7 @@ module "keyvault" {
 # 13-CosmosDB
 
 module "cosmosdb" {
-  source                    = "../../Modules/13-CosmosDB" 
+  source                    = "../../Modules/13-CosmosDB"
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   cosmosdb_account_name     = var.cosmosdb_account_name
