@@ -78,7 +78,7 @@ module "azurerm_app_service" {
   location            = module.resource_group.location
   service_plan_id     = module.service_plan.id
   app_name            = var.app_name
-  runtime             = var.runtime
+  runtime             = var.web_app_runtime
 
   app_settings = {
     "WEBSITE_NODE_DEFAULT_VERSION"   = var.app_service_node_version

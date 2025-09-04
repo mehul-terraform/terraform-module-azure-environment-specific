@@ -117,7 +117,7 @@ variable "app_name" {
   type = string
 }
 
-variable "runtime" {
+variable "web_app_runtime" {
   type    = string
   default = "DOTNETCORE|6.0"
 }
@@ -919,31 +919,31 @@ variable "zone_redundancy_enabled" {
 variable "virtual_network_gateway_name" {
   description = "Name of the virtual network gateway"
   type        = string
-  
+
 }
 
 variable "gateway_type" {
   description = "Gateway type"
   type        = string
-  
+
 }
 
 variable "vpn_type" {
   description = "VPN type"
   type        = string
-  
+
 }
 
 variable "active_active" {
   description = "Active-active mode"
   type        = bool
-  
+
 }
 
 variable "virtual_network_gateway_sku" {
   description = "Gateway SKU"
   type        = string
-  
+
 }
 
 variable "virtual_network_gateway_public_ip_name" {

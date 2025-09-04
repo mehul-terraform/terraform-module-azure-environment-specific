@@ -89,9 +89,8 @@ asp_sku_name      = "B2"
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-app_name = "myexample-dev-webapp01"
-runtime  = "NODE|14-lts"
-
+app_name        = "myexample-dev-webapp01"
+web_app_runtime = "22-lts"
 
 #-----------------------------------------------------------------------------------------------
 # 05-AppServiceContainer
