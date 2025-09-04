@@ -96,7 +96,7 @@ web_app_runtime = "22-lts"
 # 05-AppServiceContainer
 
 linux_web_app_name       = "myexample-dev-container-webapp01"
-docker_image_name        = "nginx"
+docker_image_name        = "myexampledevacr01.azurecr.io/myexample-dev:latest"
 docker_image_tag         = "latest"
 docker_registry_url      = "myexampledevacr01.azurecr.io"
 docker_registry_username = "myexample-dev-user"
@@ -155,7 +155,7 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name             = "myexample-dev-key-vault"
+key_vault_name             = "myexample-dev-kv01"
 tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 object_id                  = "11111111-1111-1111-1111-111111111111"
 key_vault_sku_name         = "standard"
@@ -251,7 +251,7 @@ zone_redundancy_enabled       = true
 
 #-------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
-
+/*
 virtual_network_gateway_name                        = "myexample-dev-vnet-gateway"
 virtual_network_gateway_public_ip_name              = "myexample-dev-vnet-gateway-ip"
 gateway_type                                        = "Vpn"
@@ -259,5 +259,6 @@ vpn_type                                            = "RouteBased"
 active_active                                       = false
 virtual_network_gateway_sku                         = "VpnGw1"
 virtual_network_gateway_public_ip_allocation_method = "Static"
+*/
 #------------------------------------------------------------------------------------------------
 

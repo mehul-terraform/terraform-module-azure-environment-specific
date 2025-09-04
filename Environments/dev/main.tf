@@ -326,7 +326,7 @@ module "azurerm_container_registry" {
 
 #--------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
-
+/*
 module "virtual_network_gateway" {
   source                       = "../../Modules/20-VirtualNetworkGateway"
   resource_group_name          = module.resource_group.name
@@ -342,5 +342,5 @@ module "virtual_network_gateway" {
   virtual_network_gateway_sku  = var.virtual_network_gateway_sku
   tags                         = var.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------

@@ -915,7 +915,7 @@ variable "zone_redundancy_enabled" {
 
 #-----------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
-
+/*
 variable "virtual_network_gateway_name" {
   description = "Name of the virtual network gateway"
   type        = string
@@ -956,5 +956,5 @@ variable "virtual_network_gateway_public_ip_allocation_method" {
   type        = string
 
 }
-
+*/
 #------------------------------------------------------------------------------------------------
