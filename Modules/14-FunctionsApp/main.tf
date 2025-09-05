@@ -28,7 +28,7 @@ resource "azurerm_linux_function_app" "functionapp" {
       # python_version = "3.11"
     }
   }
-    lifecycle {
+  lifecycle {
     ignore_changes = [
       app_settings["WEBSITE_RUN_FROM_PACKAGE"],
       app_settings,
