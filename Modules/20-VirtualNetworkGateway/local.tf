@@ -1,5 +1,5 @@
 locals {
   tags = {
-    Name = "myexampledevacr01"
+    Name = "myexample-dev-vnet-gateway01"
   }
 }

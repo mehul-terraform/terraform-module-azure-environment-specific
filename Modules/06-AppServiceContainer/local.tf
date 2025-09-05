@@ -1,5 +1,5 @@
 locals {
   tags = {
-    Name = "myexample-dev-webapp01"
+    Name = "myexample-dev-webapp-container01"
   }
 }
