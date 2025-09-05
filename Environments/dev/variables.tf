@@ -111,7 +111,7 @@ variable "worker_count" {
   description = "Number of workers"
 }
 #-----------------------------------------------------------------------------------------------
-# 04-AppService
+# 05-AppService
 
 variable "app_name" {
   type = string
@@ -127,7 +127,7 @@ variable "app_service_node_version" {
   default = "DOTNETCORE|6.0"
 }
 #-----------------------------------------------------------------------------------------------
-# 05-AppServiceContainer
+# 06-AppServiceContainer
 
 variable "active_directory_auth_setttings" {
   description = "Active directory authentication provider settings for app service"
@@ -271,7 +271,7 @@ variable "docker_image_tag" {
 }
 
 #------------------------------------------------------------------------------------------------
-# 06-StorageAccount
+# 07-StorageAccount
 
 variable "storage_account_name" {
   type = string
@@ -298,7 +298,7 @@ variable "storage_account_error_404_document" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 07-PostgresSQLFlexible
+# 08-PostgresSQLFlexible
 
 variable "postgresql_flexible_server_name" {
   description = "A name which will be pre-pended to the resources created"
@@ -427,7 +427,7 @@ variable "create_key_secret" {
   default = {}
 }
 #-----------------------------------------------------------------------------------------
-# 08-PrivateEndpoint
+# 09-PrivateEndPoint
 
 variable "private_endpoint_name" {
   description = "The name of the private endpoint"
@@ -454,7 +454,7 @@ variable "private_dns_zone_group_name" {
   type        = string
 }
 #----------------------------------------------------------------------------------------
-# 09-PrivateDNSZone
+# 10-PrivateDNSZone
 
 variable "private_dns_zone_name" {
   description = "Name of the private DNS zone"
@@ -466,7 +466,7 @@ variable "virtual_network_link_name" {
   type        = string
 }
 #-----------------------------------------------------------------------------------------
-# 10-RedisCache
+# 11-RedisCache
 /*
 variable "cache_name" {
   description = "The name of the Redis cache instance"
@@ -576,7 +576,7 @@ variable "redis_firewall_rule" {
 }
 */
 #-----------------------------------------------------------------------------------------------
-# 11-KeyVault
+# 12-KeyVault
 
 variable "key_vault_name" {
   type        = string
@@ -611,7 +611,7 @@ variable "purge_protection_enabled" {
   description = "Enable purge protection on the Key Vault."
 }
 #-----------------------------------------------------------------------------------------
-# 12-CosmosDB
+# 13-CosmosDB
 
 variable "cosmosdb_account_name" {
   description = "Cosmos DB account name"
@@ -653,7 +653,7 @@ variable "enable_automatic_failover" {
   default     = false
 }
 #-----------------------------------------------------------------------------------------------
-# 13-FunctionApp
+# 14-FunctionApp
 
 variable "function_app_name" {
   type        = string
@@ -686,7 +686,7 @@ variable "function_app_extension_version" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 14-CommunicationServices
+# 15-CommunicationServices
 
 variable "communication_service_name" {
   description = "The name of the Azure Communication Service."
@@ -715,7 +715,7 @@ variable "enable_user_engagement_tracking" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 15-FrontDoor
+# 16-FrontDoor
 
 variable "front_door_sku_name" {
   description = "Azure SKU"
@@ -788,7 +788,7 @@ variable "host_backend_domain_name" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 16-VirtualMachine
+# 17-VirtualMachine
 
 # Public IP Variables
 variable "virtual_machine_public_ip_name" {
@@ -882,7 +882,7 @@ variable "virtual_machine_image_version" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 17-ContainerRegistry
+# 18-ContainerRegistry
 
 variable "container_registry_name" {
   description = "Name of the Azure Container Registry (lowercase letters and numbers only)"
@@ -916,6 +916,14 @@ variable "zone_redundancy_enabled" {
   description = "Enable zone redundancy"
   type        = bool
   default     = true
+}
+
+#------------------------------------------------------------------------------------------------
+# 19-DNSZone
+
+variable "dns_zone_name" {
+  description = "The name of the DNS zone."
+  type        = string
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -963,3 +971,4 @@ variable "virtual_network_gateway_public_ip_allocation_method" {
 }
 */
 #------------------------------------------------------------------------------------------------
+

@@ -263,4 +263,10 @@ virtual_network_gateway_sku                         = "VpnGw1"
 virtual_network_gateway_public_ip_allocation_method = "Static"
 */
 #------------------------------------------------------------------------------------------------
+# 19-DNSZone
+
+dns_zone_name = "example.com"
+
+#------------------------------------------------------------------------------------------------
+
 

@@ -345,3 +345,14 @@ module "virtual_network_gateway" {
 }
 */
 #--------------------------------------------------------------------------------------------------
+# 19-DNSZone
+
+module "example_dns_zone" {
+  source              = "../../Modules/19-DNSZone"
+  dns_zone_name       = var.dns_zone_name
+  resource_group_name = module.resource_group.name
+  #location = module.resource_group_name.location
+  tags = var.tags
+}
+
+#---------------------------------------------------------------------------------------------------
