@@ -467,7 +467,7 @@ variable "virtual_network_link_name" {
 }
 #-----------------------------------------------------------------------------------------
 # 10-RedisCache
-
+/*
 variable "cache_name" {
   description = "The name of the Redis cache instance"
   type        = string
@@ -574,7 +574,7 @@ variable "redis_firewall_rule" {
   description = "A map of firewall rules for the Redis cache."
   default     = {}
 }
-
+*/
 #-----------------------------------------------------------------------------------------------
 # 11-KeyVault
 

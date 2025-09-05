@@ -167,7 +167,7 @@ module "private_dns_zone" {
 
 #--------------------------------------------------------------------------------------------------
 # 11-CacheRedis
-
+/*
 module "redis" {
   source                        = "../../Modules/11-CacheRedis"
   cache_name                    = var.cache_name
@@ -183,7 +183,7 @@ module "redis" {
   cluster_shard_count           = var.cluster_shard_count
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
 

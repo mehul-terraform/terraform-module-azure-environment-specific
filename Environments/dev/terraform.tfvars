@@ -141,6 +141,7 @@ is_manual_connection            = false
 subresource_names               = ["postgresqlServer"]
 
 #-----------------------------------------------------------------------------------------
+/*
 # 10-RedisCache
 cache_name                                = "myexample-dev-redis-cache"
 capacity                                  = 2
@@ -151,7 +152,7 @@ redis_version                             = "6"
 enable_non_ssl_port                       = false
 minimum_tls_version                       = "1.2"
 cluster_shard_count                       = 1
-
+*/
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
@@ -184,7 +185,7 @@ worker_runtime                 = "dotnet"
 function_app_node_version      = "~14"
 function_app_extension_version = "~4"
 app_settings = {
-  "MyCustomSetting" = "value"
+  "MyCustomSetting" = "https://my-api.com/key"
 }
 
 #-----------------------------------------------------------------------------------------------
