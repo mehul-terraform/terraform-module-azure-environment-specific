@@ -40,7 +40,7 @@ subnets = [
 #-------------------------------------------------------------------------------------------------
 # 03-NetworkSecurityGroup
 
-network_security_group_name = "myexample-dev-nsg01"
+network_security_group_name = "myexample-dev-nsg"
 network_security_group_rules = [
   {
     name                       = "Allow-RDP"
@@ -82,21 +82,21 @@ network_security_group_rules = [
 #-----------------------------------------------------------------------------------------------
 # 04-AppServicePlan
 
-service_plan_name = "myexample-dev-asp01"
+service_plan_name = "myexample-dev-asp"
 asp_os_type       = "Linux"
 asp_sku_name      = "B2"
 
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-app_name        = "myexample-dev-webapp01"
+app_name        = "myexample-dev-webapp"
 web_app_runtime = "22-lts"
 
 #-----------------------------------------------------------------------------------------------
 # 05-AppServiceContainer
 
-linux_web_app_name       = "myexample-dev-container-webapp01"
-docker_image_name        = "myexampledevacr01.azurecr.io/myexample-dev:latest"
+linux_web_app_name       = "myexample-dev-container-webapp"
+docker_image_name        = "myexampledevacr.azurecr.io/myexample-dev:latest"
 docker_image_tag         = "latest"
 docker_registry_url      = "myexampledevacr01.azurecr.io"
 docker_registry_username = "myexample-dev-user"
@@ -104,7 +104,7 @@ docker_registry_password = "Passwor@1234"
 
 #-----------------------------------------------------------------------------------------------
 # 07-StorageAccount
-storage_account_name               = "myexampledevstorage01" # must be globally unique
+storage_account_name               = "myexampledevstorage"
 account_tier                       = "Standard"
 account_replication_type           = "LRS"
 storage_account_index_document     = "index.html"
@@ -156,7 +156,7 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name             = "myexampledevkv01"
+key_vault_name             = "myexampledevkv"
 tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 object_id                  = "11111111-1111-1111-1111-111111111111"
 key_vault_sku_name         = "standard"
@@ -224,7 +224,7 @@ host_backend_domain_name  = "api-dev.myexample.co.in"
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
 
-virtual_machine_public_ip_name              = "myexample-dev-vm01-ip"
+virtual_machine_public_ip_name              = "myexample-dev-vm-ip"
 virtual_machine_public_ip_allocation_method = "Static"
 virtual_machine_name                        = "myexampledevvm"
 virtual_machine_size                        = "Standard_F2"
@@ -244,7 +244,7 @@ virtual_machine_image_version               = "latest"
 #-------------------------------------------------------------------------------------------------
 # 17-ContainerRegistry
 
-container_registry_name       = "myexampledevacr01"
+container_registry_name       = "myexampledevacr"
 container_registry_sku        = "Premium"
 admin_enabled                 = true
 public_network_access_enabled = true
@@ -254,7 +254,7 @@ zone_redundancy_enabled       = true
 #-------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
 /*
-virtual_network_gateway_name                        = "myexample-dev-vnet-gateway"
+virtual_network_gateway_name                        = "myexample-dev-vnet-gateway01"
 virtual_network_gateway_public_ip_name              = "myexample-dev-vnet-gateway-ip"
 gateway_type                                        = "Vpn"
 vpn_type                                            = "RouteBased"
