@@ -238,7 +238,7 @@ os_disk_caching                             = "ReadWrite"
 os_disk_storage_account_type                = "Standard_LRS"
 virtual_machine_image_publisher             = "MicrosoftWindowsServer"
 virtual_machine_image_offer                 = "WindowsServer"
-virtual_machine_image_sku                   = "2016-datacenter"
+virtual_machine_image_sku                   = "2022-datacenter"
 virtual_machine_image_version               = "latest"
 
 #-------------------------------------------------------------------------------------------------
