@@ -102,6 +102,7 @@ module "azurerm_app_service_container" {
   docker_registry_password = var.docker_registry_password
   tags                     = local.tags
 }
+
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccount
 

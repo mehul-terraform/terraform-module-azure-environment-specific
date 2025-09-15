@@ -14,9 +14,21 @@ output "vm_subnets" {
   }
 }
 
+output "webapp_subnets" {
+  value = {
+    webapp = azurerm_subnet.subnets["webapp"].id
+  }
+}
+
 output "db_subnets" {
   value = {
     db = azurerm_subnet.subnets["db"].id
+  }
+}
+
+output "storage_subnets" {
+  value = {
+    storage = azurerm_subnet.subnets["storage"].id
   }
 }
 

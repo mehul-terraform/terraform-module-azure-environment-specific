@@ -73,4 +73,3 @@ variable "storage_account_access_key" {
   type        = string
   description = "Tags"
 }
-
