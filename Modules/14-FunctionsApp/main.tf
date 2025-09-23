@@ -1,4 +1,4 @@
-resource "azurerm_linux_function_app" "functionapp" {
+resource "azurerm_linux_function_app" "function_app" {
   name                       = var.function_app_name
   location                   = var.location
   resource_group_name        = var.resource_group_name

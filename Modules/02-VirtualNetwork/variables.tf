@@ -19,11 +19,18 @@ variable "address_space" {
 }
 
 variable "subnets" {
+  description = "List of subnets to create"
   type = list(object({
     name           = string
     address_prefix = string
+    delegation = optional(object({
+      name = string
+      service_delegation = object({
+        name    = string
+        actions = list(string)
+      })
+    }))
   }))
-  description = "List of subnets with name and address prefix"
 }
 
 variable "tags" {

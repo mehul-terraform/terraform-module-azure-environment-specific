@@ -1,5 +1,5 @@
-output "app_service_name" {
-  value = azurerm_linux_web_app.app_service.name
+output "id" {
+  value = azurerm_linux_web_app.app_service.id
 }
 
 output "app_service_default_hostname" {
