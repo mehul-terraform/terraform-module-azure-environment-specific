@@ -45,12 +45,17 @@ variable "dns_servers" {
 }
 
 variable "subnets" {
-  description = "List of subnets to create in the virtual network"
+  description = "List of subnets to create"
   type = list(object({
-    name                              = string
-    address_prefix                    = string
-    private_endpoint_network_policies = optional(string)
-    service_endpoints                 = optional(list(string))
+    name           = string
+    address_prefix = string
+    delegation = optional(object({
+      name = string
+      service_delegation = object({
+        name    = string
+        actions = list(string)
+      })
+    }))
   }))
 }
 

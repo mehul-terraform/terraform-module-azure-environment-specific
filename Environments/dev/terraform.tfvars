@@ -18,6 +18,14 @@ subnets = [
   {
     name           = "webapp"
     address_prefix = "10.252.0.0/16"
+
+    delegation = {
+      name = "delegation"
+      service_delegation = {
+        name    = "Microsoft.Web/serverFarms"
+        actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+      }
+    }
   },
   {
     name           = "db"
@@ -128,14 +136,14 @@ postgre_administrator_password = "Admin@123456"
 #-----------------------------------------------------------------------------------------------  
 # 08-PrivateDNSZone
 
-private_dns_zone_name     = "myexample.co.in"
+private_dns_zone_name     = "privatelink.postgres.database.azure.com"
 virtual_network_link_name = "myexample-dev-vnet-link"
 
 #-----------------------------------------------------------------------------------------------
 # 09-PrivateEndpoint
 
 private_endpoint_name           = "myexample-dev-db-pg-pep"
-private_dns_zone_group_name     = "myexample.co.in"
+private_dns_zone_group_name     = "privatelink.postgres.database.azure.com"
 private_service_connection_name = "myexample-dev-db-pg-connection"
 is_manual_connection            = false
 subresource_names               = ["postgresqlServer"]

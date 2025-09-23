@@ -71,7 +71,7 @@ module "service_plan" {
 #--------------------------------------------------------------------------------------------------
 # 05-AppService
 
-module "azurerm_app_service" {
+module "app_service" {
   source = "../../Modules/05-AppService"
 
   resource_group_name = module.resource_group.name
@@ -86,10 +86,15 @@ module "azurerm_app_service" {
   }
 }
 
+#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
+#  app_service_id = module.app_service.id  
+#  subnet_id = module.virtual_network.webapp_subnets["webapp"]
+#}
+
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
 
-module "azurerm_app_service_container" {
+module "app_service_container" {
   source                   = "../../Modules/06-AppServiceContainer"
   resource_group_name      = module.resource_group.name
   location                 = module.resource_group.location
@@ -102,6 +107,11 @@ module "azurerm_app_service_container" {
   docker_registry_password = var.docker_registry_password
   tags                     = local.tags
 }
+
+#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_container_vnet_integration" {
+#  app_service_id = module.app_service_container.id
+#  subnet_id = module.virtual_network.webapp_subnets["webapp"]
+#}
 
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccount
@@ -238,6 +248,11 @@ module "function_app" {
   tags                           = var.tags
 }
 
+#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
+#  app_service_id = module.function_app.id  
+#  subnet_id = module.virtual_network.webapp_subnets["webapp"]
+#}
+
 #--------------------------------------------------------------------------------------------------
 # 15-CommunicationsService
 
@@ -313,7 +328,7 @@ module "virtual_machine" {
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
 
-module "azurerm_container_registry" {
+module "container_registry" {
   source                        = "../../Modules/18-ContainerRegistry"
   container_registry_name       = var.container_registry_name
   resource_group_name           = module.resource_group.name
