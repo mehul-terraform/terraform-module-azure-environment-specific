@@ -13,6 +13,16 @@ variable "storage_account_name" {
   description = "Storage account name"
 }
 
+variable "account_tier" {
+  type    = string
+  default = "Standard"
+}
+
+variable "account_replication_type" {
+  type    = string
+  default = "LRS"
+}
+
 variable "app_service_plan_name" {
   type        = string
   description = "App Service plan name"

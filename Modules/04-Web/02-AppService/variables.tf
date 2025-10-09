@@ -23,3 +23,8 @@ variable "app_settings" {
 variable "service_plan_id" {
   type = string
 }
+
+variable "subnet_id" {
+  description = "The subnet ID to associate with the network interface"
+  type        = string
+}

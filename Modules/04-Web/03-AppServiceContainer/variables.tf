@@ -143,8 +143,8 @@ variable "extra_tags" {
   default     = {}
 }
 
-variable "virtual_network_subnet_id" {
-  description = "ID of the subnet to associate with the Function App (VNet integration)"
+variable "subnet_id" {
+  description = "ID of the subnet to associate with the AppService (VNet integration)"
   type        = string
   default     = null
 }

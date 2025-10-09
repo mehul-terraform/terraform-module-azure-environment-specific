@@ -32,7 +32,7 @@ module "resource_group" {
 # 02-VirtualNetwork
 
 module "virtual_network" {
-  source               = "../../Modules/02-VirtualNetwork"
+  source               = "../../Modules/02-Networking/01-VirtualNetwork"
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
   virtual_network_name = var.virtual_network_name
@@ -45,7 +45,7 @@ module "virtual_network" {
 # 03-NetworkSecurityGroup
 
 module "network_security_group" {
-  source                       = "../../Modules/03-NetworkSecurityGroup"
+  source                       = "../../Modules/02-Networking/02-NetworkSecurityGroup"
   resource_group_name          = module.resource_group.name
   location                     = module.resource_group.location
   network_security_group_name  = var.network_security_group_name
@@ -59,7 +59,7 @@ module "network_security_group" {
 # 04-AppServicePlan
 
 module "service_plan" {
-  source              = "../../Modules/04-AppServicePlan"
+  source              = "../../Modules/04-Web/01-AppServicePlan"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_name   = var.service_plan_name
@@ -70,15 +70,16 @@ module "service_plan" {
 
 #--------------------------------------------------------------------------------------------------
 # 05-AppService
-
+/*
 module "app_service" {
-  source = "../../Modules/05-AppService"
+  source = "../../Modules/04-Web/02-AppService"
 
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_id     = module.service_plan.id
   app_name            = var.app_name
   runtime             = var.web_app_runtime
+  subnet_id           = module.virtual_network.webapp_subnets["webapp"]
 
   app_settings = {
     "WEBSITE_NODE_DEFAULT_VERSION"   = var.app_service_node_version
@@ -86,16 +87,16 @@ module "app_service" {
   }
 }
 
-#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
-#  app_service_id = module.app_service.id  
-#  subnet_id = module.virtual_network.webapp_subnets["webapp"]
-#}
-
+resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
+  app_service_id = module.app_service.id
+  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
+}
+*/
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
-
+/*
 module "app_service_container" {
-  source                   = "../../Modules/06-AppServiceContainer"
+  source                   = "../../Modules/04-Web/03-AppServiceContainer"
   resource_group_name      = module.resource_group.name
   location                 = module.resource_group.location
   linux_web_app_name       = var.linux_web_app_name
@@ -105,19 +106,20 @@ module "app_service_container" {
   docker_registry_url      = var.docker_registry_url
   docker_registry_username = var.docker_registry_username
   docker_registry_password = var.docker_registry_password
+  subnet_id                = module.virtual_network.webapp_subnets["webapp"]
   tags                     = local.tags
 }
 
-#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_container_vnet_integration" {
-#  app_service_id = module.app_service_container.id
-#  subnet_id = module.virtual_network.webapp_subnets["webapp"]
-#}
-
+resource "azurerm_app_service_virtual_network_swift_connection" "app_service_container_vnet_integration" {
+  app_service_id = module.app_service_container.id
+  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
+}
+*/
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccount
 
 module "storage_account" {
-  source                             = "../../Modules/07-StorageAccount"
+  source                             = "../../Modules/05-Storage/01-StorageAccount"
   resource_group_name                = module.resource_group.name
   location                           = module.resource_group.location
   storage_account_name               = var.storage_account_name
@@ -130,9 +132,9 @@ module "storage_account" {
 
 #--------------------------------------------------------------------------------------------------
 # 08-PostgresSQLFlexible
-
+/*
 module "postgre_sql" {
-  source                          = "../../Modules/08-PostgresSQLFlexible"
+  source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   postgresql_flexible_server_name = var.postgresql_flexible_server_name
@@ -143,14 +145,14 @@ module "postgre_sql" {
   postgre_administrator_password  = var.postgre_administrator_password
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
-# 09-PrivateEndPoint (PostgresSQLFelxible) 
-
-module "private_endpoint_postgres" {
-  source                          = "../../Modules/09-PrivateEndPoint"
+# 09.1-PrivateEndPoint (PostgresSQLFelxible) 
+/*
+module "private_endpoint_postgres_flexible" {
+  source                          = "../../Modules/08-PrivateEndPoint/01-PostgresSQLFlexible"
   private_endpoint_name           = var.private_endpoint_name
-  private_dns_zone_ids            = [module.private_dns_zone.private_dns_zone_id]
+  private_dns_zone_ids            = [module.private_dns_zone.id]
   virtual_network_id              = module.virtual_network.id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
   location                        = module.resource_group.location
@@ -164,10 +166,28 @@ module "private_endpoint_postgres" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 10-PrivateDNSZone
+# 09.1-PrivateEndPoint (StorageAccount) 
+
+module "private_endpoint_storage_account" {
+  source                          = "../../Modules/08-PrivateEndPoint/02-StorageAccount"
+  private_endpoint_name           = var.storage_account_private_endpoint_name
+  private_dns_zone_ids            = [module.private_dns_zone_storage_account.id]
+  virtual_network_id              = module.virtual_network.id
+  private_dns_zone_group_name     = var.storage_account_private_dns_zone_group_name
+  location                        = module.resource_group.location
+  resource_group_name             = module.resource_group.name
+  private_endpoint_subnet_id      = module.virtual_network.storage_subnets["storage"]
+  private_service_connection_name = var.storage_account_private_service_connection_name
+  private_connection_resource_id  = module.storage_account.id
+  is_manual_connection            = var.storage_account_is_manual_connection
+  subresource_names               = var.storage_account_subresource_names
+  tags                            = local.tags
+}
+#--------------------------------------------------------------------------------------------------
+# 10-PrivateDNSZonePostgresSQLFlexible
 
 module "private_dns_zone" {
-  source                    = "../../Modules/10-PrivateDNSZone"
+  source                    = "../../Modules/07-PrivateDNSZone/10.1-PrivateDNSZonePostgresSQLFlexible"
   private_dns_zone_name     = var.private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
@@ -175,12 +195,23 @@ module "private_dns_zone" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
+#-------------------------------------------------------------------------------------------------
+# 10-PrivateDNSZoneStorageAccount
 
+module "private_dns_zone_storage_account" {
+  source                    = "../../Modules/07-PrivateDNSZone/10.2-PrivateDNSZoneStorageAccount"
+  private_dns_zone_name     = var.storage_account_private_dns_zone_group_name
+  resource_group_name       = module.resource_group.name
+  location                  = module.resource_group.location
+  virtual_network_link_name = var.storage_account_virtual_network_link_name
+  virtual_network_id        = module.virtual_network.id
+  tags                      = local.tags
+}
 #--------------------------------------------------------------------------------------------------
 # 11-CacheRedis
 /*
 module "redis" {
-  source                        = "../../Modules/11-CacheRedis"
+  source                        = "../../Modules/09-CacheRedis"
   cache_name                    = var.cache_name
   location                      = module.resource_group.location
   resource_group_name           = module.resource_group.name
@@ -197,9 +228,9 @@ module "redis" {
 */
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
-
+/*
 module "keyvault" {
-  source              = "../../Modules/12-KeyVault"
+  source              = "../../Modules/10-KeyVault"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   key_vault_name      = var.key_vault_name
@@ -207,12 +238,12 @@ module "keyvault" {
   object_id           = var.object_id
   tags                = local.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------
 # 13-CosmosDB
-
+/*
 module "cosmosdb" {
-  source                    = "../../Modules/13-CosmosDB"
+  source                    = "../../Modules/06-Database/02-CosmosDB"
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
   cosmosdb_account_name     = var.cosmosdb_account_name
@@ -224,11 +255,12 @@ module "cosmosdb" {
   enable_automatic_failover = var.enable_automatic_failover
   tags                      = local.tags
 }
+
 #--------------------------------------------------------------------------------------------------
 # 14-FunctionsApp
 
 module "function_app" {
-  source              = "../../Modules/14-Functionsapp"
+  source              = "../../Modules/04-Web/05-Functionsapp"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
 
@@ -248,16 +280,42 @@ module "function_app" {
   tags                           = var.tags
 }
 
-#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
-#  app_service_id = module.function_app.id  
-#  subnet_id = module.virtual_network.webapp_subnets["webapp"]
+resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
+  app_service_id = module.function_app.id
+  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
+}
+*/
+#--------------------------------------------------------------------------------------------------
+
+# 14-FunctionsApp
+
+module "function_app_flex" {
+  source                = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
+  resource_group_name   = module.resource_group.name
+  location              = module.resource_group.location
+  app_service_plan_name = var.function_app_flex_service_plan_name
+  storage_account_name  = var.function_app_flex_storage_account_name
+  function_app_name     = var.function_app_flex_name
+
+  identity_type    = var.identity_type
+  run_from_package = var.run_from_package
+  worker_runtime   = var.worker_runtime
+
+  function_app_extension_version = var.function_app_extension_version
+  app_settings                   = var.app_settings
+  tags                           = var.tags
+}
+
+#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_flex_vnet_integration" {
+#  app_service_id = module.function_app_flex.id
+#  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
 #}
 
 #--------------------------------------------------------------------------------------------------
 # 15-CommunicationsService
 
 module "communication_services" {
-  source                          = "../../Modules/15-CommunicationServices"
+  source                          = "../../Modules/11-CommunicationServices"
   communication_service_name      = var.communication_service_name
   email_service_name              = var.email_service_name
   domain_name                     = var.domain_name
@@ -269,9 +327,9 @@ module "communication_services" {
 
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-
+/*
 module "azure_front_door" {
-  source              = "../../Modules/16-FrontDoor"
+  source              = "../../Modules/02-Networking/03-FrontDoor"
   front_door_name     = var.front_door_name
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
@@ -297,12 +355,12 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
 
 module "virtual_machine" {
-  source                          = "../../Modules/17-VirtualMachine"
+  source                          = "../../Modules/03-Compute/01-VirtualMachine"
   resource_group_name             = module.resource_group.name
   location                        = module.resource_group.location
   virtual_machine_name            = var.virtual_machine_name
@@ -327,9 +385,9 @@ module "virtual_machine" {
 
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
-
+/*
 module "container_registry" {
-  source                        = "../../Modules/18-ContainerRegistry"
+  source                        = "../../Modules/03-Compute/02-ContainerRegistry"
   container_registry_name       = var.container_registry_name
   resource_group_name           = module.resource_group.name
   location                      = module.resource_group.location
@@ -340,12 +398,12 @@ module "container_registry" {
   zone_redundancy_enabled       = var.zone_redundancy_enabled
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
 /*
 module "virtual_network_gateway" {
-  source                       = "../../Modules/20-VirtualNetworkGateway"
+  source                       = "../../Modules/02-Networking/07-VirtualNetworkGateway"
   resource_group_name          = module.resource_group.name
   location                     = module.resource_group.location
   virtual_network_gateway_name = var.virtual_network_gateway_name
@@ -356,7 +414,7 @@ module "virtual_network_gateway" {
   gateway_type                 = var.gateway_type
   vpn_type                     = var.vpn_type
   active_active                = var.active_active
-  virtual_network_gateway_sku  = var.virtual_network_gateway_sku
+  virtual_network_gateway_sku  = var.virtual_network_gateway_sku0
   tags                         = var.tags
 }
 */
@@ -364,11 +422,26 @@ module "virtual_network_gateway" {
 # 19-DNSZone
 
 module "example_dns_zone" {
-  source              = "../../Modules/19-DNSZone"
+  source              = "../../Modules/12-DNSZone"
   dns_zone_name       = var.dns_zone_name
   resource_group_name = module.resource_group.name
-  #location = module.resource_group_name.location
-  tags = var.tags
+  tags                = var.tags
 }
 
+#---------------------------------------------------------------------------------------------------
+# 20-StaticWebApp
+/*
+module "static_web_app" {
+  source              = "../../Modules/04-Web/04-StaticWebApp"
+  static_webapp_name  = var.static_webapp_name
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  repository_url      = var.static_webapp_repository_url
+  branch              = var.static_webapp_branch
+  app_location        = var.static_webapp_location
+  api_location        = var.static_webapp_api_location
+  output_location     = var.static_webapp_output_location
+  tags                = var.tags
+}
+*/
 #---------------------------------------------------------------------------------------------------

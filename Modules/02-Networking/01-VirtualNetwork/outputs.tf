@@ -32,6 +32,12 @@ output "storage_subnets" {
   }
 }
 
+output "funcapp_subnets" {
+  value = {
+    funcapp = azurerm_subnet.subnets["funcapp"].id
+  }
+}
+
 output "gateway_subnets" {
   value = {
     gateway = azurerm_subnet.subnets["GatewaySubnet"].id

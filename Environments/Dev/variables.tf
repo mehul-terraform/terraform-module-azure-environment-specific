@@ -432,7 +432,7 @@ variable "create_key_secret" {
   default = {}
 }
 #-----------------------------------------------------------------------------------------
-# 09-PrivateEndPoint
+# 09.1-PrivateEndPointPostgresSQLFlexible
 
 variable "private_endpoint_name" {
   description = "The name of the private endpoint"
@@ -458,8 +458,37 @@ variable "private_dns_zone_group_name" {
   description = "The ID of the subnet where the private endpoint will be deployed"
   type        = string
 }
+
 #----------------------------------------------------------------------------------------
-# 10-PrivateDNSZone
+#09.2-PrivateEndPointStorageAccount
+
+variable "storage_account_private_endpoint_name" {
+  description = "The name of the private endpoint"
+  type        = string
+}
+
+variable "storage_account_private_service_connection_name" {
+  description = "The name for the private service connection"
+  type        = string
+}
+
+variable "storage_account_is_manual_connection" {
+  description = "The ID of the subnet where the private endpoint will be deployed"
+  type        = string
+}
+
+variable "storage_account_subresource_names" {
+  description = "The ID of the subnet where the private endpoint will be deployed"
+  type        = list(string)
+}
+
+variable "storage_account_private_dns_zone_group_name" {
+  description = "The ID of the subnet where the private endpoint will be deployed"
+  type        = string
+}
+
+#----------------------------------------------------------------------------------------
+# 10.1-PrivateDNSZone
 
 variable "private_dns_zone_name" {
   description = "Name of the private DNS zone"
@@ -470,6 +499,20 @@ variable "virtual_network_link_name" {
   description = "Name for the virtual network link"
   type        = string
 }
+
+#-----------------------------------------------------------------------------------------
+# 10.2-PrivateDNSZoneStorageAccount
+
+variable "storage_account_private_dns_zone_name" {
+  description = "Name of the private DNS zone"
+  type        = string
+}
+
+variable "storage_account_virtual_network_link_name" {
+  description = "Name for the virtual network link"
+  type        = string
+}
+
 #-----------------------------------------------------------------------------------------
 # 11-RedisCache
 /*
@@ -690,7 +733,68 @@ variable "function_app_extension_version" {
   description = "Extension Version"
 }
 
-#-----------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------
+# # 14-FunctionAppFlexConsumption
+
+variable "function_app_flex_name" {
+  type        = string
+  description = "Function app name"
+}
+
+variable "function_app_flex_storage_account_name" {
+  type        = string
+  description = "Extension Version"
+}
+
+variable "function_app_flex_service_plan_name" {
+  type        = string
+  description = "Extension Version"
+}
+
+variable "function_app_flex_dotnet_version" {
+  type    = string
+  default = "dotnet6"
+}
+
+variable "function_app_flex_run_from_package" {
+  type    = string
+  default = "1"
+}
+
+variable "function_app_flex_worker_runtime" {
+  type    = string
+  default = "dotnet"
+}
+
+variable "function_app_flex_node_version" {
+  type    = string
+  default = "~14"
+}
+
+variable "function_app_flex_extension_version" {
+  type        = string
+  description = "Extension Version"
+}
+
+variable "function_app_flex_app_settings" {
+  description = "App application settings"
+  type        = map(any)
+  default     = {}
+}
+
+variable "runtime_name" {
+  description = "The name of the language worker runtime."
+  type        = string
+  default     = "node" # Allowed: dotnet-isolated, java, node, powershell, python
+}
+
+variable "runtime_version" {
+  description = "The version of the language worker runtime."
+  type        = string
+  default     = "20" # Supported versions: see https://aka.ms/flexfxversions
+}
+
+#---------------------------------------------------------------------------------------------
 # 15-CommunicationServices
 
 variable "communication_service_name" {
@@ -976,4 +1080,52 @@ variable "virtual_network_gateway_public_ip_allocation_method" {
 }
 */
 #------------------------------------------------------------------------------------------------
+# 04.4-StaticWebApp
 
+variable "static_webapp_name" {
+  description = "The name of the static web app."
+  type        = string
+}
+
+variable "static_webapp_sku_tier" {
+  description = "The SKU tier (e.g., Free, Standard)."
+  type        = string
+  default     = "Free"
+}
+
+variable "static_webapp_sku_size" {
+  description = "The SKU size."
+  type        = string
+  default     = "Free"
+}
+
+variable "static_webapp_repository_url" {
+  description = "GitHub repo URL for the source code."
+  type        = string
+}
+
+variable "static_webapp_branch" {
+  description = "Branch of the GitHub repo."
+  type        = string
+  default     = "main"
+}
+
+variable "static_webapp_location" {
+  description = "Path to your application code relative to the repository root."
+  type        = string
+  default     = "/"
+}
+
+variable "static_webapp_api_location" {
+  description = "Path to your Azure Functions API code."
+  type        = string
+  default     = ""
+}
+
+variable "static_webapp_output_location" {
+  description = "Build output folder relative to app_location."
+  type        = string
+  default     = "build"
+}
+
+#-----------------------------------------------------------------------------------------------

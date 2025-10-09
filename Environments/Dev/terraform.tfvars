@@ -2,46 +2,52 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "WEST US 3"
+location            = "EAST US 2"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
 
 virtual_network_name = "myexample-dev-vnet"
-address_space        = ["10.0.0.0/8"]
+address_space        = ["10.250.0.0/16"]
 
 subnets = [
   {
     name           = "vm"
-    address_prefix = "10.251.0.0/16"
+    address_prefix = "10.250.1.0/24"
   },
   {
     name           = "webapp"
-    address_prefix = "10.252.0.0/16"
-
+    address_prefix = "10.250.2.0/24"
     delegation = {
       name = "delegation"
       service_delegation = {
         name    = "Microsoft.Web/serverFarms"
-        actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
       }
     }
   },
   {
     name           = "db"
-    address_prefix = "10.253.0.0/16"
+    address_prefix = "10.250.3.0/24"
   },
   {
     name           = "storage"
-    address_prefix = "10.254.0.0/16"
+    address_prefix = "10.250.4.0/24"
   },
   {
-    name           = "aks"
-    address_prefix = "10.255.0.0/16"
+    name           = "funcapp"
+    address_prefix = "10.250.5.0/24"
+    delegation = {
+      name = "delegation"
+      service_delegation = {
+        name    = "Microsoft.Web/serverFarms"
+        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+      }
+    }
   },
   {
     name           = "GatewaySubnet"
-    address_prefix = "10.250.0.0/16"
+    address_prefix = "10.250.255.0/24"
   }
 ]
 
@@ -134,19 +140,33 @@ postgre_administrator_login    = "myexampleadmin"
 postgre_administrator_password = "Admin@123456"
 
 #-----------------------------------------------------------------------------------------------  
-# 08-PrivateDNSZone
+# 08.1-PrivateDNSZonePostgresSQLFlexible
 
 private_dns_zone_name     = "privatelink.postgres.database.azure.com"
 virtual_network_link_name = "myexample-dev-vnet-link"
 
 #-----------------------------------------------------------------------------------------------
-# 09-PrivateEndpoint
+#08.2-PrivateDNSZonePostgresSQLFlexible
+
+storage_account_private_dns_zone_name     = "privatelink.postgres.database.azure.com"
+storage_account_virtual_network_link_name = "myexample-dev-vnet-link"
+
+#-----------------------------------------------------------------------------------------------
+# 09.1-PrivateEndpointPostgresSQLFlexible
 
 private_endpoint_name           = "myexample-dev-db-pg-pep"
 private_dns_zone_group_name     = "privatelink.postgres.database.azure.com"
 private_service_connection_name = "myexample-dev-db-pg-connection"
 is_manual_connection            = false
 subresource_names               = ["postgresqlServer"]
+#-----------------------------------------------------------------------------------------------
+# 09.2-PrivateEndpointStorageAccount
+
+storage_account_private_endpoint_name           = "myexample-dev-storage-pep"
+storage_account_private_dns_zone_group_name     = "privatelink.blob.core.windows.net"
+storage_account_private_service_connection_name = "myexample-dev-storage-connection"
+storage_account_is_manual_connection            = false
+storage_account_subresource_names               = ["blob"]
 
 #-----------------------------------------------------------------------------------------
 /*
@@ -183,6 +203,7 @@ capabilities              = []
 enable_automatic_failover = false
 
 #-----------------------------------------------------------------------------------------------
+
 # 13-FunctionApp
 
 function_app_name              = "myexample-dev-funcapp"
@@ -193,6 +214,21 @@ worker_runtime                 = "dotnet"
 function_app_node_version      = "~14"
 function_app_extension_version = "~4"
 app_settings = {
+  "MyCustomSetting" = "https://my-api.com/key"
+}
+
+#----------------------------------------------------------------------------------------------
+# 13-FunctionAppFlexconsumption
+
+function_app_flex_name                 = "myexample-dev-funcapp-flex"
+function_app_flex_service_plan_name    = "myexample-dev-asp-flex"
+function_app_flex_storage_account_name = "myexampledevfuncstorage"
+function_app_flex_dotnet_version       = "dotnet6"
+function_app_flex_run_from_package     = "1"
+function_app_flex_worker_runtime       = "dotnet"
+function_app_flex_node_version         = "~14"
+function_app_flex_extension_version    = "~4"
+function_app_flex_app_settings = {
   "MyCustomSetting" = "https://my-api.com/key"
 }
 
@@ -241,7 +277,7 @@ admin_password                              = "Admin@123456"
 network_interface_name                      = "myexample-dev-vm01-nic"
 private_ip_address_allocation               = "Static"
 private_ip_address_name                     = "myexample-dev-vm01-private-ip"
-private_ip_address                          = "10.251.0.11"
+private_ip_address                          = "10.250.1.11"
 os_disk_caching                             = "ReadWrite"
 os_disk_storage_account_type                = "Standard_LRS"
 virtual_machine_image_publisher             = "MicrosoftWindowsServer"
@@ -276,5 +312,15 @@ virtual_network_gateway_public_ip_allocation_method = "Static"
 dns_zone_name = "myexample.co.in"
 
 #------------------------------------------------------------------------------------------------
+# 04.1-StaticWebApp
 
+static_webapp_name            = "myexample-dev-static-webapp"
+static_webapp_repository_url  = "https://github.com/your/repo"
+static_webapp_branch          = "main"
+static_webapp_sku_size        = "Standard"
+static_webapp_location        = "/"
+static_webapp_api_location    = "api"
+static_webapp_output_location = "build"
+
+#-------------------------------------------------------------------------------------------------
 
