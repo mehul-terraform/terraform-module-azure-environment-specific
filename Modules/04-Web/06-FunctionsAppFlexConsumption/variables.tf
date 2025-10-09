@@ -80,5 +80,15 @@ variable "runtime_name" {
 variable "runtime_version" {
   description = "Function runtime"
   type        = string
-  default     = "node"
+  default     = "20"
+}
+
+variable "sku_name" {
+  description = "Function sku name"
+  type        = string 
+}
+
+variable "os_type" {
+  description = "Function os type"
+  type        = string 
 }

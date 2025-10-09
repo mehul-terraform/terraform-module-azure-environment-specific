@@ -296,6 +296,8 @@ module "function_app_flex" {
   app_service_plan_name = var.function_app_flex_service_plan_name
   storage_account_name  = var.function_app_flex_storage_account_name
   function_app_name     = var.function_app_flex_name
+  sku_name              = var.function_app_flex_sku_name
+  os_type               = var.function_app_flex_os_type
 
   identity_type    = var.identity_type
   run_from_package = var.run_from_package

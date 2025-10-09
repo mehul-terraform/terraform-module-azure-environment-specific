@@ -751,47 +751,30 @@ variable "function_app_flex_service_plan_name" {
   description = "Extension Version"
 }
 
-variable "function_app_flex_dotnet_version" {
-  type    = string
-  default = "dotnet6"
-}
-
-variable "function_app_flex_run_from_package" {
-  type    = string
-  default = "1"
-}
-
-variable "function_app_flex_worker_runtime" {
-  type    = string
-  default = "dotnet"
-}
-
-variable "function_app_flex_node_version" {
-  type    = string
-  default = "~14"
-}
-
-variable "function_app_flex_extension_version" {
-  type        = string
-  description = "Extension Version"
-}
-
 variable "function_app_flex_app_settings" {
   description = "App application settings"
   type        = map(any)
   default     = {}
 }
 
-variable "runtime_name" {
+variable "function_app_flex_runtime_name" {
   description = "The name of the language worker runtime."
   type        = string
-  default     = "node" # Allowed: dotnet-isolated, java, node, powershell, python
 }
 
-variable "runtime_version" {
+variable "function_app_flex_runtime_version" {
   description = "The version of the language worker runtime."
   type        = string
-  default     = "20" # Supported versions: see https://aka.ms/flexfxversions
+}
+
+variable "function_app_flex_sku_name" {
+  description = "Function sku name"
+  type        = string
+}
+
+variable "function_app_flex_os_type" {
+  description = "Function os type"
+  type        = string
 }
 
 #---------------------------------------------------------------------------------------------

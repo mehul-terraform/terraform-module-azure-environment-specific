@@ -223,11 +223,17 @@ app_settings = {
 function_app_flex_name                 = "myexample-dev-funcapp-flex"
 function_app_flex_service_plan_name    = "myexample-dev-asp-flex"
 function_app_flex_storage_account_name = "myexampledevfuncstorage"
-function_app_flex_dotnet_version       = "dotnet6"
-function_app_flex_run_from_package     = "1"
-function_app_flex_worker_runtime       = "dotnet"
-function_app_flex_node_version         = "~14"
-function_app_flex_extension_version    = "~4"
+function_app_flex_sku_name             = "FC1"
+function_app_flex_os_type              = "Linux"
+function_app_flex_runtime_name         = "Node"
+function_app_flex_runtime_version      = "20"
+
+
+function_app_flex_dotnet_version    = "dotnet6"
+function_app_flex_run_from_package  = "1"
+function_app_flex_worker_runtime    = "dotnet"
+function_app_flex_node_version      = "~14"
+function_app_flex_extension_version = "~4"
 function_app_flex_app_settings = {
   "MyCustomSetting" = "https://my-api.com/key"
 }
