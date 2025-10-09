@@ -227,13 +227,6 @@ function_app_flex_sku_name             = "FC1"
 function_app_flex_os_type              = "Linux"
 function_app_flex_runtime_name         = "Node"
 function_app_flex_runtime_version      = "20"
-
-
-function_app_flex_dotnet_version    = "dotnet6"
-function_app_flex_run_from_package  = "1"
-function_app_flex_worker_runtime    = "dotnet"
-function_app_flex_node_version      = "~14"
-function_app_flex_extension_version = "~4"
 function_app_flex_app_settings = {
   "MyCustomSetting" = "https://my-api.com/key"
 }
@@ -329,4 +322,12 @@ static_webapp_api_location    = "api"
 static_webapp_output_location = "build"
 
 #-------------------------------------------------------------------------------------------------
+#  13.1-ServiceBus
 
+servicebus_namespace_name = "myexample-dev-sb-ns"
+servicebus_sku            = "Standard"
+servicebus_capacity       = null
+servicebus_topic_name     = "myexample-dev-sb-topic"
+servicebus_queue_name     = "myexample-dev-sb-queue"
+
+#-------------------------------------------------------------------------------------------------

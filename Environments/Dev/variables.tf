@@ -1112,3 +1112,33 @@ variable "static_webapp_output_location" {
 }
 
 #-----------------------------------------------------------------------------------------------
+# 13.1 ServiceBus
+
+variable "servicebus_namespace_name" {
+  type        = string
+  description = "Name of the Service Bus namespace."
+}
+
+variable "servicebus_sku" {
+  type        = string
+  default     = "Standard"
+  description = "Service Bus namespace SKU."
+}
+
+variable "servicebus_capacity" {
+  type        = number
+  default     = 1
+  description = "Capacity, required for Premium SKU."
+}
+
+variable "servicebus_topic_name" {
+  type        = string
+  description = "Name of the Service Bus topic."
+}
+
+variable "servicebus_queue_name" {
+  type        = string
+  description = "Name of the Service Bus queue."
+}
+
+#------------------------------------------------------------------------------------------------

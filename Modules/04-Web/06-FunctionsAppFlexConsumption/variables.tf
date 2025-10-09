@@ -85,10 +85,10 @@ variable "runtime_version" {
 
 variable "sku_name" {
   description = "Function sku name"
-  type        = string 
+  type        = string
 }
 
 variable "os_type" {
   description = "Function os type"
-  type        = string 
+  type        = string
 }

@@ -119,7 +119,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "app_service_con
 # 07-StorageAccount
 
 module "storage_account" {
-  source                             = "../../Modules/05-Storage/01-StorageAccount"
+  source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
   resource_group_name                = module.resource_group.name
   location                           = module.resource_group.location
   storage_account_name               = var.storage_account_name
@@ -447,3 +447,19 @@ module "static_web_app" {
 }
 */
 #---------------------------------------------------------------------------------------------------
+# 21-ServiceBus
+
+module "servicebus" {
+  source              = "../../Modules/13-Integration/01-ServiceBus"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  namespace_name      = var.servicebus_namespace_name
+  sku                 = var.servicebus_sku
+  capacity            = var.servicebus_capacity
+  topic_name          = var.servicebus_topic_name
+  queue_name          = var.servicebus_queue_name
+  tags                = var.tags
+}
+
+#---------------------------------------------------------------------------------------------------
+

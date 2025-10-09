@@ -9,3 +9,15 @@ output "cosmosdb_database_id" {
   value       = module.cosmosdb.cosmosdb_database_id
 }
 */
+
+output "namespace_id" {
+  value = module.servicebus.namespace_id
+}
+
+output "topic_id" {
+  value = module.servicebus.topic_id
+}
+
+output "queue_id" {
+  value = module.servicebus.queue_id
+}
