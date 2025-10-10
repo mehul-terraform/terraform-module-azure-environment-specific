@@ -6,10 +6,3 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type = var.account_replication_type
   tags                     = merge(var.tags)
 }
-
-resource "azurerm_storage_account_static_website" "static_website" {
-  storage_account_id = azurerm_storage_account.sa.id
-
-  index_document     = var.storage_account_index_document
-  error_404_document = var.storage_account_error_404_document
-}

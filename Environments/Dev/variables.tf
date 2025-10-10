@@ -95,13 +95,11 @@ variable "service_plan_name" {
 variable "asp_os_type" {
   type        = string
   description = "OS type: Windows, Linux, or WindowsContainer"
-  default     = "Linux"
 }
 
 variable "asp_sku_name" {
   type        = string
   description = "The SKU for the plan"
-  default     = "P1v3"
 }
 
 variable "per_site_scaling_enabled" {
@@ -123,14 +121,13 @@ variable "app_name" {
 }
 
 variable "web_app_runtime" {
-  type    = string
-  default = "DOTNETCORE|6.0"
+  type = string
 }
 
 variable "app_service_node_version" {
-  type    = string
-  default = "DOTNETCORE|6.0"
+  type = string
 }
+
 #-----------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
 
@@ -276,20 +273,18 @@ variable "docker_image_tag" {
 }
 
 #------------------------------------------------------------------------------------------------
-# 07-StorageAccount
+# 05.1-StorageAccount
 
-variable "storage_account_name" {
+variable "storage_account_web_name" {
   type = string
 }
 
 variable "account_tier" {
-  type    = string
-  default = "Standard"
+  type = string
 }
 
 variable "account_replication_type" {
-  type    = string
-  default = "LRS"
+  type = string
 }
 
 variable "storage_account_index_document" {
@@ -300,6 +295,12 @@ variable "storage_account_index_document" {
 variable "storage_account_error_404_document" {
   type    = string
   default = "404.html"
+}
+#----------------------------------------------------------------------------------------------
+# 05.2-StorageAccount
+
+variable "storage_account_name" {
+  type = string
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -643,7 +644,6 @@ variable "object_id" {
 
 variable "key_vault_sku_name" {
   type        = string
-  default     = "standard"
   description = "SKU Name of the Key Vault. Possible values are 'standard' and 'premium'."
 }
 
@@ -709,23 +709,20 @@ variable "function_app_name" {
 }
 
 variable "dotnet_version" {
-  type    = string
-  default = "dotnet6"
+  type = string
 }
 
 variable "run_from_package" {
-  type    = string
-  default = "1"
+  type = string
 }
 
 variable "worker_runtime" {
-  type    = string
-  default = "dotnet"
+  type = string
+
 }
 
 variable "function_app_node_version" {
-  type    = string
-  default = "~14"
+  type = string
 }
 
 variable "function_app_extension_version" {
@@ -918,7 +915,7 @@ variable "private_ip_address_allocation" {
 variable "virtual_machine_name" {
   description = "The name of the virtual machine"
   type        = string
-  default     = "project-az-vm01"
+
 }
 
 variable "virtual_machine_size" {
@@ -952,25 +949,21 @@ variable "os_disk_storage_account_type" {
 variable "virtual_machine_image_publisher" {
   description = "Publisher of the OS image"
   type        = string
-  default     = "MicrosoftWindowsServer"
 }
 
 variable "virtual_machine_image_offer" {
   description = "Offer of the OS image"
   type        = string
-  default     = "WindowsServer"
 }
 
 variable "virtual_machine_image_sku" {
   description = "SKU of the OS image"
   type        = string
-  default     = "2016-Datacenter"
 }
 
 variable "virtual_machine_image_version" {
   description = "Version of the OS image"
   type        = string
-  default     = "latest"
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -1020,7 +1013,7 @@ variable "dns_zone_name" {
 
 #-----------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
-
+/*
 variable "virtual_network_gateway_name" {
   description = "Name of the virtual network gateway"
   type        = string
@@ -1061,7 +1054,7 @@ variable "virtual_network_gateway_public_ip_allocation_method" {
   type        = string
 
 }
-
+*/
 #------------------------------------------------------------------------------------------------
 # 04.4-StaticWebApp
 
@@ -1073,13 +1066,11 @@ variable "static_webapp_name" {
 variable "static_webapp_sku_tier" {
   description = "The SKU tier (e.g., Free, Standard)."
   type        = string
-  default     = "Free"
 }
 
 variable "static_webapp_sku_size" {
   description = "The SKU size."
   type        = string
-  default     = "Free"
 }
 
 variable "static_webapp_repository_url" {

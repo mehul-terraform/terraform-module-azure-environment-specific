@@ -2,7 +2,7 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "EAST US 2"
+location            = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
@@ -103,8 +103,9 @@ asp_sku_name      = "B2"
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-app_name        = "myexample-dev-webapp"
-web_app_runtime = "22-lts"
+app_name                 = "myexample-dev-webapp"
+web_app_runtime          = "22-lts"
+app_service_node_version = "~20"
 
 #-----------------------------------------------------------------------------------------------
 # 05-AppServiceContainer
@@ -117,12 +118,18 @@ docker_registry_username = "myexample-dev-user"
 docker_registry_password = "Passwor@1234"
 
 #-----------------------------------------------------------------------------------------------
-# 07-StorageAccount
-storage_account_name               = "myexampledevstorage"
+# 07-StorageAccountStaticWebsite
+
+storage_account_web_name           = "myexampledevstorageweb"
 account_tier                       = "Standard"
 account_replication_type           = "LRS"
 storage_account_index_document     = "index.html"
 storage_account_error_404_document = "404.html"
+
+#-----------------------------------------------------------------------------------------------
+# 05-1-StorageAccount
+
+storage_account_name = "myexampledevstorage"
 
 #-----------------------------------------------------------------------------------------------
 # 06-PostgreSQLDatabase
@@ -169,7 +176,7 @@ storage_account_is_manual_connection            = false
 storage_account_subresource_names               = ["blob"]
 
 #-----------------------------------------------------------------------------------------
-/*
+
 # 10-RedisCache
 cache_name                                = "myexample-dev-redis-cache"
 capacity                                  = 2
@@ -180,7 +187,7 @@ redis_version                             = "6"
 enable_non_ssl_port                       = false
 minimum_tls_version                       = "1.2"
 cluster_shard_count                       = 1
-*/
+
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
@@ -317,6 +324,7 @@ static_webapp_name            = "myexample-dev-static-webapp"
 static_webapp_repository_url  = "https://github.com/your/repo"
 static_webapp_branch          = "main"
 static_webapp_sku_size        = "Standard"
+static_webapp_sku_tier        = "Free"
 static_webapp_location        = "/"
 static_webapp_api_location    = "api"
 static_webapp_output_location = "build"
