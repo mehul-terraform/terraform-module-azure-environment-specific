@@ -515,7 +515,7 @@ variable "storage_account_virtual_network_link_name" {
 
 #-----------------------------------------------------------------------------------------
 # 11-RedisCache
-/*
+
 variable "cache_name" {
   description = "The name of the Redis cache instance"
   type        = string
@@ -622,7 +622,7 @@ variable "redis_firewall_rule" {
   description = "A map of firewall rules for the Redis cache."
   default     = {}
 }
-*/
+
 #-----------------------------------------------------------------------------------------------
 # 12-KeyVault
 
@@ -1020,7 +1020,7 @@ variable "dns_zone_name" {
 
 #-----------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
-/*
+
 variable "virtual_network_gateway_name" {
   description = "Name of the virtual network gateway"
   type        = string
@@ -1061,7 +1061,7 @@ variable "virtual_network_gateway_public_ip_allocation_method" {
   type        = string
 
 }
-*/
+
 #------------------------------------------------------------------------------------------------
 # 04.4-StaticWebApp
 

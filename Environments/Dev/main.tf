@@ -70,7 +70,7 @@ module "service_plan" {
 
 #--------------------------------------------------------------------------------------------------
 # 05-AppService
-/*
+
 module "app_service" {
   source = "../../Modules/04-Web/02-AppService"
 
@@ -87,14 +87,14 @@ module "app_service" {
   }
 }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
-  app_service_id = module.app_service.id
-  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
-}
-*/
+#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
+#  app_service_id = module.app_service.id
+#  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
+#}
+
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
-/*
+
 module "app_service_container" {
   source                   = "../../Modules/04-Web/03-AppServiceContainer"
   resource_group_name      = module.resource_group.name
@@ -110,11 +110,11 @@ module "app_service_container" {
   tags                     = local.tags
 }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "app_service_container_vnet_integration" {
-  app_service_id = module.app_service_container.id
-  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
-}
-*/
+#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_container_vnet_integration" {
+#  app_service_id = module.app_service_container.id
+#  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
+#}
+
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccount
 
@@ -132,7 +132,7 @@ module "storage_account" {
 
 #--------------------------------------------------------------------------------------------------
 # 08-PostgresSQLFlexible
-/*
+
 module "postgre_sql" {
   source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
   resource_group_name             = module.resource_group.name
@@ -145,12 +145,12 @@ module "postgre_sql" {
   postgre_administrator_password  = var.postgre_administrator_password
   tags                            = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 09.1-PrivateEndPoint (PostgresSQLFelxible) 
-/*
+
 module "private_endpoint_postgres_flexible" {
-  source                          = "../../Modules/08-PrivateEndPoint/01-PostgresSQLFlexible"
+  source                          = "../../Modules/08-PrivateEndPoint/8.1-PostgresSQLFlexible"
   private_endpoint_name           = var.private_endpoint_name
   private_dns_zone_ids            = [module.private_dns_zone.id]
   virtual_network_id              = module.virtual_network.id
@@ -169,7 +169,7 @@ module "private_endpoint_postgres_flexible" {
 # 09.1-PrivateEndPoint (StorageAccount) 
 
 module "private_endpoint_storage_account" {
-  source                          = "../../Modules/08-PrivateEndPoint/02-StorageAccount"
+  source                          = "../../Modules/08-PrivateEndPoint/8.2-StorageAccount"
   private_endpoint_name           = var.storage_account_private_endpoint_name
   private_dns_zone_ids            = [module.private_dns_zone_storage_account.id]
   virtual_network_id              = module.virtual_network.id
@@ -183,11 +183,12 @@ module "private_endpoint_storage_account" {
   subresource_names               = var.storage_account_subresource_names
   tags                            = local.tags
 }
+
 #--------------------------------------------------------------------------------------------------
 # 10-PrivateDNSZonePostgresSQLFlexible
 
 module "private_dns_zone" {
-  source                    = "../../Modules/07-PrivateDNSZone/10.1-PrivateDNSZonePostgresSQLFlexible"
+  source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.1-PrivateDNSZonePostgresSQLFlexible"
   private_dns_zone_name     = var.private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
@@ -195,11 +196,12 @@ module "private_dns_zone" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
+
 #-------------------------------------------------------------------------------------------------
 # 10-PrivateDNSZoneStorageAccount
 
 module "private_dns_zone_storage_account" {
-  source                    = "../../Modules/07-PrivateDNSZone/10.2-PrivateDNSZoneStorageAccount"
+  source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.2-PrivateDNSZoneStorageAccount"
   private_dns_zone_name     = var.storage_account_private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
@@ -207,9 +209,10 @@ module "private_dns_zone_storage_account" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
+
 #--------------------------------------------------------------------------------------------------
 # 11-CacheRedis
-/*
+
 module "redis" {
   source                        = "../../Modules/09-CacheRedis"
   cache_name                    = var.cache_name
@@ -225,10 +228,10 @@ module "redis" {
   cluster_shard_count           = var.cluster_shard_count
   tags                          = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
-/*
+
 module "keyvault" {
   source              = "../../Modules/10-KeyVault"
   resource_group_name = module.resource_group.name
@@ -238,10 +241,10 @@ module "keyvault" {
   object_id           = var.object_id
   tags                = local.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------
 # 13-CosmosDB
-/*
+
 module "cosmosdb" {
   source                    = "../../Modules/06-Database/02-CosmosDB"
   resource_group_name       = module.resource_group.name
@@ -280,13 +283,12 @@ module "function_app" {
   tags                           = var.tags
 }
 
-resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
-  app_service_id = module.function_app.id
-  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
-}
-*/
-#--------------------------------------------------------------------------------------------------
+#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
+#  app_service_id = module.function_app.id
+#  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
+#}
 
+#--------------------------------------------------------------------------------------------------
 # 14-FunctionsApp
 
 module "function_app_flex" {
@@ -329,7 +331,7 @@ module "communication_services" {
 
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-/*
+
 module "azure_front_door" {
   source              = "../../Modules/02-Networking/03-FrontDoor"
   front_door_name     = var.front_door_name
@@ -357,7 +359,7 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
 
@@ -387,7 +389,7 @@ module "virtual_machine" {
 
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
-/*
+
 module "container_registry" {
   source                        = "../../Modules/03-Compute/02-ContainerRegistry"
   container_registry_name       = var.container_registry_name
@@ -400,7 +402,7 @@ module "container_registry" {
   zone_redundancy_enabled       = var.zone_redundancy_enabled
   tags                          = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
 /*
@@ -424,7 +426,7 @@ module "virtual_network_gateway" {
 # 19-DNSZone
 
 module "example_dns_zone" {
-  source              = "../../Modules/12-DNSZone"
+  source              = "../../Modules/07-DNSZone/7.2-DNSZone"
   dns_zone_name       = var.dns_zone_name
   resource_group_name = module.resource_group.name
   tags                = var.tags
@@ -432,7 +434,7 @@ module "example_dns_zone" {
 
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
-/*
+
 module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
@@ -445,7 +447,7 @@ module "static_web_app" {
   output_location     = var.static_webapp_output_location
   tags                = var.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 21-ServiceBus
 
