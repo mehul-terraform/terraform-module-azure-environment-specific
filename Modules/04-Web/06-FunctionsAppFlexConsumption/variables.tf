@@ -3,6 +3,16 @@ variable "storage_account_name" {
   type        = string
 }
 
+variable "account_tier" {
+  description = "Storage account tier name"
+  type        = string
+}
+
+variable "account_replication_type" {
+  description = "Storage account replication type"
+  type        = string
+}
+
 variable "resource_group_name" {
   description = "Resource group name"
   type        = string
@@ -29,30 +39,6 @@ variable "identity_type" {
   default     = "SystemAssigned"
 }
 
-variable "function_app_extension_version" {
-  description = "Function app extension version"
-  type        = string
-  default     = "~4"
-}
-
-variable "run_from_package" {
-  description = "Enable run from package"
-  type        = bool
-  default     = true
-}
-
-variable "worker_runtime" {
-  description = "Function runtime"
-  type        = string
-  default     = "node"
-}
-
-variable "linux_fx_version" {
-  description = "Linux runtime stack, e.g. NODE|18"
-  type        = string
-  default     = "NODE|18"
-}
-
 variable "app_settings" {
   description = "Extra app settings as a map"
   type        = map(string)
@@ -65,22 +51,14 @@ variable "tags" {
   default     = {}
 }
 
-variable "node_version" {
-  description = "Node.js version for the Function App"
-  type        = string
-  default     = "18"
-}
-
 variable "runtime_name" {
   description = "Function runtime"
-  type        = string
-  default     = "node"
+  type        = string  
 }
 
 variable "runtime_version" {
   description = "Function runtime"
-  type        = string
-  default     = "20"
+  type        = string  
 }
 
 variable "sku_name" {
@@ -90,5 +68,15 @@ variable "sku_name" {
 
 variable "os_type" {
   description = "Function os type"
+  type        = string
+}
+
+variable "container_access_type" {
+  description = "Function os type"
+  type        = string
+}
+
+variable "storage_container_name" {
+  description = "storage container name"
   type        = string
 }
