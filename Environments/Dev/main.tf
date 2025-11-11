@@ -204,7 +204,7 @@ module "private_dns_zone" {
   private_dns_zone_name     = var.private_dns_zone_group_name
   resource_group_name       = module.resource_group.name
   location                  = module.resource_group.location
-  virtual_network_link_name = var.virtual_network_link_name
+  virtual_network_link_name = var.postgres_sql_virtual_network_link_name
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
@@ -301,25 +301,27 @@ module "function_app" {
 #}
 
 #--------------------------------------------------------------------------------------------------
-# 14-FunctionsApp
+# 14-FunctionsAppFlexConsumption
 
 module "function_app_flex" {
-  source                = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
-  resource_group_name   = module.resource_group.name
-  location              = module.resource_group.location
-  app_service_plan_name = var.function_app_flex_service_plan_name
-  storage_account_name  = var.function_app_flex_storage_account_name
-  function_app_name     = var.function_app_flex_name
-  sku_name              = var.function_app_flex_sku_name
-  os_type               = var.function_app_flex_os_type
+  source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
+  resource_group_name      = module.resource_group.name
+  location                 = module.resource_group.location
+  app_service_plan_name    = var.function_app_flex_service_plan_name
+  storage_account_name     = var.function_app_flex_storage_account_name
+  account_tier             = var.function_app_flex_account_tier
+  account_replication_type = var.function_app_flex_account_replication_type
+  function_app_name        = var.function_app_flex_name
+  runtime_name             = var.function_app_flex_runtime_name
+  runtime_version          = var.function_app_flex_runtime_version
+  container_access_type    = var.function_app_flex_container_access_type
+  storage_container_name   = var.function_app_flex_storage_container_name
+  sku_name                 = var.function_app_flex_sku_name
+  os_type                  = var.function_app_flex_os_type
 
-  identity_type    = var.identity_type
-  run_from_package = var.run_from_package
-  worker_runtime   = var.worker_runtime
-
-  function_app_extension_version = var.function_app_extension_version
-  app_settings                   = var.app_settings
-  tags                           = var.tags
+  identity_type = var.function_app_flex_identity_type
+  app_settings  = var.function_app_flex_app_settings
+  tags          = var.tags
 }
 
 #resource "azurerm_app_service_virtual_network_swift_connection" "function_app_flex_vnet_integration" {
@@ -476,4 +478,18 @@ module "servicebus" {
 }
 
 #---------------------------------------------------------------------------------------------------
+# 14-NotificationHub
+
+module "notification_hub" {
+  source = "../../Modules/14-NotificationHub"
+
+  resource_group_name   = var.resource_group_name
+  location              = var.location
+  namespace_name        = var.namespace_name
+  namespace_sku         = var.namespace_sku
+  notification_hub_name = var.notification_hub_name
+
+}
+
+#--------------------------------------------------------------------------------------------------
 

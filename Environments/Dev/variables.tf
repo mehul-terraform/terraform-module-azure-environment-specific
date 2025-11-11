@@ -489,14 +489,14 @@ variable "storage_account_private_dns_zone_group_name" {
 }
 
 #----------------------------------------------------------------------------------------
-# 10.1-PrivateDNSZone
+# 10.1-PrivateDNSZonePostgresSQLFlexible
 
-variable "private_dns_zone_name" {
+variable "postgres_sql_private_dns_zone_name" {
   description = "Name of the private DNS zone"
   type        = string
 }
 
-variable "virtual_network_link_name" {
+variable "postgres_sql_virtual_network_link_name" {
   description = "Name for the virtual network link"
   type        = string
 }
@@ -731,7 +731,7 @@ variable "function_app_extension_version" {
 }
 
 #---------------------------------------------------------------------------------------------
-# # 14-FunctionAppFlexConsumption
+# 14-FunctionAppFlexConsumption
 
 variable "function_app_flex_name" {
   type        = string
@@ -741,6 +741,16 @@ variable "function_app_flex_name" {
 variable "function_app_flex_storage_account_name" {
   type        = string
   description = "Extension Version"
+}
+
+variable "function_app_flex_account_tier" {
+  description = "Storage account tier name"
+  type        = string
+}
+
+variable "function_app_flex_account_replication_type" {
+  description = "Storage account replication type"
+  type        = string
 }
 
 variable "function_app_flex_service_plan_name" {
@@ -774,6 +784,21 @@ variable "function_app_flex_os_type" {
   type        = string
 }
 
+variable "function_app_flex_container_access_type" {
+  description = "Function containrer access type"
+  type        = string
+}
+
+variable "function_app_flex_storage_container_name" {
+  description = "storage container name"
+  type        = string
+}
+
+variable "function_app_flex_identity_type" {
+  description = "The Managed Service Identity."
+  type        = string
+  default     = ""
+}
 #---------------------------------------------------------------------------------------------
 # 15-CommunicationServices
 
@@ -1133,3 +1158,19 @@ variable "servicebus_queue_name" {
 }
 
 #------------------------------------------------------------------------------------------------
+# 14-NotificationHub
+
+variable "namespace_name" {
+  type = string
+}
+
+variable "namespace_sku" {
+  type    = string
+  default = "Basic"
+}
+
+variable "notification_hub_name" {
+  type = string
+}
+
+#--------------------------------------------------------------------------------------------
