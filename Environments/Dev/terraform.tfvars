@@ -2,7 +2,7 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "WEST US 2"
+location            = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
@@ -325,14 +325,10 @@ dns_zone_name = "myexample.co.in"
 #------------------------------------------------------------------------------------------------
 # 04.1-StaticWebApp
 
-static_webapp_name            = "myexample-dev-static-webapp"
-static_webapp_repository_url  = "https://github.com/your/repo"
-static_webapp_branch          = "main"
-static_webapp_sku_size        = "Standard"
-static_webapp_sku_tier        = "Free"
-static_webapp_location        = "/"
-static_webapp_api_location    = "api"
-static_webapp_output_location = "build"
+static_webapp_name     = "myexample-dev-static-webapp"
+static_webapp_sku_size = "Free"
+static_webapp_sku_tier = "Free"
+
 
 #-------------------------------------------------------------------------------------------------
 #  13.1-ServiceBus

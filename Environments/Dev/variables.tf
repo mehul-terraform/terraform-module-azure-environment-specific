@@ -1098,35 +1098,6 @@ variable "static_webapp_sku_size" {
   type        = string
 }
 
-variable "static_webapp_repository_url" {
-  description = "GitHub repo URL for the source code."
-  type        = string
-}
-
-variable "static_webapp_branch" {
-  description = "Branch of the GitHub repo."
-  type        = string
-  default     = "main"
-}
-
-variable "static_webapp_location" {
-  description = "Path to your application code relative to the repository root."
-  type        = string
-  default     = "/"
-}
-
-variable "static_webapp_api_location" {
-  description = "Path to your Azure Functions API code."
-  type        = string
-  default     = ""
-}
-
-variable "static_webapp_output_location" {
-  description = "Build output folder relative to app_location."
-  type        = string
-  default     = "build"
-}
-
 #-----------------------------------------------------------------------------------------------
 # 13.1 ServiceBus
 

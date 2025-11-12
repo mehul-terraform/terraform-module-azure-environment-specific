@@ -454,11 +454,8 @@ module "static_web_app" {
   static_webapp_name  = var.static_webapp_name
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
-  repository_url      = var.static_webapp_repository_url
-  branch              = var.static_webapp_branch
-  app_location        = var.static_webapp_location
-  api_location        = var.static_webapp_api_location
-  output_location     = var.static_webapp_output_location
+  sku_tier            = var.static_webapp_sku_tier
+  sku_size            = var.static_webapp_sku_size
   tags                = var.tags
 }
 

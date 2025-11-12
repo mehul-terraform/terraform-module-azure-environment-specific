@@ -15,44 +15,14 @@ variable "location" {
 
 variable "sku_tier" {
   description = "The SKU tier (e.g., Free, Standard)."
-  type        = string
-  default     = "Free"
+  type        = string  
 }
 
 variable "sku_size" {
   description = "The SKU size."
-  type        = string
-  default     = "Free"
+  type        = string 
 }
 
-variable "repository_url" {
-  description = "GitHub repo URL for the source code."
-  type        = string
-}
-
-variable "branch" {
-  description = "Branch of the GitHub repo."
-  type        = string
-  default     = "main"
-}
-
-variable "app_location" {
-  description = "Path to your application code relative to the repository root."
-  type        = string
-  default     = "/"
-}
-
-variable "api_location" {
-  description = "Path to your Azure Functions API code."
-  type        = string
-  default     = ""
-}
-
-variable "output_location" {
-  description = "Build output folder relative to app_location."
-  type        = string
-  default     = "build"
-}
 
 variable "tags" {
   description = "Optional tags for Azure resources."
