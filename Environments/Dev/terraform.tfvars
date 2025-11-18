@@ -2,7 +2,7 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "WEST US 2"
+location            = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
