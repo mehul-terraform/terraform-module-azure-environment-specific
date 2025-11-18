@@ -2,7 +2,7 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "WEST US 3"
+location            = "WEST US 2"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
@@ -191,12 +191,12 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name             = "myexample-dev-kv1"
-tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
-object_id                  = "11111111-1111-1111-1111-111111111111"
-key_vault_sku_name         = "standard"
-soft_delete_retention_days = 7
-purge_protection_enabled   = true
+key_vault_name                       = "myexample-dev-be-kv"
+key_vault_tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
+key_vault_object_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
+key_vault_sku_name                   = "standard"
+key_vault_purge_protection_enabled   = false
+key_vault_soft_delete_retention_days = "7"
 
 #-----------------------------------------------------------------------------------------------
 # 12-CosmosDB
@@ -217,8 +217,8 @@ function_app_name              = "myexample-dev-funcapp"
 dotnet_version                 = "dotnet6"
 identity_type                  = "SystemAssigned"
 run_from_package               = "1"
-worker_runtime                 = "dotnet"
-function_app_node_version      = "~14"
+worker_runtime                 = "node"
+function_app_node_version      = "~22"
 function_app_extension_version = "~4"
 app_settings = {
   "MyCustomSetting" = "https://my-api.com/key"
@@ -234,8 +234,8 @@ function_app_flex_account_tier             = "Standard"
 function_app_flex_account_replication_type = "LRS"
 function_app_flex_sku_name                 = "FC1"
 function_app_flex_os_type                  = "Linux"
-function_app_flex_runtime_name             = "java"
-function_app_flex_runtime_version          = "21"
+function_app_flex_runtime_name             = "dotnet-isolated"
+function_app_flex_runtime_version          = "8.0"
 function_app_flex_container_access_type    = "private"
 function_app_flex_storage_container_name   = "myexample-container"
 

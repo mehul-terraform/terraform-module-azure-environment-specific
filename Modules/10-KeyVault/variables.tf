@@ -25,19 +25,16 @@ variable "object_id" {
 
 variable "sku_name" {
   type        = string
-  default     = "standard"
   description = "SKU Name of the Key Vault. Possible values are 'standard' and 'premium'."
 }
 
 variable "soft_delete_retention_days" {
   type        = number
-  default     = 7
   description = "Number of days to retain soft deleted key vault objects."
 }
 
 variable "purge_protection_enabled" {
-  type        = bool
-  default     = true
+  type        = bool 
   description = "Enable purge protection on the Key Vault."
 }
 

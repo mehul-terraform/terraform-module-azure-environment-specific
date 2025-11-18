@@ -47,14 +47,12 @@ variable "identity_type" {
 
 variable "run_from_package" {
   type        = string
-  description = "Run from package flag"
-  default     = "1"
+  description = "Run from package flag"  
 }
 
 variable "worker_runtime" {
   type        = string
-  description = "Functions runtime"
-  default     = "dotnet"
+  description = "Functions runtime"  
 }
 
 variable "function_app_node_version" {

@@ -632,12 +632,12 @@ variable "key_vault_name" {
   description = "The name of the Key Vault."
 }
 
-variable "tenant_id" {
+variable "key_vault_tenant_id" {
   type        = string
   description = "The Tenant ID for Azure AD."
 }
 
-variable "object_id" {
+variable "key_vault_object_id" {
   type        = string
   description = "The Object ID of the Azure AD user/service principal that will have access to the Key Vault."
 }
@@ -647,17 +647,16 @@ variable "key_vault_sku_name" {
   description = "SKU Name of the Key Vault. Possible values are 'standard' and 'premium'."
 }
 
-variable "soft_delete_retention_days" {
+variable "key_vault_soft_delete_retention_days" {
   type        = number
-  default     = 7
   description = "Number of days to retain soft deleted key vault objects."
 }
 
-variable "purge_protection_enabled" {
+variable "key_vault_purge_protection_enabled" {
   type        = bool
-  default     = true
   description = "Enable purge protection on the Key Vault."
 }
+
 #-----------------------------------------------------------------------------------------
 # 13-CosmosDB
 
