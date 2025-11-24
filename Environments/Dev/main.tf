@@ -5,7 +5,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.0.0"
+      version = ">= 4.0.0"
     }
   }
 }
@@ -224,7 +224,7 @@ module "private_dns_zone_storage_account" {
 
 #--------------------------------------------------------------------------------------------------
 # 11-CacheRedis
-
+/*
 module "redis" {
   source                        = "../../Modules/09-CacheRedis"
   cache_name                    = var.cache_name
@@ -240,23 +240,26 @@ module "redis" {
   cluster_shard_count           = var.cluster_shard_count
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
 
 module "keyvault" {
-  source              = "../../Modules/10-KeyVault"
-  resource_group_name = module.resource_group.name
-  location            = module.resource_group.location
-  key_vault_name      = var.key_vault_name
-  tenant_id           = var.tenant_id
-  object_id           = var.object_id
-  tags                = local.tags
+  source                     = "../../Modules/10-KeyVault"
+  resource_group_name        = module.resource_group.name
+  location                   = module.resource_group.location
+  key_vault_name             = var.key_vault_name
+  tenant_id                  = var.key_vault_tenant_id
+  object_id                  = var.key_vault_object_id
+  sku_name                   = var.key_vault_sku_name
+  purge_protection_enabled   = var.key_vault_purge_protection_enabled
+  soft_delete_retention_days = var.key_vault_soft_delete_retention_days
+  tags                       = local.tags
 }
 
 #---------------------------------------------------------------------------------------------
 # 13-CosmosDB
-
+/*
 module "cosmosdb" {
   source                    = "../../Modules/06-Database/02-CosmosDB"
   resource_group_name       = module.resource_group.name
@@ -270,7 +273,7 @@ module "cosmosdb" {
   enable_automatic_failover = var.enable_automatic_failover
   tags                      = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 14-FunctionsApp
 
@@ -301,35 +304,37 @@ module "function_app" {
 #}
 
 #--------------------------------------------------------------------------------------------------
-# 14-FunctionsApp
+# 14-FunctionsAppFlexConsumption
 
 module "function_app_flex" {
-  source                = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
-  resource_group_name   = module.resource_group.name
-  location              = module.resource_group.location
-  app_service_plan_name = var.function_app_flex_service_plan_name
-  storage_account_name  = var.function_app_flex_storage_account_name
-  function_app_name     = var.function_app_flex_name
-  sku_name              = var.function_app_flex_sku_name
-  os_type               = var.function_app_flex_os_type
+  source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
+  resource_group_name      = module.resource_group.name
+  location                 = module.resource_group.location
+  app_service_plan_name    = var.function_app_flex_service_plan_name
+  storage_account_name     = var.function_app_flex_storage_account_name
+  account_tier             = var.function_app_flex_account_tier
+  account_replication_type = var.function_app_flex_account_replication_type
+  function_app_name        = var.function_app_flex_name
+  runtime_name             = var.function_app_flex_runtime_name
+  runtime_version          = var.function_app_flex_runtime_version
+  container_access_type    = var.function_app_flex_container_access_type
+  storage_container_name   = var.function_app_flex_storage_container_name
+  sku_name                 = var.function_app_flex_sku_name
+  os_type                  = var.function_app_flex_os_type
 
-  identity_type    = var.identity_type
-  run_from_package = var.run_from_package
-  worker_runtime   = var.worker_runtime
-
-  function_app_extension_version = var.function_app_extension_version
-  app_settings                   = var.app_settings
-  tags                           = var.tags
+  identity_type = var.function_app_flex_identity_type
+  app_settings  = var.function_app_flex_app_settings
+  tags          = var.tags
 }
 
-#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_flex_vnet_integration" {
-#  app_service_id = module.function_app_flex.id
-#  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
-#}
+resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
+  app_service_id = module.function_app_flex.id
+  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
+}
 
 #--------------------------------------------------------------------------------------------------
 # 15-CommunicationsService
-
+/*
 module "communication_services" {
   source                          = "../../Modules/11-CommunicationServices"
   communication_service_name      = var.communication_service_name
@@ -340,10 +345,10 @@ module "communication_services" {
   data_location                   = var.data_location
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-
+/*
 module "azure_front_door" {
   source              = "../../Modules/02-Networking/03-FrontDoor"
   front_door_name     = var.front_door_name
@@ -371,10 +376,10 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
-
+/*
 module "virtual_machine" {
   source                          = "../../Modules/03-Compute/01-VirtualMachine"
   resource_group_name             = module.resource_group.name
@@ -398,7 +403,7 @@ module "virtual_machine" {
   virtual_machine_image_version   = var.virtual_machine_image_version
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
 
@@ -446,7 +451,7 @@ module "example_dns_zone" {
 
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
-
+/*
 module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
@@ -459,7 +464,7 @@ module "static_web_app" {
   output_location     = var.static_webapp_output_location
   tags                = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 21-ServiceBus
 

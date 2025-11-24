@@ -2,15 +2,15 @@ resource "azurerm_storage_account" "this" {
   name                     = var.storage_account_name
   resource_group_name      = var.resource_group_name
   location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  account_tier             = var.account_tier
+  account_replication_type = var.account_replication_type
   tags                     = var.tags
 }
 
 resource "azurerm_storage_container" "this" {
-  name                  = "myexample-dev-func-flex"
+  name                  = var.storage_container_name
   storage_account_id    = azurerm_storage_account.this.id
-  container_access_type = "private"
+  container_access_type = var.container_access_type
 }
 
 resource "azurerm_service_plan" "this" {
@@ -34,9 +34,10 @@ resource "azurerm_function_app_flex_consumption" "function_app" {
   storage_access_key          = azurerm_storage_account.this.primary_access_key
   runtime_name                = var.runtime_name
   runtime_version             = var.runtime_version
-  maximum_instance_count      = 50
-  instance_memory_in_mb       = 2048
+  maximum_instance_count      = 40
+  instance_memory_in_mb       = 4096
 
   site_config {
   }
+  
 }

@@ -632,12 +632,12 @@ variable "key_vault_name" {
   description = "The name of the Key Vault."
 }
 
-variable "tenant_id" {
+variable "key_vault_tenant_id" {
   type        = string
   description = "The Tenant ID for Azure AD."
 }
 
-variable "object_id" {
+variable "key_vault_object_id" {
   type        = string
   description = "The Object ID of the Azure AD user/service principal that will have access to the Key Vault."
 }
@@ -647,17 +647,16 @@ variable "key_vault_sku_name" {
   description = "SKU Name of the Key Vault. Possible values are 'standard' and 'premium'."
 }
 
-variable "soft_delete_retention_days" {
+variable "key_vault_soft_delete_retention_days" {
   type        = number
-  default     = 7
   description = "Number of days to retain soft deleted key vault objects."
 }
 
-variable "purge_protection_enabled" {
+variable "key_vault_purge_protection_enabled" {
   type        = bool
-  default     = true
   description = "Enable purge protection on the Key Vault."
 }
+
 #-----------------------------------------------------------------------------------------
 # 13-CosmosDB
 
@@ -743,6 +742,16 @@ variable "function_app_flex_storage_account_name" {
   description = "Extension Version"
 }
 
+variable "function_app_flex_account_tier" {
+  description = "Storage account tier name"
+  type        = string
+}
+
+variable "function_app_flex_account_replication_type" {
+  description = "Storage account replication type"
+  type        = string
+}
+
 variable "function_app_flex_service_plan_name" {
   type        = string
   description = "Extension Version"
@@ -772,6 +781,22 @@ variable "function_app_flex_sku_name" {
 variable "function_app_flex_os_type" {
   description = "Function os type"
   type        = string
+}
+
+variable "function_app_flex_container_access_type" {
+  description = "Function containrer access type"
+  type        = string
+}
+
+variable "function_app_flex_storage_container_name" {
+  description = "storage container name"
+  type        = string
+}
+
+variable "function_app_flex_identity_type" {
+  description = "The Managed Service Identity Type of this Virtual Machine."
+  type        = string
+  default     = ""
 }
 
 #---------------------------------------------------------------------------------------------
