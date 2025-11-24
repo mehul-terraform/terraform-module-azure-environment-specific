@@ -191,7 +191,7 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name                       = "myexample-dev-be-kv05"
+key_vault_name                       = "myexample-dev-be-kv"
 key_vault_tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 key_vault_object_id                  = "myexample-dev-be-kv1"
 key_vault_sku_name                   = "standard"
