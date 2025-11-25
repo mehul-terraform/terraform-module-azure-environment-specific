@@ -2,7 +2,7 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "WEST US 3"
+location            = "WEST US 2"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
@@ -191,12 +191,18 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name                       = "myexample-dev-be-kv"
+key_vault_name                       = "myexample-dev-backend-kv"
 key_vault_tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 key_vault_object_id                  = "myexample-dev-be-kv1"
 key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false
 key_vault_soft_delete_retention_days = "7"
+key_vault_secrets = {
+  DBPASSWORD   = "P@ssw0rd123"
+  APIKEY       = "1234567890"
+  STORAGETOKEN = "abcde12345"
+  DBUSERS      = "user-1"
+}
 
 #-----------------------------------------------------------------------------------------------
 # 12-CosmosDB
@@ -325,9 +331,10 @@ dns_zone_name = "myexample.co.in"
 # 04.1-StaticWebApp
 
 static_webapp_name            = "myexample-dev-static-webapp"
-static_webapp_repository_url  = "https://github.com/your/repo"
-static_webapp_branch          = "main"
-static_webapp_sku_size        = "Standard"
+static_webapp_repository_url = "https://myexample.co.in/github"
+static_webapp_repository_branch = "develop"
+static_webapp_repository_token = "ABCDEFGHIJKLMNOPQ"
+static_webapp_sku_size        = "Free"
 static_webapp_sku_tier        = "Free"
 static_webapp_location        = "/"
 static_webapp_api_location    = "api"

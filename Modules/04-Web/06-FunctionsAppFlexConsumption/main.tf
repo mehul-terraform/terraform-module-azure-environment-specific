@@ -39,5 +39,5 @@ resource "azurerm_function_app_flex_consumption" "function_app" {
 
   site_config {
   }
-  
+
 }

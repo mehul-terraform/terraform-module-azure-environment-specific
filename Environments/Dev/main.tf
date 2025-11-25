@@ -43,7 +43,7 @@ module "virtual_network" {
 
 #--------------------------------------------------------------------------------------------------
 # 03-NetworkSecurityGroup
-
+/*
 module "network_security_group" {
   source                       = "../../Modules/02-Networking/02-NetworkSecurityGroup"
   resource_group_name          = module.resource_group.name
@@ -54,10 +54,10 @@ module "network_security_group" {
   db_subnet_id                 = module.virtual_network.db_subnets["db"]
   tags                         = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 04-AppServicePlan
-
+/*
 module "service_plan" {
   source              = "../../Modules/04-Web/01-AppServicePlan"
   resource_group_name = module.resource_group.name
@@ -67,10 +67,10 @@ module "service_plan" {
   asp_sku_name        = var.asp_sku_name
   tags                = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 05-AppService
-
+/*
 module "app_service" {
   source = "../../Modules/04-Web/02-AppService"
 
@@ -91,10 +91,10 @@ module "app_service" {
 #  app_service_id = module.app_service.id
 #  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
 #}
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
-
+/*
 module "app_service_container" {
   source                   = "../../Modules/04-Web/03-AppServiceContainer"
   resource_group_name      = module.resource_group.name
@@ -114,10 +114,10 @@ module "app_service_container" {
 #  app_service_id = module.app_service_container.id
 #  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
 #}
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccountStaticWebSite
-
+/*
 module "storage_account_website" {
   source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
   resource_group_name                = module.resource_group.name
@@ -129,9 +129,10 @@ module "storage_account_website" {
   storage_account_error_404_document = var.storage_account_error_404_document
   tags                               = local.tags
 }
+*/
 #--------------------------------------------------------------------------------------------------
 # 05.1-StorageAccount
-
+/*
 module "storage_account" {
   source                   = "../../Modules/05-Storage/02-StorageAccount"
   resource_group_name      = module.resource_group.name
@@ -141,10 +142,10 @@ module "storage_account" {
   account_replication_type = var.account_replication_type
   tags                     = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 08-PostgresSQLFlexible
-
+/*
 module "postgre_sql" {
   source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
   resource_group_name             = module.resource_group.name
@@ -157,10 +158,10 @@ module "postgre_sql" {
   postgre_administrator_password  = var.postgre_administrator_password
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 09.1-PrivateEndPoint (PostgresSQLFelxible) 
-
+/*
 module "private_endpoint_postgres_flexible" {
   source                          = "../../Modules/08-PrivateEndPoint/8.1-PostgresSQLFlexible"
   private_endpoint_name           = var.private_endpoint_name
@@ -176,10 +177,10 @@ module "private_endpoint_postgres_flexible" {
   subresource_names               = var.subresource_names
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 09.1-PrivateEndPoint (StorageAccount) 
-
+/*
 module "private_endpoint_storage_account" {
   source                          = "../../Modules/08-PrivateEndPoint/8.2-StorageAccount"
   private_endpoint_name           = var.storage_account_private_endpoint_name
@@ -195,10 +196,10 @@ module "private_endpoint_storage_account" {
   subresource_names               = var.storage_account_subresource_names
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 10-PrivateDNSZonePostgresSQLFlexible
-
+/*
 module "private_dns_zone" {
   source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.1-PrivateDNSZonePostgresSQLFlexible"
   private_dns_zone_name     = var.private_dns_zone_group_name
@@ -208,10 +209,10 @@ module "private_dns_zone" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
-
+*/
 #-------------------------------------------------------------------------------------------------
 # 10-PrivateDNSZoneStorageAccount
-
+/*
 module "private_dns_zone_storage_account" {
   source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.2-PrivateDNSZoneStorageAccount"
   private_dns_zone_name     = var.storage_account_private_dns_zone_group_name
@@ -221,7 +222,7 @@ module "private_dns_zone_storage_account" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 11-CacheRedis
 /*
@@ -254,6 +255,7 @@ module "keyvault" {
   sku_name                   = var.key_vault_sku_name
   purge_protection_enabled   = var.key_vault_purge_protection_enabled
   soft_delete_retention_days = var.key_vault_soft_delete_retention_days
+  secrets                    = var.key_vault_secrets
   tags                       = local.tags
 }
 
@@ -276,7 +278,7 @@ module "cosmosdb" {
 */
 #--------------------------------------------------------------------------------------------------
 # 14-FunctionsApp
-
+/*
 module "function_app" {
   source              = "../../Modules/04-Web/05-Functionsapp"
   resource_group_name = module.resource_group.name
@@ -302,10 +304,10 @@ module "function_app" {
 #  app_service_id = module.function_app.id
 #  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
 #}
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 14-FunctionsAppFlexConsumption
-
+/*
 module "function_app_flex" {
   source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
   resource_group_name      = module.resource_group.name
@@ -331,7 +333,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vn
   app_service_id = module.function_app_flex.id
   subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 15-CommunicationsService
 /*
@@ -406,7 +408,7 @@ module "virtual_machine" {
 */
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
-
+/*
 module "container_registry" {
   source                        = "../../Modules/03-Compute/02-ContainerRegistry"
   container_registry_name       = var.container_registry_name
@@ -419,7 +421,7 @@ module "container_registry" {
   zone_redundancy_enabled       = var.zone_redundancy_enabled
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
 /*
@@ -441,33 +443,34 @@ module "virtual_network_gateway" {
 */
 #--------------------------------------------------------------------------------------------------
 # 19-DNSZone
-
+/*
 module "example_dns_zone" {
   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
   dns_zone_name       = var.dns_zone_name
   resource_group_name = module.resource_group.name
   tags                = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
-/*
+
 module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
   resource_group_name = module.resource_group.name
-  location            = module.resource_group.location
-  repository_url      = var.static_webapp_repository_url
-  branch              = var.static_webapp_branch
+  location            = module.resource_group.location  
   app_location        = var.static_webapp_location
   api_location        = var.static_webapp_api_location
   output_location     = var.static_webapp_output_location
+  repository_url    = var.static_webapp_repository_url
+  repository_branch = var.static_webapp_repository_branch
+  repository_token = var.static_webapp_repository_token 
   tags                = var.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 21-ServiceBus
-
+/*
 module "servicebus" {
   source              = "../../Modules/13-Integration/01-ServiceBus"
   resource_group_name = module.resource_group.name
@@ -479,6 +482,6 @@ module "servicebus" {
   queue_name          = var.servicebus_queue_name
   tags                = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 

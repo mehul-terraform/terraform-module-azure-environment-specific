@@ -657,6 +657,10 @@ variable "key_vault_purge_protection_enabled" {
   description = "Enable purge protection on the Key Vault."
 }
 
+variable "key_vault_secrets" {
+  type = map(string)
+}
+
 #-----------------------------------------------------------------------------------------
 # 13-CosmosDB
 
@@ -1098,21 +1102,10 @@ variable "static_webapp_sku_size" {
   type        = string
 }
 
-variable "static_webapp_repository_url" {
-  description = "GitHub repo URL for the source code."
-  type        = string
-}
-
-variable "static_webapp_branch" {
-  description = "Branch of the GitHub repo."
-  type        = string
-  default     = "main"
-}
-
 variable "static_webapp_location" {
   description = "Path to your application code relative to the repository root."
   type        = string
-  default     = "/"
+  
 }
 
 variable "static_webapp_api_location" {
@@ -1125,6 +1118,21 @@ variable "static_webapp_output_location" {
   description = "Build output folder relative to app_location."
   type        = string
   default     = "build"
+}
+
+variable "static_webapp_repository_url" {
+  type        = string
+  description = "Repository URL for Static Web App"
+}
+
+variable "static_webapp_repository_branch" {
+  type        = string
+  description = "Branch name for Static Web App"
+}
+
+variable "static_webapp_repository_token" {
+  type = string
+  sensitive = true
 }
 
 #-----------------------------------------------------------------------------------------------

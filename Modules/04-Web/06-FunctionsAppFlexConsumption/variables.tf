@@ -53,12 +53,12 @@ variable "tags" {
 
 variable "runtime_name" {
   description = "Function runtime"
-  type        = string  
+  type        = string
 }
 
 variable "runtime_version" {
   description = "Function runtime"
-  type        = string  
+  type        = string
 }
 
 variable "sku_name" {

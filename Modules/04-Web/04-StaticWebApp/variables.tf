@@ -30,10 +30,15 @@ variable "repository_url" {
   type        = string
 }
 
-variable "branch" {
+variable "repository_branch" {
   description = "Branch of the GitHub repo."
   type        = string
   default     = "main"
+}
+
+variable "repository_token" {
+  type = string
+  sensitive = true
 }
 
 variable "app_location" {
