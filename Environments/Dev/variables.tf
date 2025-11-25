@@ -116,7 +116,7 @@ variable "worker_count" {
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-variable "app_name" {
+variable "web_app_name" {
   type = string
 }
 
@@ -137,7 +137,7 @@ variable "active_directory_auth_setttings" {
   default     = {}
 }
 
-variable "linux_web_app_name" {
+variable "web_app_container_name" {
   description = "The name of the function app"
   type        = string
   default     = null
@@ -243,33 +243,6 @@ variable "virtual_network_subnet_id" {
   description = "ID of the subnet to associate with the Function App (VNet integration)"
   type        = string
   default     = null
-}
-
-variable "docker_registry_url" {
-  description = "URL of the Docker container registry (e.g. https://index.docker.io for Docker Hub)"
-  type        = string
-}
-
-variable "docker_registry_username" {
-  description = "Username for the Docker container registry"
-  type        = string
-  sensitive   = true
-}
-
-variable "docker_registry_password" {
-  description = "Password for the Docker container registry"
-  type        = string
-  sensitive   = true
-}
-
-variable "docker_image_name" {
-  description = "The name of the Docker image to deploy (e.g., nginx, myregistry.azurecr.io/myapp)"
-  type        = string
-}
-
-variable "docker_image_tag" {
-  description = "The tag of the Docker image to deploy (e.g., latest, v1.0.0)"
-  type        = string
 }
 
 #------------------------------------------------------------------------------------------------
@@ -733,6 +706,12 @@ variable "function_app_extension_version" {
   description = "Extension Version"
 }
 
+variable "function_app_settings" {
+  description = "App application settings"
+  type        = map(any)
+  default     = {}
+}
+
 #---------------------------------------------------------------------------------------------
 # # 14-FunctionAppFlexConsumption
 
@@ -1092,26 +1071,28 @@ variable "static_webapp_name" {
   type        = string
 }
 
-variable "static_webapp_sku_tier" {
-  description = "The SKU tier (e.g., Free, Standard)."
-  type        = string
-}
-
-variable "static_webapp_sku_size" {
-  description = "The SKU size."
-  type        = string
-}
-
 variable "static_webapp_location" {
   description = "Path to your application code relative to the repository root."
   type        = string
-  
+
 }
 
 variable "static_webapp_api_location" {
   description = "Path to your Azure Functions API code."
   type        = string
   default     = ""
+}
+
+variable "static_webapp_sku_tier" {
+  description = "The SKU tier (e.g., Free, Standard)."
+  type        = string
+
+}
+
+variable "static_webapp_sku_size" {
+  description = "The SKU size."
+  type        = string
+
 }
 
 variable "static_webapp_output_location" {
@@ -1131,7 +1112,7 @@ variable "static_webapp_repository_branch" {
 }
 
 variable "static_webapp_repository_token" {
-  type = string
+  type      = string
   sensitive = true
 }
 

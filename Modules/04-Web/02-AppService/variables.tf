@@ -6,7 +6,7 @@ variable "location" {
   type = string
 }
 
-variable "app_name" {
+variable "web_app_name" {
   type = string
 }
 

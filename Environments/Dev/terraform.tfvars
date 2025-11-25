@@ -2,7 +2,7 @@
 # 01-ResourceGroup
 
 resource_group_name = "myexample-dev-rg"
-location            = "WEST US 2"
+location            = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
@@ -103,19 +103,24 @@ asp_sku_name      = "B2"
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-app_name                 = "myexample-dev-webapp"
+web_app_name             = "myexample-dev-webapp"
 web_app_runtime          = "22-lts"
 app_service_node_version = "~20"
 
 #-----------------------------------------------------------------------------------------------
 # 05-AppServiceContainer
 
-linux_web_app_name       = "myexample-dev-container-webapp"
-docker_image_name        = "myexampledevacr.azurecr.io/myexample-dev:latest"
-docker_image_tag         = "latest"
-docker_registry_url      = "myexampledevacr01.azurecr.io"
-docker_registry_username = "myexample-dev-user"
-docker_registry_password = "Passwor@1234"
+web_app_container_name = "myexample-dev-webapp-container"
+app_settings = {
+  DATABASE_CONNECTION          = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+  JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+  JWT_ISSUER                   = "myexample-auth-api"
+  JWT_AUDIENCE                 = "myexample-client"
+  JWT_TOKEN_LIFETIME_MINUTES   = "15"
+  ALLOWED_HOSTS                = "*"
+  LOGGING_DEFAULT              = "Information"
+  LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+}
 
 #-----------------------------------------------------------------------------------------------
 # 07-StorageAccountStaticWebsite
@@ -191,9 +196,9 @@ cluster_shard_count                       = 1
 #------------------------------------------------------------------------------------------
 # 11-KeyVault
 
-key_vault_name                       = "myexample-dev-backend-kv"
+key_vault_name                       = "myexample-dev-be-kv"
 key_vault_tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
-key_vault_object_id                  = "myexample-dev-be-kv1"
+key_vault_object_id                  = "myexample-dev-bkd-kv"
 key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false
 key_vault_soft_delete_retention_days = "7"
@@ -225,7 +230,7 @@ run_from_package               = "1"
 worker_runtime                 = "dotnet"
 function_app_node_version      = "~14"
 function_app_extension_version = "~4"
-app_settings = {
+function_app_settings = {
   "MyCustomSetting" = "https://my-api.com/key"
 }
 
@@ -330,15 +335,15 @@ dns_zone_name = "myexample.co.in"
 #------------------------------------------------------------------------------------------------
 # 04.1-StaticWebApp
 
-static_webapp_name            = "myexample-dev-static-webapp"
-static_webapp_repository_url = "https://myexample.co.in/github"
+static_webapp_name              = "myexample-dev-static-webapp"
+static_webapp_sku_size          = "Free"
+static_webapp_sku_tier          = "Free"
+static_webapp_repository_url    = "https://myexample.co.in/github"
 static_webapp_repository_branch = "develop"
-static_webapp_repository_token = "ABCDEFGHIJKLMNOPQ"
-static_webapp_sku_size        = "Free"
-static_webapp_sku_tier        = "Free"
-static_webapp_location        = "/"
-static_webapp_api_location    = "api"
-static_webapp_output_location = "build"
+static_webapp_repository_token  = "ABCDEFGHIJKLMNOPQ"
+static_webapp_location          = "/"
+static_webapp_api_location      = "api"
+static_webapp_output_location   = "build"
 
 #-------------------------------------------------------------------------------------------------
 #  13.1-ServiceBus

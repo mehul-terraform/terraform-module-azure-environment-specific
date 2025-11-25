@@ -37,40 +37,6 @@ resource "azurerm_role_assignment" "terraform_access" {
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azurerm_client_config.current.object_id
 }
-/*
-resource "azurerm_key_vault_secret" "DATABASEURL" {
-  name         = "DATABASEURL"
-  value        = "https://myexample.com/databasedurl"
-  key_vault_id = azurerm_key_vault.keyvault.id
-
-  depends_on = [
-    azurerm_role_assignment.terraform_access,
-    azurerm_role_assignment.kv_secrets_reader
-  ]
-}
-
-resource "azurerm_key_vault_secret" "DATABASEREADURL" {
-  name         = "DATABASEREADURL"
-  value        = "https://myexample.com/databasereadurl"
-  key_vault_id = azurerm_key_vault.keyvault.id
-
-  depends_on = [
-    azurerm_role_assignment.terraform_access,
-    azurerm_role_assignment.kv_secrets_reader
-  ]
-}
-
-resource "azurerm_key_vault_secret" "REDISPASSWORD" {
-  name         = "REDISPASSWORD"
-  value        = "P@ssw0rd123"
-  key_vault_id = azurerm_key_vault.keyvault.id
-
-  depends_on = [
-    azurerm_role_assignment.terraform_access,
-    azurerm_role_assignment.kv_secrets_reader
-  ]
-}
-*/
 
 resource "azurerm_key_vault_secret" "secrets" {
   for_each = var.secrets

@@ -4,7 +4,7 @@ variable "active_directory_auth_setttings" {
   default     = {}
 }
 
-variable "linux_web_app_name" {
+variable "web_app_container_name" {
   description = "The name of the function app"
   type        = string
   default     = null
@@ -14,13 +14,6 @@ variable "service_plan_name" {
   type        = string
   description = "The name of the App Service Plan"
   default     = null
-}
-
-
-variable "app_settings" {
-  description = "Function App application settings"
-  type        = map(any)
-  default     = {}
 }
 
 variable "backup_sas_url" {
@@ -117,6 +110,11 @@ variable "site_config" {
   default     = {}
 }
 
+variable "app_settings" {
+  type = map(string)
+  description = "App settings for the Linux Web App"
+}
+
 variable "storage_key_vault_secret_id" {
   type        = string
   description = "The secret ID for the connection string of the storage account used by the function app"
@@ -147,31 +145,4 @@ variable "subnet_id" {
   description = "ID of the subnet to associate with the AppService (VNet integration)"
   type        = string
   default     = null
-}
-
-variable "docker_registry_url" {
-  description = "URL of the Docker container registry (e.g. https://index.docker.io for Docker Hub)"
-  type        = string
-}
-
-variable "docker_registry_username" {
-  description = "Username for the Docker container registry"
-  type        = string
-  sensitive   = true
-}
-
-variable "docker_registry_password" {
-  description = "Password for the Docker container registry"
-  type        = string
-  sensitive   = true
-}
-
-variable "docker_image_name" {
-  description = "The name of the Docker image to deploy (e.g., nginx, myregistry.azurecr.io/myapp)"
-  type        = string
-}
-
-variable "docker_image_tag" {
-  description = "The tag of the Docker image to deploy (e.g., latest, v1.0.0)"
-  type        = string
 }

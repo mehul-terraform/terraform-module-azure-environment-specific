@@ -57,7 +57,7 @@ module "network_security_group" {
 */
 #--------------------------------------------------------------------------------------------------
 # 04-AppServicePlan
-/*
+
 module "service_plan" {
   source              = "../../Modules/04-Web/01-AppServicePlan"
   resource_group_name = module.resource_group.name
@@ -67,54 +67,46 @@ module "service_plan" {
   asp_sku_name        = var.asp_sku_name
   tags                = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 05-AppService
-/*
+
 module "app_service" {
   source = "../../Modules/04-Web/02-AppService"
 
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_id     = module.service_plan.id
-  app_name            = var.app_name
+  web_app_name        = var.web_app_name
   runtime             = var.web_app_runtime
   subnet_id           = module.virtual_network.webapp_subnets["webapp"]
-
-  app_settings = {
-    "WEBSITE_NODE_DEFAULT_VERSION"   = var.app_service_node_version
-    "APPINSIGHTS_INSTRUMENTATIONKEY" = "some-key"
-  }
+  app_settings        = var.app_settings
 }
 
 #resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
 #  app_service_id = module.app_service.id
 #  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
 #}
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
-/*
+
 module "app_service_container" {
-  source                   = "../../Modules/04-Web/03-AppServiceContainer"
-  resource_group_name      = module.resource_group.name
-  location                 = module.resource_group.location
-  linux_web_app_name       = var.linux_web_app_name
-  service_plan_id          = module.service_plan.id
-  docker_image_name        = var.docker_image_name
-  docker_image_tag         = var.docker_image_tag
-  docker_registry_url      = var.docker_registry_url
-  docker_registry_username = var.docker_registry_username
-  docker_registry_password = var.docker_registry_password
-  subnet_id                = module.virtual_network.webapp_subnets["webapp"]
-  tags                     = local.tags
+  source                 = "../../Modules/04-Web/03-AppServiceContainer"
+  resource_group_name    = module.resource_group.name
+  location               = module.resource_group.location
+  web_app_container_name = var.web_app_container_name
+  service_plan_id        = module.service_plan.id
+  app_settings           = var.app_settings
+  subnet_id              = module.virtual_network.webapp_subnets["webapp"]
+  tags                   = local.tags
 }
 
 #resource "azurerm_app_service_virtual_network_swift_connection" "app_service_container_vnet_integration" {
 #  app_service_id = module.app_service_container.id
 #  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
 #}
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccountStaticWebSite
 /*
@@ -458,13 +450,15 @@ module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
   resource_group_name = module.resource_group.name
-  location            = module.resource_group.location  
+  location            = module.resource_group.location
+  sku_tier            = var.static_webapp_sku_tier
+  sku_size            = var.static_webapp_sku_size
   app_location        = var.static_webapp_location
   api_location        = var.static_webapp_api_location
   output_location     = var.static_webapp_output_location
-  repository_url    = var.static_webapp_repository_url
-  repository_branch = var.static_webapp_repository_branch
-  repository_token = var.static_webapp_repository_token 
+  repository_url      = var.static_webapp_repository_url
+  repository_branch   = var.static_webapp_repository_branch
+  repository_token    = var.static_webapp_repository_token
   tags                = var.tags
 }
 
