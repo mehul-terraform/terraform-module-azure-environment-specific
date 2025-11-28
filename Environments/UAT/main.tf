@@ -57,7 +57,7 @@ module "network_security_group" {
 
 #--------------------------------------------------------------------------------------------------
 # 04-AppServicePlan
-
+/*
 module "service_plan" {
   source              = "../../Modules/04-Web/01-AppServicePlan"
   resource_group_name = module.resource_group.name
@@ -67,10 +67,10 @@ module "service_plan" {
   asp_sku_name        = var.asp_sku_name
   tags                = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 05-AppService
-
+/*
 module "app_service" {
   source = "../../Modules/04-Web/02-AppService"
 
@@ -88,7 +88,7 @@ module "app_service" {
 #  app_service_id = module.app_service.id
 #  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
 #}
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
 
