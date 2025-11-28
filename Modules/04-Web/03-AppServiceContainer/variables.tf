@@ -1,148 +1,58 @@
-variable "active_directory_auth_setttings" {
-  description = "Active directory authentication provider settings for app service"
-  type        = any
-  default     = {}
-}
-
 variable "web_app_container_name" {
-  description = "The name of the function app"
+  description = "The name of the Azure Web App container."
   type        = string
-  default     = null
-}
-
-variable "service_plan_name" {
-  type        = string
-  description = "The name of the App Service Plan"
-  default     = null
-}
-
-variable "backup_sas_url" {
-  description = "URL SAS to backup"
-  type        = string
-  default     = ""
-}
-
-variable "builtin_logging_enabled" {
-  type        = bool
-  description = "Whether AzureWebJobsDashboards should be enabled, default is true"
-  default     = true
-}
-
-variable "client_certificate_enabled" {
-  type        = bool
-  description = "Whether client certificate auth is enabled, default is false"
-  default     = false
-}
-
-variable "client_certificate_mode" {
-  type        = string
-  description = "The option for client certificates"
-  default     = "Optional"
-}
-
-variable "connection_strings" {
-  description = "Connection strings for App Service"
-  type        = list(map(string))
-  default     = []
-}
-
-variable "daily_memory_time_quota" {
-  type        = number
-  description = "The amount of memory in gigabyte-seconds that your app can consume per day, defaults to 0"
-  default     = 0
-}
-
-
-variable "enabled" {
-  type        = bool
-  description = "Is the function app enabled? Default is true"
-  default     = true
-}
-
-variable "force_disabled_content_share" {
-  type        = bool
-  description = "Should content share be disabled in storage account? Default is false"
-  default     = false
-}
-
-variable "https_only" {
-  description = "Disable http procotol and keep only https"
-  type        = bool
-  default     = true
-}
-
-variable "identity_ids" {
-  description = "Specifies a list of user managed identity ids to be assigned to the VM."
-  type        = list(string)
-  default     = []
-}
-
-variable "identity_type" {
-  description = "The Managed Service Identity Type of this Virtual Machine."
-  type        = string
-  default     = ""
 }
 
 variable "location" {
-  description = "Azure location."
+  description = "The Azure region to deploy the app."
   type        = string
 }
 
 variable "resource_group_name" {
-  description = "Resource group name"
+  description = "The name of the Azure Resource Group."
   type        = string
 }
 
 variable "service_plan_id" {
-  description = "Id of the App Service Plan for Function App hosting"
+  description = "The ID of the Azure App Service Plan."
   type        = string
 }
 
-variable "settings" {
-  description = "Specifies the Authentication enabled or not"
-  default     = false
-  type        = any
-}
-
-variable "site_config" {
-  description = "Site config for App Service. See documentation https://www.terraform.io/docs/providers/azurerm/r/app_service.html#site_config. IP restriction attribute is not managed in this block."
-  type        = any
-  default     = {}
+variable "docker_image_name" {
+  description = "The Docker image to use for the single container (e.g., myusername/myapp:latest)."
+  type        = string
+  default     = null  # Optional: Only used if deploying a single container
 }
 
 variable "app_settings" {
-  type = map(string)
-  description = "App settings for the Linux Web App"
-}
-
-variable "storage_key_vault_secret_id" {
-  type        = string
-  description = "The secret ID for the connection string of the storage account used by the function app"
-  default     = ""
-}
-
-variable "storage_uses_managed_identity" {
-  type        = bool
-  description = "If you want the storage account to use a managed identity instead of a access key"
-  default     = false
+  description = "A map of application settings to configure the app."
+  type        = map(string)
+  default     = {}
 }
 
 variable "tags" {
-  description = "Tags to be applied to resources (inclusive)"
-  type = object({
-    environment = string
-    project     = string
-  })
-}
-
-variable "extra_tags" {
-  description = "extra tags to be applied to resources (in addition to the tags above)"
+  description = "A map of tags to assign to the resource."
   type        = map(string)
   default     = {}
 }
 
 variable "subnet_id" {
-  description = "ID of the subnet to associate with the AppService (VNet integration)"
+  description = "The subnet ID to associate with the network interface"
   type        = string
-  default     = null
+}
+
+variable "docker_compose_image" {
+  default = "mehul1887/nginx:latest"
+}
+
+variable "main_app_container_image" {
+  description = "Docker image for the main application container"
+  type        = string
+  default     = "myacr.azurecr.io/myapp:latest"  # Example Azure Container Registry image
+}
+
+variable "sidecar_container_image" {
+  description = "Docker image for the sidecar container"
+  type        = string
+  default     = "myacr.azurecr.io/sidecar:latest"  # Example Azure Container Registry image
 }

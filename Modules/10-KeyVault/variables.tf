@@ -44,5 +44,5 @@ variable "tags" {
 }
 
 variable "secrets" {
-  type      = map(string)  
+  type = map(string)
 }

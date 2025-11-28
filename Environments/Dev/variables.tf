@@ -134,6 +134,30 @@ variable "app_settings" {
 
 #-----------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
+
+variable "web_app_container_name" {
+  description = "The name of the function app"
+  type        = string
+  default     = null
+}
+
+variable "site_config" {
+  description = "Site config for App Service. See documentation https://www.terraform.io/docs/providers/azurerm/r/app_service.html#site_config. IP restriction attribute is not managed in this block."
+  type        = any
+  default     = {}
+}
+
+variable "app_container_app_settings" {
+  type        = map(string)
+  description = "App settings for the Linux Web App"
+}
+
+variable "docker_image_name" {
+  description = "The Docker image to use for the single container (e.g., myusername/myapp:latest)."
+  type        = string
+  default     = null  # Optional: Only used if deploying a single container
+}
+
 #------------------------------------------------------------------------------------------------
 # 05.1-StorageAccount
 

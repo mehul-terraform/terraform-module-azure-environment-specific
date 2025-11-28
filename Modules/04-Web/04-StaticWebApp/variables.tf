@@ -15,13 +15,13 @@ variable "location" {
 
 variable "sku_tier" {
   description = "The SKU tier (e.g., Free, Standard)."
-  type        = string  
+  type        = string
 }
 
 variable "sku_size" {
   description = "The SKU size."
   type        = string
-}   
+}
 
 variable "repository_url" {
   description = "GitHub repo URL for the source code."
@@ -31,11 +31,11 @@ variable "repository_url" {
 variable "repository_branch" {
   description = "Branch of the GitHub repo."
   type        = string
- 
+
 }
 
 variable "repository_token" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -46,12 +46,12 @@ variable "app_location" {
 
 variable "api_location" {
   description = "Path to your Azure Functions API code."
-  type        = string  
+  type        = string
 }
 
 variable "output_location" {
   description = "Build output folder relative to app_location."
-  type        = string 
+  type        = string
 }
 
 variable "tags" {

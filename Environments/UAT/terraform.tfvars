@@ -103,7 +103,7 @@ asp_sku_name      = "B2"
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-web_app_name             = "myexample-uat-webapp"
+web_app_name = "myexample-uat-webapp"
 web_app_runtime = {
   #dotnet_version = "8.0"
   node_version = "22-lts"

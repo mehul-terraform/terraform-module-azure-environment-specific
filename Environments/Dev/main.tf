@@ -81,7 +81,7 @@ module "app_service" {
   runtime             = var.web_app_runtime
   subnet_id           = module.virtual_network.webapp_subnets["webapp"]
   app_settings        = var.app_settings
-  tags = local.tags
+  tags                = local.tags
 }
 
 #resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
@@ -91,6 +91,19 @@ module "app_service" {
 
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
+
+module "app_service_container" {
+  source = "../../Modules/04-Web/03-AppServiceContainer"
+
+  resource_group_name    = module.resource_group.name
+  location               = module.resource_group.location
+  service_plan_id        = module.service_plan.id
+  web_app_container_name = var.web_app_container_name
+  subnet_id              = module.virtual_network.webapp_subnets["webapp"]
+  app_settings           = var.app_settings
+  docker_image_name           = var.docker_image_name 
+  tags                   = local.tags
+}
 
 
 #--------------------------------------------------------------------------------------------------
@@ -359,7 +372,7 @@ module "azure_front_door" {
 */
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
-
+/*
 module "virtual_machine" {
   source                          = "../../Modules/03-Compute/01-VirtualMachine"
   resource_group_name             = module.resource_group.name
@@ -383,7 +396,7 @@ module "virtual_machine" {
   virtual_machine_image_version   = var.virtual_machine_image_version
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
 /*
