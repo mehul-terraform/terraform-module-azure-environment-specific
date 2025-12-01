@@ -341,9 +341,9 @@ module "communication_services" {
 */
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-/*
+
 module "azure_front_door" {
-  source              = "../../Modules/02-Networking/03-FrontDoor"
+  source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
   front_door_name     = var.front_door_name
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
@@ -369,7 +369,7 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
 /*

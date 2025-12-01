@@ -23,19 +23,19 @@ resource "azurerm_cdn_frontdoor_endpoint" "backend_endpoint" {
 resource "azurerm_cdn_frontdoor_origin_group" "frontend_origin_group" {
   name                     = var.frontend_origin_group_name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
-  session_affinity_enabled = true
+  session_affinity_enabled = false
 
   load_balancing {
     sample_size                        = 4
-    successful_samples_required        = 2
-    additional_latency_in_milliseconds = 1000
+    successful_samples_required        = 3
+    additional_latency_in_milliseconds = 50
   }
 
   health_probe {
     path                = "/"
-    request_type        = "HEAD"
+    request_type        = "GET"
     protocol            = "Https"
-    interval_in_seconds = 60
+    interval_in_seconds = 100
   }
 }
 
@@ -46,8 +46,9 @@ resource "azurerm_cdn_frontdoor_origin" "frontend_origin" {
   origin_host_header             = var.host_frontend_domain_name
   http_port                      = 80
   https_port                     = 443
+  weight = 1000
   certificate_name_check_enabled = true
-  enabled                        = true
+  enabled                        = true  
 }
 
 resource "azurerm_cdn_frontdoor_origin_group" "backend_origin_group" {
@@ -56,27 +57,27 @@ resource "azurerm_cdn_frontdoor_origin_group" "backend_origin_group" {
   session_affinity_enabled = false
 
   load_balancing {
-    sample_size                        = 2
-    successful_samples_required        = 1
-    additional_latency_in_milliseconds = 1000
+    sample_size                        = 4
+    successful_samples_required        = 3
+    additional_latency_in_milliseconds = 50
   }
 
   health_probe {
-    path                = "/api/ping"
+    path                = "/docs"
     request_type        = "GET"
     protocol            = "Https"
-    interval_in_seconds = 255
+    interval_in_seconds = 100
   }
 }
 
 resource "azurerm_cdn_frontdoor_origin" "backend_origin" {
   name                          = var.backend_origin_name
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.backend_origin_group.id
-
   host_name                      = var.host_backend_domain_name
   origin_host_header             = var.host_backend_domain_name
   http_port                      = 80
   https_port                     = 443
+  weight = 1000
   certificate_name_check_enabled = true
   enabled                        = true
 }
@@ -90,7 +91,7 @@ resource "azurerm_cdn_frontdoor_route" "frontend" {
 
   supported_protocols    = ["Http", "Https"]
   patterns_to_match      = ["/*"]
-  forwarding_protocol    = "HttpsOnly"
+  forwarding_protocol    = "MatchRequest"
   https_redirect_enabled = true
   link_to_default_domain = true
   enabled                = true
@@ -104,8 +105,8 @@ resource "azurerm_cdn_frontdoor_route" "backend" {
   cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.backend_domain.id]
 
   supported_protocols    = ["Http", "Https"]
-  patterns_to_match      = ["/api/*"]
-  forwarding_protocol    = "HttpsOnly"
+  patterns_to_match      = ["/*"]
+  forwarding_protocol    = "MatchRequest"
   https_redirect_enabled = true
   link_to_default_domain = true
   enabled                = true

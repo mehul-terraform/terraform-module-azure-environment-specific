@@ -111,7 +111,7 @@ web_app_runtime = {
   #runtime = {}
 }
 app_settings = {
-  DATABASE_CONNECTION          = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+  DATABASE_URL          = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
   JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
   JWT_ISSUER                   = "myexample-auth-api"
   JWT_AUDIENCE                 = "myexample-client"
@@ -286,20 +286,20 @@ front_door_sku_name = "Standard_AzureFrontDoor"
 frontend_endpoint_name = "myexample-dev-frontend"
 backend_endpoint_name  = "myexample-dev-backend"
 
-frontend_origin_group_name = "frontend-dev-origin-group"
-backend_origin_group_name  = "backend-dev-origin-group"
+frontend_origin_group_name = "myexample-dev-frontend-origin-group"
+backend_origin_group_name  = "myexample-dev-backend-origin-group"
 
-frontend_origin_name = "frontend-dev-origin"
-backend_origin_name  = "backend-dev-origin"
+frontend_origin_name = "myexample-dev-frontend-origin"
+backend_origin_name  = "myexample-dev-backend-origin"
 
-frontend_route_name = "frontend-dev-route"
-backend_route_name  = "backend-dev-route"
+frontend_route_name = "myexample-dev-frontend-route"
+backend_route_name  = "myexample-dev-backend-route"
 
 frontend_domain_name = "myexample-dev-frontend"
 backend_domain_name  = "myexample-dev-backend"
 
-host_frontend_domain_name = "web-dev.myexample.co.in"
-host_backend_domain_name  = "api-dev.myexample.co.in"
+host_frontend_domain_name = "myexample-dev-frontend-container.azurewebsites.net"
+host_backend_domain_name  = "myexample-dev-backend-container.azurewebsites.net"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  

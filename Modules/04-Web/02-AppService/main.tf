@@ -3,9 +3,12 @@ resource "azurerm_linux_web_app" "app_service" {
   location            = var.location
   resource_group_name = var.resource_group_name
   service_plan_id     = var.service_plan_id
+  https_only = true
+  webdeploy_publish_basic_authentication_enabled = false
 
   site_config {
     always_on = true
+    ftps_state = "Disabled"
 
     dynamic "application_stack" {
       for_each = length(var.runtime) > 0 ? [var.runtime] : []
