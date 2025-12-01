@@ -101,7 +101,7 @@ module "app_service_container" {
   web_app_container_name = var.web_app_container_name
   subnet_id              = module.virtual_network.webapp_subnets["webapp"]
   app_settings           = var.app_settings
-  docker_image_name           = var.docker_image_name 
+  docker_image_name      = var.docker_image_name
   tags                   = local.tags
 }
 

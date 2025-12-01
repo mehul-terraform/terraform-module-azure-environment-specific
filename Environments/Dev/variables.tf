@@ -155,7 +155,7 @@ variable "app_container_app_settings" {
 variable "docker_image_name" {
   description = "The Docker image to use for the single container (e.g., myusername/myapp:latest)."
   type        = string
-  default     = null  # Optional: Only used if deploying a single container
+  default     = null # Optional: Only used if deploying a single container
 }
 
 #------------------------------------------------------------------------------------------------

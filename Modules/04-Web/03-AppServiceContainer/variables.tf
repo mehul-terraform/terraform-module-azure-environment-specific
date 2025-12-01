@@ -21,7 +21,7 @@ variable "service_plan_id" {
 variable "docker_image_name" {
   description = "The Docker image to use for the single container (e.g., myusername/myapp:latest)."
   type        = string
-  default     = null  # Optional: Only used if deploying a single container
+  default     = null # Optional: Only used if deploying a single container
 }
 
 variable "app_settings" {
@@ -48,11 +48,11 @@ variable "docker_compose_image" {
 variable "main_app_container_image" {
   description = "Docker image for the main application container"
   type        = string
-  default     = "myacr.azurecr.io/myapp:latest"  # Example Azure Container Registry image
+  default     = "myacr.azurecr.io/myapp:latest" # Example Azure Container Registry image
 }
 
 variable "sidecar_container_image" {
   description = "Docker image for the sidecar container"
   type        = string
-  default     = "myacr.azurecr.io/sidecar:latest"  # Example Azure Container Registry image
+  default     = "myacr.azurecr.io/sidecar:latest" # Example Azure Container Registry image
 }

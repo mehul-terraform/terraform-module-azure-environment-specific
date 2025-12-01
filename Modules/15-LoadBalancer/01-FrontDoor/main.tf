@@ -46,9 +46,9 @@ resource "azurerm_cdn_frontdoor_origin" "frontend_origin" {
   origin_host_header             = var.host_frontend_domain_name
   http_port                      = 80
   https_port                     = 443
-  weight = 1000
+  weight                         = 1000
   certificate_name_check_enabled = true
-  enabled                        = true  
+  enabled                        = true
 }
 
 resource "azurerm_cdn_frontdoor_origin_group" "backend_origin_group" {
@@ -71,13 +71,13 @@ resource "azurerm_cdn_frontdoor_origin_group" "backend_origin_group" {
 }
 
 resource "azurerm_cdn_frontdoor_origin" "backend_origin" {
-  name                          = var.backend_origin_name
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.backend_origin_group.id
+  name                           = var.backend_origin_name
+  cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.backend_origin_group.id
   host_name                      = var.host_backend_domain_name
   origin_host_header             = var.host_backend_domain_name
   http_port                      = 80
   https_port                     = 443
-  weight = 1000
+  weight                         = 1000
   certificate_name_check_enabled = true
   enabled                        = true
 }

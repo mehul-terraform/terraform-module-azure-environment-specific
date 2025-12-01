@@ -111,7 +111,7 @@ web_app_runtime = {
   #runtime = {}
 }
 app_settings = {
-  DATABASE_URL          = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+  DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
   JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
   JWT_ISSUER                   = "myexample-auth-api"
   JWT_AUDIENCE                 = "myexample-client"
@@ -125,7 +125,7 @@ app_settings = {
 # 05-AppServiceContainer
 
 web_app_container_name = "myexample-dev-backend-container"
-docker_image_name = "mehul1887/php7.3-laravel-nodejs:latest"
+docker_image_name      = "mehul1887/php7.3-laravel-nodejs:latest"
 app_container_app_settings = {
   DATABASE_CONNECTION          = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
   JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
