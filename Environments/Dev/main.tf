@@ -450,7 +450,7 @@ module "example_dns_zone" {
 */
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
-/*
+
 module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
@@ -466,7 +466,7 @@ module "static_web_app" {
   repository_token    = var.static_webapp_repository_token
   tags                = var.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 21-ServiceBus
 /*
