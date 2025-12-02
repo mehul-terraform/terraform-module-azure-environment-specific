@@ -742,42 +742,42 @@ variable "front_door_name" {
   type        = string
 }
 
-variable "frontend_endpoint_name" {
+variable "endpoint_frontend_name" {
   description = "backend domain"
   type        = string
 }
 
-variable "backend_endpoint_name" {
+variable "endpoint_backend_name" {
   description = "backend domain"
   type        = string
 }
 
-variable "frontend_origin_group_name" {
+variable "origin_group_frontend_name" {
   description = "frontend-origin-group"
   type        = string
 }
 
-variable "backend_origin_group_name" {
+variable "origin_group_backend_name" {
   description = "backend-origin-group"
   type        = string
 }
 
-variable "frontend_origin_name" {
+variable "origin_frontend_name" {
   description = "frontend_origin_name"
   type        = string
 }
 
-variable "backend_origin_name" {
+variable "origin_backend_name" {
   description = "backend_origin_name"
   type        = string
 }
 
-variable "frontend_route_name" {
+variable "route_frontend_name" {
   description = "frontend route"
   type        = string
 }
 
-variable "backend_route_name" {
+variable "route_backend_name" {
   description = "backend route"
   type        = string
 }
@@ -792,22 +792,22 @@ variable "origin_host_backend_name" {
   type        = string
 }
 
-variable "host_frontend_custome_domain_name" {
+variable "host_custome_domain_frontend_name" {
   description = "Frontend Domain"
   type        = string
 }
 
-variable "host_backend_custome_domain_name" {
+variable "host_custome_domain_backend_name" {
   description = "backend domain"
   type        = string
 }
 
-variable "frontend_custome_domain_name" {
+variable "custome_domain_frontend_name" {
   description = "Frontend Domain"
   type        = string
 }
 
-variable "backend_custome_domain_name" {
+variable "custome_domain_backend_name" {
   description = "backend domain"
   type        = string
 }

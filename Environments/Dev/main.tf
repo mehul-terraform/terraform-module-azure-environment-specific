@@ -349,31 +349,31 @@ module "azure_front_door" {
   location            = module.resource_group.location
   front_door_sku_name = var.front_door_sku_name
 
-  frontend_endpoint_name = var.frontend_endpoint_name
-  backend_endpoint_name  = var.backend_endpoint_name
+ endpoint_frontend_name = var.endpoint_frontend_name
+ endpoint_backend_name  = var.endpoint_backend_name
 
-  frontend_origin_group_name = var.frontend_origin_group_name
-  backend_origin_group_name  = var.backend_origin_group_name
+ origin_group_frontend_name = var.origin_group_frontend_name
+ origin_group_backend_name  = var.origin_group_backend_name
 
-  frontend_origin_name = var.frontend_origin_name
-  backend_origin_name  = var.backend_origin_name 
+ origin_frontend_name = var.origin_frontend_name
+ origin_backend_name  = var.origin_backend_name 
 
-  origin_host_frontend_name = replace(
-    replace(module.storage_account_website.static_website_url, "https://", ""),
-    "/", ""
-  )
-  origin_host_backend_name  = module.app_service_container.app_service_container_default_hostname
+ origin_host_frontend_name = replace(
+   replace(module.storage_account_website.static_website_url, "https://", ""),
+   "/", ""
+ )
+ origin_host_backend_name  = module.app_service_container.app_service_container_default_hostname
 
-  frontend_custome_domain_name = var.frontend_custome_domain_name
-  backend_custome_domain_name  = var.backend_custome_domain_name
+ custome_domain_frontend_name = var.custome_domain_frontend_name
+ custome_domain_backend_name  = var.custome_domain_backend_name
 
-  host_frontend_custome_domain_name = var.host_frontend_custome_domain_name
-  host_backend_custome_domain_name  = var.host_backend_custome_domain_name
+ host_custome_domain_frontend_name = var.host_custome_domain_frontend_name
+ host_custome_domain_backend_name  = var.host_custome_domain_backend_name
 
-  frontend_route_name = var.frontend_route_name
-  backend_route_name  = var.backend_route_name
+ route_frontend_name = var.route_frontend_name
+ route_backend_name  = var.route_backend_name
 
-  tags = local.tags
+ tags = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------------------

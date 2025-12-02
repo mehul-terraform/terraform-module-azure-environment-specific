@@ -283,26 +283,26 @@ data_location                   = "United States"
 front_door_name     = "myexample-dev-afd"
 front_door_sku_name = "Standard_AzureFrontDoor"
 
-frontend_endpoint_name = "myexample-dev-frontend"
-backend_endpoint_name  = "myexample-dev-backend"
+endpoint_frontend_name = "myexample-dev-frontend"
+endpoint_backend_name  = "myexample-dev-backend"
 
-frontend_origin_group_name = "myexample-dev-frontend-origin-group"
-backend_origin_group_name  = "myexample-dev-backend-origin-group"
+origin_group_frontend_name = "myexample-dev-frontend-origin-group"
+origin_group_backend_name  = "myexample-dev-backend-origin-group"
 
-frontend_origin_name = "myexample-dev-frontend-origin"
-backend_origin_name  = "myexample-dev-backend-origin"
+origin_frontend_name = "myexample-dev-frontend-origin"
+origin_backend_name  = "myexample-dev-backend-origin"
 
 origin_host_frontend_name = "myexample-dev-frontend.web.core.windows.net"
 origin_host_backend_name  = "myexample-dev-backend-code.azurewebsites.net"
 
-frontend_custome_domain_name = "myexample-dev-frontend"
-backend_custome_domain_name  = "myexample-dev-backend"
+custome_domain_frontend_name = "myexample-dev-frontend"
+custome_domain_backend_name  = "myexample-dev-backend"
 
-host_frontend_custome_domain_name = "dev.myexample.co.in"
-host_backend_custome_domain_name  = "api-dev.myexample.co.in"
+host_custome_domain_frontend_name = "dev.myexample.co.in"
+host_custome_domain_backend_name  = "api-dev.myexample.co.in"
 
-frontend_route_name = "myexample-dev-frontend-route"
-backend_route_name  = "myexample-dev-backend-route"
+route_frontend_name = "myexample-dev-frontend-route"
+route_backend_name  = "myexample-dev-backend-route"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
