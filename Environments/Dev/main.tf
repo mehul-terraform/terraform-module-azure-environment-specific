@@ -349,31 +349,31 @@ module "azure_front_door" {
   location            = module.resource_group.location
   front_door_sku_name = var.front_door_sku_name
 
- endpoint_frontend_name = var.endpoint_frontend_name
- endpoint_backend_name  = var.endpoint_backend_name
+  endpoint_frontend_name = var.endpoint_frontend_name
+  endpoint_backend_name  = var.endpoint_backend_name
 
- origin_group_frontend_name = var.origin_group_frontend_name
- origin_group_backend_name  = var.origin_group_backend_name
+  origin_group_frontend_name = var.origin_group_frontend_name
+  origin_group_backend_name  = var.origin_group_backend_name
 
- origin_frontend_name = var.origin_frontend_name
- origin_backend_name  = var.origin_backend_name 
+  origin_frontend_name = var.origin_frontend_name
+  origin_backend_name  = var.origin_backend_name
 
- origin_host_frontend_name = replace(
-   replace(module.storage_account_website.static_website_url, "https://", ""),
-   "/", ""
- )
- origin_host_backend_name  = module.app_service_container.app_service_container_default_hostname
+  origin_host_frontend_name = replace(
+    replace(module.storage_account_website.static_website_url, "https://", ""),
+    "/", ""
+  )
+  origin_host_backend_name = module.app_service_container.app_service_container_default_hostname
 
- custome_domain_frontend_name = var.custome_domain_frontend_name
- custome_domain_backend_name  = var.custome_domain_backend_name
+  custome_domain_frontend_name = var.custome_domain_frontend_name
+  custome_domain_backend_name  = var.custome_domain_backend_name
 
- host_custome_domain_frontend_name = var.host_custome_domain_frontend_name
- host_custome_domain_backend_name  = var.host_custome_domain_backend_name
+  host_custome_domain_frontend_name = var.host_custome_domain_frontend_name
+  host_custome_domain_backend_name  = var.host_custome_domain_backend_name
 
- route_frontend_name = var.route_frontend_name
- route_backend_name  = var.route_backend_name
+  route_frontend_name = var.route_frontend_name
+  route_backend_name  = var.route_backend_name
 
- tags = local.tags
+  tags = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------------------
