@@ -42,8 +42,8 @@ resource "azurerm_cdn_frontdoor_origin_group" "frontend_origin_group" {
 resource "azurerm_cdn_frontdoor_origin" "frontend_origin" {
   name                           = var.frontend_origin_name
   cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.frontend_origin_group.id
-  host_name                      = var.host_frontend_domain_name
-  origin_host_header             = var.host_frontend_domain_name
+  host_name                      = var.origin_host_frontend_name
+  origin_host_header             = var.origin_host_frontend_name
   http_port                      = 80
   https_port                     = 443
   weight                         = 1000
@@ -73,13 +73,33 @@ resource "azurerm_cdn_frontdoor_origin_group" "backend_origin_group" {
 resource "azurerm_cdn_frontdoor_origin" "backend_origin" {
   name                           = var.backend_origin_name
   cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.backend_origin_group.id
-  host_name                      = var.host_backend_domain_name
-  origin_host_header             = var.host_backend_domain_name
+  host_name                      = var.origin_host_backend_name
+  origin_host_header             = var.origin_host_backend_name
   http_port                      = 80
   https_port                     = 443
   weight                         = 1000
   certificate_name_check_enabled = true
   enabled                        = true
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain" "frontend_domain" {
+  name                     = var.frontend_custome_domain_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+  host_name                = var.host_frontend_custome_domain_name
+
+  tls {
+    certificate_type = "ManagedCertificate"
+  }
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain" "backend_domain" {
+  name                     = var.backend_custome_domain_name
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
+  host_name                = var.host_backend_custome_domain_name
+
+  tls {
+    certificate_type = "ManagedCertificate"
+  }
 }
 
 resource "azurerm_cdn_frontdoor_route" "frontend" {
@@ -112,25 +132,6 @@ resource "azurerm_cdn_frontdoor_route" "backend" {
   enabled                = true
 }
 
-resource "azurerm_cdn_frontdoor_custom_domain" "frontend_domain" {
-  name                     = var.frontend_domain_name
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
-  host_name                = var.host_frontend_domain_name
-
-  tls {
-    certificate_type = "ManagedCertificate"
-  }
-}
-
-resource "azurerm_cdn_frontdoor_custom_domain" "backend_domain" {
-  name                     = var.backend_domain_name
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
-  host_name                = var.host_backend_domain_name
-
-  tls {
-    certificate_type = "ManagedCertificate"
-  }
-}
 /**  
 # Creating Web Application Firewall policy for Frontdoor
 resource "azurerm_cdn_frontdoor_security_policy" "example" {

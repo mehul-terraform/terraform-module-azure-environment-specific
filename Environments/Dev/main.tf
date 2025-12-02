@@ -108,7 +108,7 @@ module "app_service_container" {
 
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccountStaticWebSite
-/*
+
 module "storage_account_website" {
   source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
   resource_group_name                = module.resource_group.name
@@ -120,7 +120,7 @@ module "storage_account_website" {
   storage_account_error_404_document = var.storage_account_error_404_document
   tags                               = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 05.1-StorageAccount
 /*
@@ -356,16 +356,22 @@ module "azure_front_door" {
   backend_origin_group_name  = var.backend_origin_group_name
 
   frontend_origin_name = var.frontend_origin_name
-  backend_origin_name  = var.backend_origin_name
+  backend_origin_name  = var.backend_origin_name 
+
+  origin_host_frontend_name = replace(
+    replace(module.storage_account_website.static_website_url, "https://", ""),
+    "/", ""
+  )
+  origin_host_backend_name  = module.app_service_container.app_service_container_default_hostname
+
+  frontend_custome_domain_name = var.frontend_custome_domain_name
+  backend_custome_domain_name  = var.backend_custome_domain_name
+
+  host_frontend_custome_domain_name = var.host_frontend_custome_domain_name
+  host_backend_custome_domain_name  = var.host_backend_custome_domain_name
 
   frontend_route_name = var.frontend_route_name
   backend_route_name  = var.backend_route_name
-
-  frontend_domain_name = var.frontend_domain_name
-  backend_domain_name  = var.backend_domain_name
-
-  host_frontend_domain_name = var.host_frontend_domain_name
-  host_backend_domain_name  = var.host_backend_domain_name
 
   tags = local.tags
 }

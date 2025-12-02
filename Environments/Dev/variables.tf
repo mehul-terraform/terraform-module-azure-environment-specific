@@ -782,22 +782,32 @@ variable "backend_route_name" {
   type        = string
 }
 
-variable "frontend_domain_name" {
+variable "origin_host_frontend_name" {
   description = "Frontend Domain"
   type        = string
 }
 
-variable "backend_domain_name" {
+variable "origin_host_backend_name" {
   description = "backend domain"
   type        = string
 }
 
-variable "host_frontend_domain_name" {
+variable "host_frontend_custome_domain_name" {
   description = "Frontend Domain"
   type        = string
 }
 
-variable "host_backend_domain_name" {
+variable "host_backend_custome_domain_name" {
+  description = "backend domain"
+  type        = string
+}
+
+variable "frontend_custome_domain_name" {
+  description = "Frontend Domain"
+  type        = string
+}
+
+variable "backend_custome_domain_name" {
   description = "backend domain"
   type        = string
 }

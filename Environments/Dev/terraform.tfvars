@@ -140,7 +140,7 @@ app_container_app_settings = {
 #-----------------------------------------------------------------------------------------------
 # 07-StorageAccountStaticWebsite
 
-storage_account_web_name           = "myexampledevstorageweb"
+storage_account_web_name           = "myexampledevewebsite"
 account_tier                       = "Standard"
 account_replication_type           = "LRS"
 storage_account_index_document     = "index.html"
@@ -292,14 +292,17 @@ backend_origin_group_name  = "myexample-dev-backend-origin-group"
 frontend_origin_name = "myexample-dev-frontend-origin"
 backend_origin_name  = "myexample-dev-backend-origin"
 
+origin_host_frontend_name = "myexample-dev-frontend.web.core.windows.net"
+origin_host_backend_name  = "myexample-dev-backend-code.azurewebsites.net"
+
+frontend_custome_domain_name = "myexample-dev-frontend"
+backend_custome_domain_name  = "myexample-dev-backend"
+
+host_frontend_custome_domain_name = "dev.myexample.co.in"
+host_backend_custome_domain_name  = "api-dev.myexample.co.in"
+
 frontend_route_name = "myexample-dev-frontend-route"
 backend_route_name  = "myexample-dev-backend-route"
-
-frontend_domain_name = "myexample-dev-frontend"
-backend_domain_name  = "myexample-dev-backend"
-
-host_frontend_domain_name = "myexample-dev-frontend-container.azurewebsites.net"
-host_backend_domain_name  = "myexample-dev-backend-container.azurewebsites.net"
 
 #-----------------------------------------------------------------------------------------------
 # 16-Virtual Machine  
