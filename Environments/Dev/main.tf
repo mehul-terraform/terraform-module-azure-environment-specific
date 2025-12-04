@@ -358,10 +358,11 @@ module "azure_front_door" {
   origin_frontend_name = var.origin_frontend_name
   origin_backend_name  = var.origin_backend_name
 
-  origin_host_frontend_name = replace(
-    replace(module.storage_account_website.static_website_url, "https://", ""),
-    "/", ""
-  )
+  #origin_host_frontend_name = replace(
+  #  replace(module.storage_account_website.static_website_url, "https://", ""),
+  #  "/", ""
+  #)
+  origin_host_frontend_name = module.app_service_container.app_service_container_default_hostname
   origin_host_backend_name = module.app_service_container.app_service_container_default_hostname
 
   custome_domain_frontend_name = var.custome_domain_frontend_name
@@ -450,7 +451,7 @@ module "example_dns_zone" {
 */
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
-
+/*
 module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
@@ -466,7 +467,7 @@ module "static_web_app" {
   repository_token    = var.static_webapp_repository_token
   tags                = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 21-ServiceBus
 /*
