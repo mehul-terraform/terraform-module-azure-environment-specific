@@ -8,6 +8,7 @@ resource "azurerm_linux_web_app" "app_service_container" {
 
   site_config {
     always_on  = true
+    vnet_route_all_enabled = true
     ftps_state = "Disabled"
   }
 

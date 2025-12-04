@@ -6,6 +6,12 @@ resource "azurerm_linux_web_app" "app_service" {
   https_only                                     = true
   webdeploy_publish_basic_authentication_enabled = false
 
+  lifecycle {
+  ignore_changes = [
+    tags
+  ]
+}
+
   site_config {
     always_on  = true
     ftps_state = "Disabled"

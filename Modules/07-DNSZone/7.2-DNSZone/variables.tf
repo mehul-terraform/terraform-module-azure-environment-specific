@@ -13,3 +13,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "cname_records" {
+  type        = map(string)
+  description = "Map of CNAME records: key = record name, value = target"
+}
+
+variable "txt_records" {
+  description = "Map of TXT records to create"
+  type        = map(string)
+  default     = {}
+}
+

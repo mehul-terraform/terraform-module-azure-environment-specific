@@ -349,6 +349,8 @@ virtual_network_gateway_public_ip_allocation_method = "Static"
 # 19-DNSZone
 
 dns_zone_name = "myexample.co.in"
+cname_records = null
+txt_records   = null
 
 #------------------------------------------------------------------------------------------------
 # 04.1-StaticWebApp

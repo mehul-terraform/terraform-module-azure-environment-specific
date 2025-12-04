@@ -362,8 +362,8 @@ module "azure_front_door" {
   #  replace(module.storage_account_website.static_website_url, "https://", ""),
   #  "/", ""
   #)
-  origin_host_frontend_name = module.app_service_container.app_service_container_default_hostname
-  origin_host_backend_name = module.app_service_container.app_service_container_default_hostname
+  origin_host_frontend_name = module.app_service_container.default_hostname
+  origin_host_backend_name = module.app_service_container.default_hostname
 
   custome_domain_frontend_name = var.custome_domain_frontend_name
   custome_domain_backend_name  = var.custome_domain_backend_name
@@ -441,14 +441,29 @@ module "virtual_network_gateway" {
 */
 #--------------------------------------------------------------------------------------------------
 # 19-DNSZone
-/*
+
 module "example_dns_zone" {
   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
   dns_zone_name       = var.dns_zone_name
   resource_group_name = module.resource_group.name
-  tags                = var.tags
+
+  cname_records = {
+    api-dev = module.app_service_container.default_hostname
+    dev     = module.app_service_container.default_hostname
+  }
+
+  txt_records = {
+    "_dnsauth.dev" = module.azure_front_door.frontdoor_frontend_validation_token
+    "_dnsauth.api-dev"  = module.azure_front_door.frontdoor_backend_validation_token
+  }
+
+  depends_on = [
+    module.azure_front_door
+  ]
+
+  tags = local.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
 /*

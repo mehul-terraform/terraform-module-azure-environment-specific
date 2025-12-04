@@ -947,6 +947,17 @@ variable "dns_zone_name" {
   type        = string
 }
 
+variable "cname_records" {
+  type        = map(string)
+  description = "Map of CNAME records: key = record name, value = target"
+}
+
+variable "txt_records" {
+  type        = map(string)
+  description = "TXT records: key = record name, value = TXT value"
+  default     = {}
+}
+
 #-----------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
 /*
