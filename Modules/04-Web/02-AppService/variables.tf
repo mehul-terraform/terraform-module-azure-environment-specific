@@ -6,34 +6,30 @@ variable "location" {
   type = string
 }
 
-variable "web_app_name" {
-  type = string
-}
-
-variable "app_settings" {
-  type    = map(string)
-  default = {}
-}
-
 variable "service_plan_id" {
   type = string
 }
 
 variable "subnet_id" {
-  description = "The subnet ID to associate with the network interface"
-  type        = string
+  type = string
 }
 
 variable "tags" {
-  description = "Tags to be applied to resources (inclusive)"
-  type = object({
-    environment = string
-    project     = string
-  })
+  type    = map(string)
+  default = {}
 }
 
-variable "runtime" {
-  description = "Provide only ONE runtime key at a time (dotnet_version, node_version, python_version)"
-  type        = map(string)
-  default     = {}
+variable "app_services" {
+  type = map(object({
+    web_app_name = string
+
+    runtime = object({
+      node_version   = optional(string)
+      python_version = optional(string)
+      dotnet_version = optional(string)
+    })
+
+    app_settings = map(string)
+    tags         = map(string)
+  }))
 }

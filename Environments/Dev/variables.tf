@@ -116,20 +116,19 @@ variable "worker_count" {
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
 
-variable "web_app_name" {
-  type = string
-}
+variable "app_services" {
+  type = map(object({
+    web_app_name = string
 
-variable "web_app_runtime" {
-  description = "Provide only ONE runtime key at a time (dotnet_version, node_version, python_version)"
-  type        = map(string)
-  default     = {}
-}
+    runtime = object({
+      node_version   = optional(string)
+      python_version = optional(string)
+      dotnet_version = optional(string)
+    })
 
-variable "app_settings" {
-  description = "App application settings"
-  type        = map(any)
-  default     = {}
+    app_settings = map(string)
+    tags         = map(string)
+  }))
 }
 
 #-----------------------------------------------------------------------------------------------

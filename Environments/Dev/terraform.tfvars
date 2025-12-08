@@ -102,7 +102,7 @@ asp_sku_name      = "B2"
 
 #-----------------------------------------------------------------------------------------------
 # 05-AppService
-
+/*
 web_app_name = "myexample-dev-backend-code"
 web_app_runtime = {
   #dotnet_version = "8.0"
@@ -119,6 +119,55 @@ app_settings = {
   ALLOWED_HOSTS                = "*"
   LOGGING_DEFAULT              = "Information"
   LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+}
+*/
+
+app_services = {
+  "frontend" = {
+    web_app_name = "myexample-dev-frontend-code"
+    runtime = {
+      node_version   = null
+      python_version = null
+      dotnet_version = "10.0"
+    }
+    app_settings = {
+       DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+       JWT_ISSUER                   = "myexample-auth-api"
+       JWT_AUDIENCE                 = "myexample-client"
+       JWT_TOKEN_LIFETIME_MINUTES   = "15"
+       ALLOWED_HOSTS                = "*"
+       LOGGING_DEFAULT              = "Information"
+       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+    }
+    tags = {
+      environment = "dev"
+      team        = "devops"
+    }
+  },
+
+  "backend" = {
+    web_app_name = "myexample-dev-backend-code"
+    runtime = {
+      node_version   = "22-lts"
+      python_version = null
+      dotnet_version = null
+    }
+    app_settings = {
+       DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+       JWT_ISSUER                   = "myexample-auth-api"
+       JWT_AUDIENCE                 = "myexample-client"
+       JWT_TOKEN_LIFETIME_MINUTES   = "15"
+       ALLOWED_HOSTS                = "*"
+       LOGGING_DEFAULT              = "Information"
+       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+    }
+    tags = {
+      environment = "dev"
+      team        = "devops"
+    }
+  }
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -212,7 +261,7 @@ cluster_shard_count                       = 1
 # 11-KeyVault
 
 key_vault_name                       = "myexample-dev-be-kv"
-key_vault_tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
+key_vault_tenant_id                  = null
 key_vault_object_id                  = "myexample-dev-bkd-kv"
 key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false

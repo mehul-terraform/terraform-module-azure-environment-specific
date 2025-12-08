@@ -13,7 +13,8 @@ terraform {
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {}
-  subscription_id = "339e9158-9454-4c79-a362-c37d1f2469a2"
+  subscription_id = "339e9158-9454-4c79-a362-c37d1f2469a2"  
+  #subscription_id = "c09e0f60-cb15-4c23-8500-eeae1ec9dd6b"
   #skip_provider_registration = true
   #  subscription_id = "c09e0f60-cb15-4c23-8500-eeae1ec9dd6b" # "az account show --query id -o tsv"
 }
@@ -72,15 +73,13 @@ module "service_plan" {
 # 05-AppService
 
 module "app_service" {
-  source = "../../Modules/04-Web/02-AppService"
+  source              = "../../Modules/04-Web/02-AppService"
 
+  app_services        = var.app_services               # map of apps
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_id     = module.service_plan.id
-  web_app_name        = var.web_app_name
-  runtime             = var.web_app_runtime
   subnet_id           = module.virtual_network.webapp_subnets["webapp"]
-  app_settings        = var.app_settings
   tags                = local.tags
 }
 
@@ -100,7 +99,7 @@ module "app_service_container" {
   service_plan_id        = module.service_plan.id
   web_app_container_name = var.web_app_container_name
   subnet_id              = module.virtual_network.webapp_subnets["webapp"]
-  app_settings           = var.app_settings
+  app_settings           = var.app_container_app_settings
   docker_image_name      = var.docker_image_name
   tags                   = local.tags
 }
@@ -235,7 +234,7 @@ module "redis" {
 */
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
-/*
+
 module "keyvault" {
   source                     = "../../Modules/10-KeyVault"
   resource_group_name        = module.resource_group.name
@@ -249,7 +248,7 @@ module "keyvault" {
   secrets                    = var.key_vault_secrets
   tags                       = local.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------
 # 13-CosmosDB
 /*
@@ -362,8 +361,8 @@ module "azure_front_door" {
   #  replace(module.storage_account_website.static_website_url, "https://", ""),
   #  "/", ""
   #)
-  origin_host_frontend_name = module.app_service_container.default_hostname
-  origin_host_backend_name = module.app_service_container.default_hostname
+  origin_host_frontend_name = module.app_service.app_service_default_hostnames["frontend"]
+  origin_host_backend_name = module.app_service.app_service_default_hostnames["backend"]
 
   custome_domain_frontend_name = var.custome_domain_frontend_name
   custome_domain_backend_name  = var.custome_domain_backend_name
@@ -448,8 +447,8 @@ module "example_dns_zone" {
   resource_group_name = module.resource_group.name
 
   cname_records = {
-    api-dev = module.app_service_container.default_hostname
-    dev     = module.app_service_container.default_hostname
+    api-dev = module.azure_front_door.backend_endpoint
+    dev     = module.azure_front_door.frontend_endpoint
   }
 
   txt_records = {
