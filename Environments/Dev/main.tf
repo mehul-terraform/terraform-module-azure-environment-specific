@@ -16,9 +16,7 @@ provider "azurerm" {
   #subscription_id = "339e9158-9454-4c79-a362-c37d1f2469a2"  
   subscription_id = "c09e0f60-cb15-4c23-8500-eeae1ec9dd6b"
   tenant_id = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
-  
-  client_id       = "#####################"
-  client_secret   = "#####################"
+
  
   disable_correlation_request_id = true
   disable_terraform_partner_id   = true
@@ -346,7 +344,7 @@ module "communication_services" {
 */
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-/*
+
 module "azure_front_door" {
   source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
   front_door_name     = var.front_door_name
@@ -381,7 +379,7 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
 /*
@@ -446,7 +444,7 @@ module "virtual_network_gateway" {
 */
 #--------------------------------------------------------------------------------------------------
 # 19-DNSZone
-/*
+
 module "example_dns_zone" {
   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
   dns_zone_name       = var.dns_zone_name
@@ -468,7 +466,7 @@ module "example_dns_zone" {
 
   tags = local.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
 /*

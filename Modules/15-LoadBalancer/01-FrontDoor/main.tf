@@ -63,7 +63,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "origin_group_backend" {
   }
 
   health_probe {
-    path                = "/docs"
+    path                = "/"
     request_type        = "GET"
     protocol            = "Https"
     interval_in_seconds = 100
