@@ -8,11 +8,6 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "location" {
-  description = "Azure location for the resources."
-  type        = string
-}
-
 variable "sku_tier" {
   description = "The SKU tier (e.g., Free, Standard)."
   type        = string
@@ -58,4 +53,10 @@ variable "tags" {
   description = "Optional tags for Azure resources."
   type        = map(string)
   default     = {}
+}
+
+variable "static_webapp_location" {
+  description = "Path to your application code relative to the repository root."
+  type        = string
+
 }
