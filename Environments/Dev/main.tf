@@ -17,6 +17,9 @@ provider "azurerm" {
   subscription_id = "c09e0f60-cb15-4c23-8500-eeae1ec9dd6b"
   tenant_id = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
 
+  #client_id       = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  #client_secret   = "ABABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+ 
   disable_correlation_request_id = true
   disable_terraform_partner_id   = true
   #skip_provider_registration = true
