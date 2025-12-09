@@ -124,7 +124,7 @@ app_settings = {
 
 app_services = {
   "frontend" = {
-    web_app_name = "myexample-dev-frontend-code"
+    web_app_name = "myexample-dev-frontend"
     runtime = {
       node_version   = null
       python_version = null
@@ -147,7 +147,7 @@ app_services = {
   },
 
   "backend" = {
-    web_app_name = "myexample-dev-backend-code"
+    web_app_name = "myexample-dev-backend"
     runtime = {
       node_version   = "22-lts"
       python_version = null
