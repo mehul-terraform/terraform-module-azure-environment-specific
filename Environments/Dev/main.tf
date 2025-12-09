@@ -15,6 +15,9 @@ provider "azurerm" {
   features {}
   #subscription_id = "339e9158-9454-4c79-a362-c37d1f2469a2"  
   subscription_id = "c09e0f60-cb15-4c23-8500-eeae1ec9dd6b"
+
+  client_id       = "appId"
+  client_secret   = "password"
  
   disable_correlation_request_id = true
   disable_terraform_partner_id   = true
@@ -78,7 +81,7 @@ module "service_plan" {
 module "app_service" {
   source              = "../../Modules/04-Web/02-AppService"
 
-  app_services        = var.app_services               # map of apps
+  app_services        = var.app_services               
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_id     = module.service_plan.id
@@ -93,7 +96,7 @@ module "app_service" {
 
 #---------------------------------------------------------------------------------------------------
 # 06-AppServiceContainer
-
+/*
 module "app_service_container" {
   source = "../../Modules/04-Web/03-AppServiceContainer"
 
@@ -106,11 +109,10 @@ module "app_service_container" {
   docker_image_name      = var.docker_image_name
   tags                   = local.tags
 }
-
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 07-StorageAccountStaticWebSite
-
+/*
 module "storage_account_website" {
   source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
   resource_group_name                = module.resource_group.name
@@ -122,7 +124,7 @@ module "storage_account_website" {
   storage_account_error_404_document = var.storage_account_error_404_document
   tags                               = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 05.1-StorageAccount
 /*
@@ -237,7 +239,7 @@ module "redis" {
 */
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
-
+/*
 module "keyvault" {
   source                     = "../../Modules/10-KeyVault"
   resource_group_name        = module.resource_group.name
@@ -251,7 +253,7 @@ module "keyvault" {
   secrets                    = var.key_vault_secrets
   tags                       = local.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------
 # 13-CosmosDB
 /*
@@ -343,7 +345,7 @@ module "communication_services" {
 */
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-
+/*
 module "azure_front_door" {
   source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
   front_door_name     = var.front_door_name
@@ -378,7 +380,7 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
 /*
@@ -443,7 +445,7 @@ module "virtual_network_gateway" {
 */
 #--------------------------------------------------------------------------------------------------
 # 19-DNSZone
-
+/*
 module "example_dns_zone" {
   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
   dns_zone_name       = var.dns_zone_name
@@ -465,7 +467,7 @@ module "example_dns_zone" {
 
   tags = local.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
 /*
