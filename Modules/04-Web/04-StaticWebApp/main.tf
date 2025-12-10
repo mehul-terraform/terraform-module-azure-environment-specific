@@ -10,12 +10,12 @@ resource "azurerm_static_web_app" "static_webapp" {
   sku_size = var.sku_size
 
   lifecycle {
-  ignore_changes = [
-    repository_url,
-    repository_branch,
-    tags
-  ]
-}
+    ignore_changes = [
+      repository_url,
+      repository_branch,
+      tags
+    ]
+  }
 
   dynamic "identity" {
     for_each = var.sku_tier != "Free" ? [1] : []

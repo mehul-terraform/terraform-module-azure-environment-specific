@@ -1,13 +1,23 @@
 resource "azurerm_linux_web_app" "app_service" {
   for_each = var.app_services
 
-  name                = each.value.web_app_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  service_plan_id     = var.service_plan_id
+  name                                           = each.value.web_app_name
+  location                                       = var.location
+  resource_group_name                            = var.resource_group_name
+  service_plan_id                                = var.service_plan_id
+  webdeploy_publish_basic_authentication_enabled = true
 
   app_settings = each.value.app_settings
   tags         = merge(var.tags, each.value.tags)
+
+  identity { type = "SystemAssigned" }
+
+  lifecycle {
+    ignore_changes = [
+      tags,
+      app_settings
+    ]
+  }
 
   site_config {
     dynamic "application_stack" {
@@ -21,3 +31,4 @@ resource "azurerm_linux_web_app" "app_service" {
     }
   }
 }
+

@@ -112,14 +112,14 @@ app_services = {
       dotnet_version = "10.0"
     }
     app_settings = {
-       DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-       JWT_ISSUER                   = "myexample-auth-api"
-       JWT_AUDIENCE                 = "myexample-client"
-       JWT_TOKEN_LIFETIME_MINUTES   = "15"
-       ALLOWED_HOSTS                = "*"
-       LOGGING_DEFAULT              = "Information"
-       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+      JWT_ISSUER                   = "myexample-auth-api"
+      JWT_AUDIENCE                 = "myexample-client"
+      JWT_TOKEN_LIFETIME_MINUTES   = "15"
+      ALLOWED_HOSTS                = "*"
+      LOGGING_DEFAULT              = "Information"
+      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
       environment = "dev"
@@ -135,14 +135,14 @@ app_services = {
       dotnet_version = null
     }
     app_settings = {
-       DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-       JWT_ISSUER                   = "myexample-auth-api"
-       JWT_AUDIENCE                 = "myexample-client"
-       JWT_TOKEN_LIFETIME_MINUTES   = "15"
-       ALLOWED_HOSTS                = "*"
-       LOGGING_DEFAULT              = "Information"
-       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+      JWT_ISSUER                   = "myexample-auth-api"
+      JWT_AUDIENCE                 = "myexample-client"
+      JWT_TOKEN_LIFETIME_MINUTES   = "15"
+      ALLOWED_HOSTS                = "*"
+      LOGGING_DEFAULT              = "Information"
+      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
       environment = "dev"
@@ -248,10 +248,13 @@ key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false
 key_vault_soft_delete_retention_days = "7"
 key_vault_secrets = {
-  DBPASSWORD   = "P@ssw0rd123"
-  APIKEY       = "1234567890"
-  STORAGETOKEN = "abcde12345"
-  DBUSERS      = "user-1"
+  DATABASEURL     = "https://myexample.db.com/"
+  DATABASEREADURL = "https://myexample.db.com/"
+  REDISHOST       = ""
+  REDISPORT       = ""
+  REDISTLS        = "true"
+  SENTRYDSN       = ""
+
 }
 
 #-----------------------------------------------------------------------------------------------

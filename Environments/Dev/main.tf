@@ -15,11 +15,12 @@ provider "azurerm" {
   features {}
   #subscription_id = "339e9158-9454-4c79-a362-c37d1f2469a2"  
   subscription_id = "c09e0f60-cb15-4c23-8500-eeae1ec9dd6b"
-  tenant_id = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
+  tenant_id       = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
+
 
   #client_id       = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
   #client_secret   = "ABABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
- 
+
   disable_correlation_request_id = true
   disable_terraform_partner_id   = true
   #skip_provider_registration = true
@@ -60,6 +61,7 @@ module "network_security_group" {
   network_security_group_rules = var.network_security_group_rules
   vm_subnet_id                 = module.virtual_network.vm_subnets["vm"]
   db_subnet_id                 = module.virtual_network.db_subnets["db"]
+  webapp_subnet_id             = module.virtual_network.webapp_subnets["webapp"]
   tags                         = local.tags
 }
 
@@ -80,9 +82,9 @@ module "service_plan" {
 # 05-AppService
 
 module "app_service" {
-  source              = "../../Modules/04-Web/02-AppService"
+  source = "../../Modules/04-Web/02-AppService"
 
-  app_services        = var.app_services               
+  app_services        = var.app_services
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_id     = module.service_plan.id
@@ -221,7 +223,7 @@ module "private_dns_zone_storage_account" {
 
 #--------------------------------------------------------------------------------------------------
 # 11-CacheRedis
-
+/*
 module "redis" {
   source                        = "../../Modules/09-CacheRedis"
   cache_name                    = var.cache_name
@@ -237,7 +239,7 @@ module "redis" {
   cluster_shard_count           = var.cluster_shard_count
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------
 # 12-KeyVault
 
@@ -257,7 +259,7 @@ module "keyvault" {
 
 #---------------------------------------------------------------------------------------------
 # 13-CosmosDB
-
+/*
 module "cosmosdb" {
   source                    = "../../Modules/06-Database/02-CosmosDB"
   resource_group_name       = module.resource_group.name
@@ -271,10 +273,10 @@ module "cosmosdb" {
   enable_automatic_failover = var.enable_automatic_failover
   tags                      = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 14-FunctionsApp
-
+/*
 module "function_app" {
   source              = "../../Modules/04-Web/05-Functionsapp"
   resource_group_name = module.resource_group.name
@@ -295,7 +297,7 @@ module "function_app" {
   app_settings                   = var.function_app_settings
   tags                           = var.tags
 }
-
+*/
 #resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
 #  app_service_id = module.function_app.id
 #  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
@@ -303,7 +305,7 @@ module "function_app" {
 
 #--------------------------------------------------------------------------------------------------
 # 14-FunctionsAppFlexConsumption
-
+/*
 module "function_app_flex" {
   source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
   resource_group_name      = module.resource_group.name
@@ -329,10 +331,10 @@ module "function_app_flex" {
 #  app_service_id = module.function_app_flex.id
 #  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
 #}
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 15-CommunicationsService
-
+/*
 module "communication_services" {
   source                          = "../../Modules/11-CommunicationServices"
   communication_service_name      = var.communication_service_name
@@ -343,10 +345,10 @@ module "communication_services" {
   data_location                   = var.data_location
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 16-FrontDoorStandard
-
+/*
 module "azure_front_door" {
   source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
   front_door_name     = var.front_door_name
@@ -381,7 +383,7 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------------------
 # 17-VirtualMachine
 
@@ -411,7 +413,7 @@ module "virtual_machine" {
 
 #--------------------------------------------------------------------------------------------------
 # 18-ContainerRegistry
-
+/*
 module "container_registry" {
   source                        = "../../Modules/03-Compute/02-ContainerRegistry"
   container_registry_name       = var.container_registry_name
@@ -424,10 +426,10 @@ module "container_registry" {
   zone_redundancy_enabled       = var.zone_redundancy_enabled
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway
-
+/*
 module "virtual_network_gateway" {
   source                       = "../../Modules/02-Networking/07-VirtualNetworkGateway"
   resource_group_name          = module.resource_group.name
@@ -443,10 +445,10 @@ module "virtual_network_gateway" {
   virtual_network_gateway_sku  = var.virtual_network_gateway_sku
   tags                         = var.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 19-DNSZone
-
+/*
 module "example_dns_zone" {
   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
   dns_zone_name       = var.dns_zone_name
@@ -468,10 +470,10 @@ module "example_dns_zone" {
 
   tags = local.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 20-StaticWebApp
-
+/*
 module "static_web_app" {
   source              = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name  = var.static_webapp_name
@@ -487,10 +489,10 @@ module "static_web_app" {
   repository_token    = var.static_webapp_repository_token
   tags                = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 21-ServiceBus
-
+/*
 module "servicebus" {
   source              = "../../Modules/13-Integration/01-ServiceBus"
   resource_group_name = module.resource_group.name
@@ -502,6 +504,6 @@ module "servicebus" {
   queue_name          = var.servicebus_queue_name
   tags                = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 

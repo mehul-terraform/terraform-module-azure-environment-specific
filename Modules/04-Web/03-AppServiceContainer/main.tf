@@ -4,12 +4,25 @@ resource "azurerm_linux_web_app" "app_service_container" {
   resource_group_name                            = var.resource_group_name
   service_plan_id                                = var.service_plan_id
   https_only                                     = true
-  webdeploy_publish_basic_authentication_enabled = false
+  webdeploy_publish_basic_authentication_enabled = true
+
+  lifecycle {
+    ignore_changes = [
+      tags,
+      app_settings,
+
+    ]
+  }
 
   site_config {
-    always_on  = true
+    application_stack {
+      docker_image_name   = "nginx:alpine"
+      docker_registry_url = "https://index.docker.io" # Optional for Docker Hub
+    }
+
+    always_on              = true
     vnet_route_all_enabled = true
-    ftps_state = "Disabled"
+    ftps_state             = "Disabled"
   }
 
   app_settings = merge(
@@ -18,5 +31,6 @@ resource "azurerm_linux_web_app" "app_service_container" {
   )
 
   identity { type = "SystemAssigned" }
+
   tags = merge(var.tags)
 }

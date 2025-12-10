@@ -30,3 +30,8 @@ resource "azurerm_subnet_network_security_group_association" "db_subnet_nsg" {
   subnet_id                 = var.db_subnet_id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
+
+resource "azurerm_subnet_network_security_group_association" "webapp_subnet_nsg" {
+  subnet_id                 = var.webapp_subnet_id
+  network_security_group_id = azurerm_network_security_group.nsg.id
+}

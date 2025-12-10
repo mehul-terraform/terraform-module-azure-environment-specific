@@ -45,4 +45,8 @@ variable "db_subnet_id" {
   type        = string
 }
 
+variable "webapp_subnet_id" {
+  description = "The Azure region where the NSG should be created."
+  type        = string
+}
 
