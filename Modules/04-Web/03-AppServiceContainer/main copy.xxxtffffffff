@@ -16,7 +16,8 @@ resource "azurerm_linux_web_app" "app_service_container" {
 
   site_config {
     application_stack {
-      docker_image_name   = var.docker_image_name      
+      docker_image_name   = "nginx:alpine"
+      docker_registry_url = "https://index.docker.io" # Optional for Docker Hub
     }
 
     always_on              = true
