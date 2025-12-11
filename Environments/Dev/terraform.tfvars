@@ -361,11 +361,11 @@ virtual_machine_image_version               = "latest"
 # 17-ContainerRegistry
 
 container_registry_name       = "myexampledevacr"
-container_registry_sku        = "Premium"
+container_registry_sku        = "Basic"
 admin_enabled                 = true
 public_network_access_enabled = true
-quarantine_policy_enabled     = true
-zone_redundancy_enabled       = true
+quarantine_policy_enabled     = false
+zone_redundancy_enabled       = false
 
 #-------------------------------------------------------------------------------------------------
 # 20-VirtualNetworkGateway

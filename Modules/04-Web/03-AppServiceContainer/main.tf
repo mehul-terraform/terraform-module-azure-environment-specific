@@ -4,19 +4,20 @@ resource "azurerm_linux_web_app" "app_service_container" {
   resource_group_name                            = var.resource_group_name
   service_plan_id                                = var.service_plan_id
   https_only                                     = true
-  webdeploy_publish_basic_authentication_enabled = true
+  webdeploy_publish_basic_authentication_enabled = true   
 
   lifecycle {
     ignore_changes = [
       tags,
-      app_settings,
-
+      app_settings,    
+      site_config,    
     ]
   }
 
   site_config {
     application_stack {
-      docker_image_name   = var.docker_image_name      
+      docker_image_name   = var.docker_image_name
+         
     }
 
     always_on              = true
@@ -30,3 +31,4 @@ resource "azurerm_linux_web_app" "app_service_container" {
 
   tags = merge(var.tags)
 }
+
