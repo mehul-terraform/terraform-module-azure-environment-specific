@@ -1,5 +1,6 @@
 #------------------------------------------------------------------------------------
-# Tags
+# 0-Tags
+#------------------------------------------------------------------------------------
 
 variable "tags" {
   type    = map(string)
@@ -13,7 +14,8 @@ variable "extra_tags" {
 }
 
 #----------------------------------------------------------------------------------------------
-# 01-ResourceGroup
+# 1-ResourceGroup
+#----------------------------------------------------------------------------------------------
 
 variable "location" {
   description = "Azure region for the virtual network"
@@ -26,7 +28,8 @@ variable "resource_group_name" {
 }
 
 #----------------------------------------------------------------------------------------------
-# 02-VirtualNetwork
+# 2.1-VirtualNetwork
+#----------------------------------------------------------------------------------------------
 
 variable "virtual_network_name" {
   description = "The name of the virtual network"
@@ -60,7 +63,8 @@ variable "subnets" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 03-NetworkSecurityGroup
+# 2.2-NetworkSecurityGroup
+#-----------------------------------------------------------------------------------------------
 
 variable "network_security_group_name" {
   description = "The name of the Network Security Group."
@@ -84,7 +88,182 @@ variable "network_security_group_rules" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 04-AppServicePlan
+# 2.3-VirtualNetworkGateway
+#-----------------------------------------------------------------------------------------------
+
+variable "virtual_network_gateway_name" {
+  description = "Name of the virtual network gateway"
+  type        = string
+
+}
+
+variable "gateway_type" {
+  description = "Gateway type"
+  type        = string
+
+}
+
+variable "vpn_type" {
+  description = "VPN type"
+  type        = string
+
+}
+
+variable "active_active" {
+  description = "Active-active mode"
+  type        = bool
+
+}
+
+variable "virtual_network_gateway_sku" {
+  description = "Gateway SKU"
+  type        = string
+
+}
+
+variable "virtual_network_gateway_public_ip_name" {
+  description = "The name of the public IP resource"
+  type        = string
+}
+
+variable "virtual_network_gateway_public_ip_allocation_method" {
+  description = "Gateway SKU"
+  type        = string
+
+}
+
+#-----------------------------------------------------------------------------------------------
+# 3.1-VirtualMachine
+#-----------------------------------------------------------------------------------------------
+
+# Public IP Variables
+variable "virtual_machine_public_ip_name" {
+  description = "The name of the public IP resource"
+  type        = string
+}
+
+variable "virtual_machine_public_ip_allocation_method" {
+  description = "The name of the public IP resource"
+  type        = string
+}
+
+# Network Interface Variables
+variable "network_interface_name" {
+  description = "The name of the network interface"
+  type        = string
+}
+
+variable "private_ip_address_name" {
+  description = "The static private IP address for the VM"
+  type        = string
+}
+
+variable "private_ip_address" {
+  description = "The static private IP address for the VM"
+  type        = string
+}
+
+variable "private_ip_address_allocation" {
+  description = "The static private IP address for the VM"
+  type        = string
+}
+
+# Virtual Machine Variables
+variable "virtual_machine_name" {
+  description = "The name of the virtual machine"
+  type        = string
+
+}
+
+variable "virtual_machine_size" {
+  description = "The size of the virtual machine"
+  type        = string
+}
+
+variable "admin_username" {
+  description = "Admin username for the virtual machine"
+  type        = string
+}
+
+variable "admin_password" {
+  description = "Admin password for the virtual machine"
+  type        = string
+  sensitive   = true
+}
+
+# OS Disk Variables
+variable "os_disk_caching" {
+  description = "Specifies the caching requirements for the OS disk"
+  type        = string
+}
+
+variable "os_disk_storage_account_type" {
+  description = "The type of storage account to use for the OS disk"
+  type        = string
+}
+
+# Image Reference Variables
+variable "virtual_machine_image_publisher" {
+  description = "Publisher of the OS image"
+  type        = string
+}
+
+variable "virtual_machine_image_offer" {
+  description = "Offer of the OS image"
+  type        = string
+}
+
+variable "virtual_machine_image_sku" {
+  description = "SKU of the OS image"
+  type        = string
+}
+
+variable "virtual_machine_image_version" {
+  description = "Version of the OS image"
+  type        = string
+}
+
+#-----------------------------------------------------------------------------------------------
+# 3.3-ContainerRegistry
+#-----------------------------------------------------------------------------------------------
+
+variable "container_registry_name" {
+  description = "Name of the Azure Container Registry (lowercase letters and numbers only)"
+  type        = string
+}
+
+variable "container_registry_sku" {
+  description = "SKU of the container registry (Basic, Standard, Premium)"
+  type        = string
+}
+
+variable "admin_enabled" {
+  description = "Enable admin user for ACR"
+  type        = bool
+  default     = true
+}
+
+variable "public_network_access_enabled" {
+  description = "Enable public network access"
+  type        = bool
+  default     = true
+}
+
+variable "quarantine_policy_enabled" {
+  description = "Enable quarantine policy"
+  type        = bool
+  default     = true
+}
+
+variable "zone_redundancy_enabled" {
+  description = "Enable zone redundancy"
+  type        = bool
+  default     = true
+}
+
+#-----------------------------------------------------------------------------------------------
+# 4.1-AppServicePlan
+#-----------------------------------------------------------------------------------------------
 
 variable "service_plan_name" {
   type        = string
@@ -113,8 +292,10 @@ variable "worker_count" {
   default     = null
   description = "Number of workers"
 }
+
 #-----------------------------------------------------------------------------------------------
-# 05-AppService
+# 4.2-AppService
+#-----------------------------------------------------------------------------------------------
 
 variable "app_service" {
   type = map(object({
@@ -132,7 +313,8 @@ variable "app_service" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 06-AppServiceContainer
+# 4.3-AppServiceContainer
+#-----------------------------------------------------------------------------------------------
 
 variable "app_service_container" {
   type = map(object({
@@ -143,8 +325,173 @@ variable "app_service_container" {
   }))
 }
 
-#------------------------------------------------------------------------------------------------
-# 05.1-StorageAccount
+#-----------------------------------------------------------------------------------------------
+# 4.4-StaticWebApp
+#-----------------------------------------------------------------------------------------------
+
+variable "static_webapp_name" {
+  description = "The name of the static web app."
+  type        = string
+}
+
+variable "static_webapp_location" {
+  description = "Path to your application code relative to the repository root."
+  type        = string
+}
+
+variable "static_webapp_api_location" {
+  description = "Path to your Azure Functions API code."
+  type        = string
+  default     = ""
+}
+
+variable "static_webapp_sku_tier" {
+  description = "The SKU tier (e.g., Free, Standard)."
+  type        = string
+}
+
+variable "static_webapp_sku_size" {
+  description = "The SKU size."
+  type        = string
+}
+
+variable "static_webapp_output_location" {
+  description = "Build output folder relative to app_location."
+  type        = string
+  default     = "build"
+}
+
+variable "static_webapp_repository_url" {
+  type        = string
+  description = "Repository URL for Static Web App"
+}
+
+variable "static_webapp_repository_branch" {
+  type        = string
+  description = "Branch name for Static Web App"
+}
+
+variable "static_webapp_repository_token" {
+  type      = string
+  sensitive = true
+}
+
+#-----------------------------------------------------------------------------------------------
+# 4.5-FunctionApp
+#-----------------------------------------------------------------------------------------------
+
+variable "function_app_name" {
+  type        = string
+  description = "Function app name"
+}
+
+variable "dotnet_version" {
+  type = string
+}
+
+variable "run_from_package" {
+  type = string
+}
+
+variable "worker_runtime" {
+  type = string
+}
+
+variable "function_app_node_version" {
+  type = string
+}
+
+variable "function_app_extension_version" {
+  type        = string
+  description = "Extension Version"
+}
+
+variable "function_app_settings" {
+  description = "App application settings"
+  type        = map(any)
+  default     = {}
+}
+
+variable "identity_type" {
+  description = "The Managed Service Identity Type of this Virtual Machine."
+  type        = string
+  default     = ""
+}
+
+#---------------------------------------------------------------------------------------------
+# 4.6-FunctionAppFlexConsumption
+#---------------------------------------------------------------------------------------------
+
+variable "function_app_flex_name" {
+  type        = string
+  description = "Function app name"
+}
+
+variable "function_app_flex_storage_account_name" {
+  type        = string
+  description = "Extension Version"
+}
+
+variable "function_app_flex_account_tier" {
+  description = "Storage account tier name"
+  type        = string
+}
+
+variable "function_app_flex_account_replication_type" {
+  description = "Storage account replication type"
+  type        = string
+}
+
+variable "function_app_flex_service_plan_name" {
+  type        = string
+  description = "Extension Version"
+}
+
+variable "function_app_flex_app_settings" {
+  description = "App application settings"
+  type        = map(any)
+  default     = {}
+}
+
+variable "function_app_flex_runtime_name" {
+  description = "The name of the language worker runtime."
+  type        = string
+}
+
+variable "function_app_flex_runtime_version" {
+  description = "The version of the language worker runtime."
+  type        = string
+}
+
+variable "function_app_flex_sku_name" {
+  description = "Function sku name"
+  type        = string
+}
+
+variable "function_app_flex_os_type" {
+  description = "Function os type"
+  type        = string
+}
+
+variable "function_app_flex_container_access_type" {
+  description = "Function containrer access type"
+  type        = string
+}
+
+variable "function_app_flex_storage_container_name" {
+  description = "storage container name"
+  type        = string
+}
+
+variable "function_app_flex_identity_type" {
+  description = "The Managed Service Identity Type of this Virtual Machine."
+  type        = string
+  default     = ""
+}
+
+#-----------------------------------------------------------------------------------------------
+# 5.1-StorageAccountWebSite
+#-----------------------------------------------------------------------------------------------
 
 variable "storage_account_web_name" {
   type = string
@@ -167,15 +514,18 @@ variable "storage_account_error_404_document" {
   type    = string
   default = "404.html"
 }
+
 #----------------------------------------------------------------------------------------------
-# 05.2-StorageAccount
+# 5.2-StorageAccount
+#----------------------------------------------------------------------------------------------
 
 variable "storage_account_name" {
   type = string
 }
 
 #-----------------------------------------------------------------------------------------------
-# 08-PostgresSQLFlexible
+# 6.1-PostgresSQLFlexible
+#-----------------------------------------------------------------------------------------------
 
 variable "postgresql_flexible_server_name" {
   description = "A name which will be pre-pended to the resources created"
@@ -303,8 +653,102 @@ variable "create_key_secret" {
   }))
   default = {}
 }
+
+#-----------------------------------------------------------------------------------------------
+# 6.2-CosmosDB
+#-----------------------------------------------------------------------------------------------
+
+variable "cosmosdb_account_name" {
+  description = "Cosmos DB account name"
+  type        = string
+}
+
+variable "database_name" {
+  description = "Cosmos DB SQL database name"
+  type        = string
+}
+
+variable "consistency_level" {
+  description = "Consistency level"
+  type        = string
+  default     = "Session"
+}
+
+variable "max_interval_in_seconds" {
+  description = "Max interval for bounded staleness"
+  type        = number
+  default     = 5
+}
+
+variable "max_staleness_prefix" {
+  description = "Max staleness prefix"
+  type        = number
+  default     = 100
+}
+
+variable "capabilities" {
+  description = "Cosmos DB capabilities"
+  type        = list(string)
+  default     = []
+}
+
+variable "enable_automatic_failover" {
+  description = "Enable automatic failover"
+  type        = bool
+  default     = false
+}
+
+#-----------------------------------------------------------------------------------------------
+# 7.1.1-PrivateDNSZone
+#-----------------------------------------------------------------------------------------------
+
+variable "private_dns_zone_name" {
+  description = "Name of the private DNS zone"
+  type        = string
+}
+
+variable "virtual_network_link_name" {
+  description = "Name for the virtual network link"
+  type        = string
+}
+
 #-----------------------------------------------------------------------------------------
-# 09.1-PrivateEndPointPostgresSQLFlexible
+# 7.1.2-PrivateDNSZoneStorageAccount
+#-----------------------------------------------------------------------------------------
+
+variable "storage_account_private_dns_zone_name" {
+  description = "Name of the private DNS zone"
+  type        = string
+}
+
+variable "storage_account_virtual_network_link_name" {
+  description = "Name for the virtual network link"
+  type        = string
+}
+
+#-----------------------------------------------------------------------------------------------
+# 7.2-DNSZone
+#-----------------------------------------------------------------------------------------------
+
+variable "dns_zone_name" {
+  description = "The name of the DNS zone."
+  type        = string
+}
+
+variable "cname_records" {
+  type        = map(string)
+  description = "Map of CNAME records: key = record name, value = target"
+}
+
+variable "txt_records" {
+  type        = map(string)
+  description = "TXT records: key = record name, value = TXT value"
+  default     = {}
+}
+
+#-----------------------------------------------------------------------------------------------
+# 8.1-PrivateEndPointPostgresSQLFlexible
+#-----------------------------------------------------------------------------------------------
 
 variable "private_endpoint_name" {
   description = "The name of the private endpoint"
@@ -332,7 +776,8 @@ variable "private_dns_zone_group_name" {
 }
 
 #----------------------------------------------------------------------------------------
-#09.2-PrivateEndPointStorageAccount
+# 8.2-PrivateEndPointStorageAccount
+#----------------------------------------------------------------------------------------
 
 variable "storage_account_private_endpoint_name" {
   description = "The name of the private endpoint"
@@ -359,34 +804,9 @@ variable "storage_account_private_dns_zone_group_name" {
   type        = string
 }
 
-#----------------------------------------------------------------------------------------
-# 10.1-PrivateDNSZone
-
-variable "private_dns_zone_name" {
-  description = "Name of the private DNS zone"
-  type        = string
-}
-
-variable "virtual_network_link_name" {
-  description = "Name for the virtual network link"
-  type        = string
-}
-
 #-----------------------------------------------------------------------------------------
-# 10.2-PrivateDNSZoneStorageAccount
-
-variable "storage_account_private_dns_zone_name" {
-  description = "Name of the private DNS zone"
-  type        = string
-}
-
-variable "storage_account_virtual_network_link_name" {
-  description = "Name for the virtual network link"
-  type        = string
-}
-
+# 9-RedisCache
 #-----------------------------------------------------------------------------------------
-# 11-RedisCache
 
 variable "cache_name" {
   description = "The name of the Redis cache instance"
@@ -496,7 +916,8 @@ variable "redis_firewall_rule" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 12-KeyVault
+# 10-KeyVault
+#-----------------------------------------------------------------------------------------------
 
 variable "key_vault_name" {
   type        = string
@@ -532,161 +953,9 @@ variable "key_vault_secrets" {
   type = map(string)
 }
 
-#-----------------------------------------------------------------------------------------
-# 13-CosmosDB
-
-variable "cosmosdb_account_name" {
-  description = "Cosmos DB account name"
-  type        = string
-}
-
-variable "database_name" {
-  description = "Cosmos DB SQL database name"
-  type        = string
-}
-
-variable "consistency_level" {
-  description = "Consistency level"
-  type        = string
-  default     = "Session"
-}
-
-variable "max_interval_in_seconds" {
-  description = "Max interval for bounded staleness"
-  type        = number
-  default     = 5
-}
-
-variable "max_staleness_prefix" {
-  description = "Max staleness prefix"
-  type        = number
-  default     = 100
-}
-
-variable "capabilities" {
-  description = "Cosmos DB capabilities"
-  type        = list(string)
-  default     = []
-}
-
-variable "enable_automatic_failover" {
-  description = "Enable automatic failover"
-  type        = bool
-  default     = false
-}
 #-----------------------------------------------------------------------------------------------
-# 14-FunctionApp
-
-variable "function_app_name" {
-  type        = string
-  description = "Function app name"
-}
-
-variable "dotnet_version" {
-  type = string
-}
-
-variable "run_from_package" {
-  type = string
-}
-
-variable "worker_runtime" {
-  type = string
-
-}
-
-variable "function_app_node_version" {
-  type = string
-}
-
-variable "function_app_extension_version" {
-  type        = string
-  description = "Extension Version"
-}
-
-variable "function_app_settings" {
-  description = "App application settings"
-  type        = map(any)
-  default     = {}
-}
-
-variable "identity_type" {
-  description = "The Managed Service Identity Type of this Virtual Machine."
-  type        = string
-  default     = ""
-}
-#---------------------------------------------------------------------------------------------
-# # 14-FunctionAppFlexConsumption
-
-variable "function_app_flex_name" {
-  type        = string
-  description = "Function app name"
-}
-
-variable "function_app_flex_storage_account_name" {
-  type        = string
-  description = "Extension Version"
-}
-
-variable "function_app_flex_account_tier" {
-  description = "Storage account tier name"
-  type        = string
-}
-
-variable "function_app_flex_account_replication_type" {
-  description = "Storage account replication type"
-  type        = string
-}
-
-variable "function_app_flex_service_plan_name" {
-  type        = string
-  description = "Extension Version"
-}
-
-variable "function_app_flex_app_settings" {
-  description = "App application settings"
-  type        = map(any)
-  default     = {}
-}
-
-variable "function_app_flex_runtime_name" {
-  description = "The name of the language worker runtime."
-  type        = string
-}
-
-variable "function_app_flex_runtime_version" {
-  description = "The version of the language worker runtime."
-  type        = string
-}
-
-variable "function_app_flex_sku_name" {
-  description = "Function sku name"
-  type        = string
-}
-
-variable "function_app_flex_os_type" {
-  description = "Function os type"
-  type        = string
-}
-
-variable "function_app_flex_container_access_type" {
-  description = "Function containrer access type"
-  type        = string
-}
-
-variable "function_app_flex_storage_container_name" {
-  description = "storage container name"
-  type        = string
-}
-
-variable "function_app_flex_identity_type" {
-  description = "The Managed Service Identity Type of this Virtual Machine."
-  type        = string
-  default     = ""
-}
-
-#---------------------------------------------------------------------------------------------
-# 15-CommunicationServices
+# 11-CommunicationServices
+#-----------------------------------------------------------------------------------------------
 
 variable "communication_service_name" {
   description = "The name of the Azure Communication Service."
@@ -714,8 +983,40 @@ variable "enable_user_engagement_tracking" {
   default     = false
 }
 
+#-------------------------------------------------------------------------------------------------
+# 13.1 ServiceBus
+#-------------------------------------------------------------------------------------------------
+
+variable "servicebus_namespace_name" {
+  type        = string
+  description = "Name of the Service Bus namespace."
+}
+
+variable "servicebus_sku" {
+  type        = string
+  default     = "Standard"
+  description = "Service Bus namespace SKU."
+}
+
+variable "servicebus_capacity" {
+  type        = number
+  default     = 1
+  description = "Capacity, required for Premium SKU."
+}
+
+variable "servicebus_topic_name" {
+  type        = string
+  description = "Name of the Service Bus topic."
+}
+
+variable "servicebus_queue_name" {
+  type        = string
+  description = "Name of the Service Bus queue."
+}
+
 #-----------------------------------------------------------------------------------------------
-# 16-FrontDoor
+# 15.1-FrontDoor
+#-----------------------------------------------------------------------------------------------
 
 variable "front_door_sku_name" {
   description = "Azure SKU"
@@ -797,277 +1098,4 @@ variable "custome_domain_backend_name" {
   type        = string
 }
 
-#-----------------------------------------------------------------------------------------------
-# 17-VirtualMachine
-
-# Public IP Variables
-variable "virtual_machine_public_ip_name" {
-  description = "The name of the public IP resource"
-  type        = string
-}
-
-variable "virtual_machine_public_ip_allocation_method" {
-  description = "The name of the public IP resource"
-  type        = string
-}
-
-# Network Interface Variables
-variable "network_interface_name" {
-  description = "The name of the network interface"
-  type        = string
-}
-
-variable "private_ip_address_name" {
-  description = "The static private IP address for the VM"
-  type        = string
-}
-
-variable "private_ip_address" {
-  description = "The static private IP address for the VM"
-  type        = string
-}
-
-variable "private_ip_address_allocation" {
-  description = "The static private IP address for the VM"
-  type        = string
-}
-
-# Virtual Machine Variables
-variable "virtual_machine_name" {
-  description = "The name of the virtual machine"
-  type        = string
-
-}
-
-variable "virtual_machine_size" {
-  description = "The size of the virtual machine"
-  type        = string
-}
-
-variable "admin_username" {
-  description = "Admin username for the virtual machine"
-  type        = string
-}
-
-variable "admin_password" {
-  description = "Admin password for the virtual machine"
-  type        = string
-  sensitive   = true
-}
-
-# OS Disk Variables
-variable "os_disk_caching" {
-  description = "Specifies the caching requirements for the OS disk"
-  type        = string
-}
-
-variable "os_disk_storage_account_type" {
-  description = "The type of storage account to use for the OS disk"
-  type        = string
-}
-
-# Image Reference Variables
-variable "virtual_machine_image_publisher" {
-  description = "Publisher of the OS image"
-  type        = string
-}
-
-variable "virtual_machine_image_offer" {
-  description = "Offer of the OS image"
-  type        = string
-}
-
-variable "virtual_machine_image_sku" {
-  description = "SKU of the OS image"
-  type        = string
-}
-
-variable "virtual_machine_image_version" {
-  description = "Version of the OS image"
-  type        = string
-}
-
-#-----------------------------------------------------------------------------------------------
-# 18-ContainerRegistry
-
-variable "container_registry_name" {
-  description = "Name of the Azure Container Registry (lowercase letters and numbers only)"
-  type        = string
-}
-
-variable "container_registry_sku" {
-  description = "SKU of the container registry (Basic, Standard, Premium)"
-  type        = string
-}
-
-variable "admin_enabled" {
-  description = "Enable admin user for ACR"
-  type        = bool
-  default     = true
-}
-
-variable "public_network_access_enabled" {
-  description = "Enable public network access"
-  type        = bool
-  default     = true
-}
-
-variable "quarantine_policy_enabled" {
-  description = "Enable quarantine policy"
-  type        = bool
-  default     = true
-}
-
-variable "zone_redundancy_enabled" {
-  description = "Enable zone redundancy"
-  type        = bool
-  default     = true
-}
-
-#------------------------------------------------------------------------------------------------
-# 19-DNSZone
-
-variable "dns_zone_name" {
-  description = "The name of the DNS zone."
-  type        = string
-}
-
-variable "cname_records" {
-  type        = map(string)
-  description = "Map of CNAME records: key = record name, value = target"
-}
-
-variable "txt_records" {
-  type        = map(string)
-  description = "TXT records: key = record name, value = TXT value"
-  default     = {}
-}
-
-#-----------------------------------------------------------------------------------------------
-# 20-VirtualNetworkGateway
-
-variable "virtual_network_gateway_name" {
-  description = "Name of the virtual network gateway"
-  type        = string
-
-}
-
-variable "gateway_type" {
-  description = "Gateway type"
-  type        = string
-
-}
-
-variable "vpn_type" {
-  description = "VPN type"
-  type        = string
-
-}
-
-variable "active_active" {
-  description = "Active-active mode"
-  type        = bool
-
-}
-
-variable "virtual_network_gateway_sku" {
-  description = "Gateway SKU"
-  type        = string
-
-}
-
-variable "virtual_network_gateway_public_ip_name" {
-  description = "The name of the public IP resource"
-  type        = string
-}
-
-variable "virtual_network_gateway_public_ip_allocation_method" {
-  description = "Gateway SKU"
-  type        = string
-
-}
-
-#------------------------------------------------------------------------------------------------
-# 04.4-StaticWebApp
-
-variable "static_webapp_name" {
-  description = "The name of the static web app."
-  type        = string
-}
-
-variable "static_webapp_location" {
-  description = "Path to your application code relative to the repository root."
-  type        = string
-
-}
-
-variable "static_webapp_api_location" {
-  description = "Path to your Azure Functions API code."
-  type        = string
-  default     = ""
-}
-
-variable "static_webapp_sku_tier" {
-  description = "The SKU tier (e.g., Free, Standard)."
-  type        = string
-
-}
-
-variable "static_webapp_sku_size" {
-  description = "The SKU size."
-  type        = string
-
-}
-
-variable "static_webapp_output_location" {
-  description = "Build output folder relative to app_location."
-  type        = string
-  default     = "build"
-}
-
-variable "static_webapp_repository_url" {
-  type        = string
-  description = "Repository URL for Static Web App"
-}
-
-variable "static_webapp_repository_branch" {
-  type        = string
-  description = "Branch name for Static Web App"
-}
-
-variable "static_webapp_repository_token" {
-  type      = string
-  sensitive = true
-}
-
-#-----------------------------------------------------------------------------------------------
-# 13.1 ServiceBus
-
-variable "servicebus_namespace_name" {
-  type        = string
-  description = "Name of the Service Bus namespace."
-}
-
-variable "servicebus_sku" {
-  type        = string
-  default     = "Standard"
-  description = "Service Bus namespace SKU."
-}
-
-variable "servicebus_capacity" {
-  type        = number
-  default     = 1
-  description = "Capacity, required for Premium SKU."
-}
-
-variable "servicebus_topic_name" {
-  type        = string
-  description = "Name of the Service Bus topic."
-}
-
-variable "servicebus_queue_name" {
-  type        = string
-  description = "Name of the Service Bus queue."
-}
-
-#------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------

@@ -14,7 +14,7 @@ crash.log
 crash.*.log
 
 # Sensitive variable overrides
-*.tfvars
+
 *.auto.tfvars
 *.tfvars.json
 

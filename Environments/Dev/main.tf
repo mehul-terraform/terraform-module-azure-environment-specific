@@ -37,7 +37,7 @@ module "network_security_group" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04-AppServicePlan
+# 04.01-AppServicePlan
 
 module "service_plan" {
   source              = "../../Modules/04-Web/01-AppServicePlan"
@@ -50,7 +50,7 @@ module "service_plan" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 05-AppService
+# 04.02-AppService
 
 module "app_service" {
   source = "../../Modules/04-Web/02-AppService"
@@ -69,7 +69,7 @@ module "app_service" {
 #}
 
 #---------------------------------------------------------------------------------------------------
-# 06-AppServiceContainer
+# 04.03-AppServiceContainer
 
 module "app_service_container" {
   source = "../../Modules/04-Web/03-AppServiceContainer"
@@ -83,7 +83,7 @@ module "app_service_container" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 07-StorageAccountStaticWebSite
+# 05.01-StorageAccountStaticWebSite
 
 module "storage_account_website" {
   source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
@@ -98,7 +98,7 @@ module "storage_account_website" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 05.1-StorageAccount
+# 05.02-StorageAccount
 
 module "storage_account" {
   source                   = "../../Modules/05-Storage/02-StorageAccount"
@@ -111,7 +111,7 @@ module "storage_account" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 08-PostgresSQLFlexible
+# 06.01-PostgresSQLFlexible
 
 module "postgre_sql" {
   source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
@@ -127,7 +127,7 @@ module "postgre_sql" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 09.1-PrivateEndPoint (PostgresSQLFelxible) 
+# 8.1-PrivateEndPoint (PostgresSQLFelxible) 
 
 module "private_endpoint_postgres_flexible" {
   source                          = "../../Modules/08-PrivateEndPoint/8.1-PostgresSQLFlexible"
@@ -146,7 +146,7 @@ module "private_endpoint_postgres_flexible" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 09.1-PrivateEndPoint (StorageAccount) 
+# 8.2-PrivateEndPoint (StorageAccount) 
 
 module "private_endpoint_storage_account" {
   source                          = "../../Modules/08-PrivateEndPoint/8.2-StorageAccount"
@@ -165,7 +165,7 @@ module "private_endpoint_storage_account" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 10-PrivateDNSZonePostgresSQLFlexible
+# 7.1.1-PrivateDNSZonePostgresSQLFlexible
 
 module "private_dns_zone" {
   source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.1-PrivateDNSZonePostgresSQLFlexible"
@@ -178,7 +178,7 @@ module "private_dns_zone" {
 }
 
 #-------------------------------------------------------------------------------------------------
-# 10-PrivateDNSZoneStorageAccount
+# 7.1.2-PrivateDNSZoneStorageAccount
 
 module "private_dns_zone_storage_account" {
   source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.2-PrivateDNSZoneStorageAccount"
@@ -191,7 +191,7 @@ module "private_dns_zone_storage_account" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 11-CacheRedis
+# 09-CacheRedis
 /*
 module "redis" {
   source                        = "../../Modules/09-CacheRedis"
@@ -210,7 +210,7 @@ module "redis" {
 }
 */
 #--------------------------------------------------------------------------------------------
-# 12-KeyVault
+# 10-KeyVault
 /*
 module "keyvault" {
   source                     = "../../Modules/10-KeyVault"
@@ -227,7 +227,7 @@ module "keyvault" {
 }
 */
 #---------------------------------------------------------------------------------------------
-# 13-CosmosDB
+# 6.2-CosmosDB
 /*
 module "cosmosdb" {
   source                    = "../../Modules/06-Database/02-CosmosDB"
@@ -244,7 +244,7 @@ module "cosmosdb" {
 }
 */
 #--------------------------------------------------------------------------------------------------
-# 14-FunctionsApp
+# 05-FunctionsApp
 /*
 module "function_app" {
   source              = "../../Modules/04-Web/05-Functionsapp"
@@ -273,7 +273,7 @@ module "function_app" {
 #}
 
 #--------------------------------------------------------------------------------------------------
-# 14-FunctionsAppFlexConsumption
+# 06-FunctionsAppFlexConsumption
 /*
 module "function_app_flex" {
   source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
@@ -302,7 +302,7 @@ module "function_app_flex" {
 #}
 */
 #--------------------------------------------------------------------------------------------------
-# 15-CommunicationsService
+# 11-CommunicationsService
 /*
 module "communication_services" {
   source                          = "../../Modules/11-CommunicationServices"
@@ -316,8 +316,8 @@ module "communication_services" {
 }
 */
 #--------------------------------------------------------------------------------------------------
-# 16-FrontDoorStandard
-/*
+# 15.1-FrontDoorStandard
+
 module "azure_front_door" {
   source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
   front_door_name     = var.front_door_name
@@ -338,8 +338,9 @@ module "azure_front_door" {
   #  replace(module.storage_account_website.static_website_url, "https://", ""),
   #  "/", ""
   #)
-  origin_host_frontend_name = module.app_service.app_service_default_hostnames["frontend"]
-  origin_host_backend_name = module.app_service.app_service_default_hostnames["backend"]
+  origin_host_frontend_name = module.static_web_app.static_site_url
+  #origin_host_frontend_name = module.app_service_container.default_hostnames["frontend"]
+  origin_host_backend_name = module.app_service_container.default_hostnames["backend"]
 
   custome_domain_frontend_name = var.custome_domain_frontend_name
   custome_domain_backend_name  = var.custome_domain_backend_name
@@ -352,9 +353,9 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------------------
-# 17-VirtualMachine
+# 3.1-VirtualMachine
 
 module "virtual_machine" {
   source                          = "../../Modules/03-Compute/01-VirtualMachine"
@@ -381,7 +382,7 @@ module "virtual_machine" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 18-ContainerRegistry
+# 3.2-ContainerRegistry
 
 module "container_registry" {
   source                        = "../../Modules/03-Compute/02-ContainerRegistry"
@@ -397,10 +398,10 @@ module "container_registry" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 20-VirtualNetworkGateway
+# 3.3-VirtualNetworkGateway
 /*
 module "virtual_network_gateway" {
-  source                       = "../../Modules/02-Networking/07-VirtualNetworkGateway"
+  source                       = "../../Modules/02-Networking/03-VirtualNetworkGateway"
   resource_group_name          = module.resource_group.name
   location                     = module.resource_group.location
   virtual_network_gateway_name = var.virtual_network_gateway_name
@@ -416,7 +417,7 @@ module "virtual_network_gateway" {
 }
 */
 #--------------------------------------------------------------------------------------------------
-# 19-DNSZone
+# 7.2-DNSZone
 /*
 module "example_dns_zone" {
   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
@@ -441,26 +442,26 @@ module "example_dns_zone" {
 }
 */
 #---------------------------------------------------------------------------------------------------
-# 20-StaticWebApp
-/*
+# 04-StaticWebApp
+
 module "static_web_app" {
-  source              = "../../Modules/04-Web/04-StaticWebApp"
-  static_webapp_name  = var.static_webapp_name
-  resource_group_name = module.resource_group.name
+  source                 = "../../Modules/04-Web/04-StaticWebApp"
+  static_webapp_name     = var.static_webapp_name
+  resource_group_name    = module.resource_group.name
   static_webapp_location = var.static_webapp_location
-  sku_tier            = var.static_webapp_sku_tier
-  sku_size            = var.static_webapp_sku_size
-  app_location        = var.static_webapp_location
-  api_location        = var.static_webapp_api_location
-  output_location     = var.static_webapp_output_location
-  repository_url      = var.static_webapp_repository_url
-  repository_branch   = var.static_webapp_repository_branch
-  repository_token    = var.static_webapp_repository_token
-  tags                = var.tags
+  sku_tier               = var.static_webapp_sku_tier
+  sku_size               = var.static_webapp_sku_size
+  app_location           = var.static_webapp_location
+  api_location           = var.static_webapp_api_location
+  output_location        = var.static_webapp_output_location
+  repository_url         = var.static_webapp_repository_url
+  repository_branch      = var.static_webapp_repository_branch
+  repository_token       = var.static_webapp_repository_token
+  tags                   = var.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
-# 21-ServiceBus
+# 13.1-ServiceBus
 /*
 module "servicebus" {
   source              = "../../Modules/13-Integration/01-ServiceBus"
