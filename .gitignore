@@ -46,9 +46,6 @@ Environments/Dev/provider.tf
 Environments/Dev/**/provider.tf
 Environments/UAT/**/provider.tf
 # Ignore provider files inside each environment folder
-Environments/*/**/provider*.tf
-Environments/*/**/provider*.tf
-
 
 
 # -------------------------------------------------------------------------
