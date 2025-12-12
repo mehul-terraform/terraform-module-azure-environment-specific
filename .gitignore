@@ -1,0 +1,71 @@
+# -------------------------------------------------------------------------
+# Terraform
+# -------------------------------------------------------------------------
+
+# Local .terraform directory
+.terraform/
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Sensitive variable overrides
+*.tfvars
+*.auto.tfvars
+*.tfvars.json
+
+# Terraform plan output
+*.tfplan
+
+# Provider-specific lock file
+.terraform.lock.hcl
+
+# Module directories (if generated locally)
+**/terraform.tfstate
+**/terraform.tfstate.*
+
+# Backup files
+*.backup
+*.bak
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore provider configuration files
+provider.tf
+providers.tf
+Environments/Dev/provider.tf
+
+Environments/Dev/**/provider.tf
+Environments/UAT/**/provider.tf
+# Ignore provider files inside each environment folder
+Environments/*/**/provider*.tf
+Environments/*/**/provider*.tf
+
+
+
+# -------------------------------------------------------------------------
+# IDE / Editor files
+# -------------------------------------------------------------------------
+
+# VSCode
+.vscode/
+.vscode/*
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+
+# Mac / Windows OS
+.DS_Store
+Thumbs.db
+
+# Python virtual env (if used for scripts)
+venv/
