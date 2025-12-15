@@ -84,7 +84,7 @@ module "app_service_container" {
 
 #--------------------------------------------------------------------------------------------------
 # 05.01-StorageAccountStaticWebSite
-
+/*
 module "storage_account_website" {
   source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
   resource_group_name                = module.resource_group.name
@@ -96,10 +96,10 @@ module "storage_account_website" {
   storage_account_error_404_document = var.storage_account_error_404_document
   tags                               = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 05.02-StorageAccount
-
+/*
 module "storage_account" {
   source                   = "../../Modules/05-Storage/02-StorageAccount"
   resource_group_name      = module.resource_group.name
@@ -109,10 +109,10 @@ module "storage_account" {
   account_replication_type = var.account_replication_type
   tags                     = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 06.01-PostgresSQLFlexible
-
+/*
 module "postgre_sql" {
   source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
   resource_group_name             = module.resource_group.name
@@ -125,10 +125,10 @@ module "postgre_sql" {
   postgre_administrator_password  = var.postgre_administrator_password
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 8.1-PrivateEndPoint (PostgresSQLFelxible) 
-
+/*
 module "private_endpoint_postgres_flexible" {
   source                          = "../../Modules/08-PrivateEndPoint/8.1-PostgresSQLFlexible"
   private_endpoint_name           = var.private_endpoint_name
@@ -144,10 +144,10 @@ module "private_endpoint_postgres_flexible" {
   subresource_names               = var.subresource_names
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 8.2-PrivateEndPoint (StorageAccount) 
-
+/*
 module "private_endpoint_storage_account" {
   source                          = "../../Modules/08-PrivateEndPoint/8.2-StorageAccount"
   private_endpoint_name           = var.storage_account_private_endpoint_name
@@ -163,10 +163,10 @@ module "private_endpoint_storage_account" {
   subresource_names               = var.storage_account_subresource_names
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 7.1.1-PrivateDNSZonePostgresSQLFlexible
-
+/*
 module "private_dns_zone" {
   source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.1-PrivateDNSZonePostgresSQLFlexible"
   private_dns_zone_name     = var.private_dns_zone_group_name
@@ -176,10 +176,10 @@ module "private_dns_zone" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
-
+*/
 #-------------------------------------------------------------------------------------------------
 # 7.1.2-PrivateDNSZoneStorageAccount
-
+/*
 module "private_dns_zone_storage_account" {
   source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.2-PrivateDNSZoneStorageAccount"
   private_dns_zone_name     = var.storage_account_private_dns_zone_group_name
@@ -189,7 +189,7 @@ module "private_dns_zone_storage_account" {
   virtual_network_id        = module.virtual_network.id
   tags                      = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 09-CacheRedis
 /*
@@ -317,7 +317,7 @@ module "communication_services" {
 */
 #--------------------------------------------------------------------------------------------------
 # 15.1-FrontDoorStandard
-
+/*
 module "azure_front_door" {
   source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
   front_door_name     = var.front_door_name
@@ -353,10 +353,10 @@ module "azure_front_door" {
 
   tags = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------------------
 # 3.1-VirtualMachine
-
+/*
 module "virtual_machine" {
   source                          = "../../Modules/03-Compute/01-VirtualMachine"
   resource_group_name             = module.resource_group.name
@@ -380,10 +380,10 @@ module "virtual_machine" {
   virtual_machine_image_version   = var.virtual_machine_image_version
   tags                            = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 3.2-ContainerRegistry
-
+/*
 module "container_registry" {
   source                        = "../../Modules/03-Compute/02-ContainerRegistry"
   container_registry_name       = var.container_registry_name
@@ -396,7 +396,7 @@ module "container_registry" {
   zone_redundancy_enabled       = var.zone_redundancy_enabled
   tags                          = local.tags
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 3.3-VirtualNetworkGateway
 /*
@@ -443,7 +443,7 @@ module "example_dns_zone" {
 */
 #---------------------------------------------------------------------------------------------------
 # 04-StaticWebApp
-
+/*
 module "static_web_app" {
   source                 = "../../Modules/04-Web/04-StaticWebApp"
   static_webapp_name     = var.static_webapp_name
@@ -459,7 +459,7 @@ module "static_web_app" {
   repository_token       = var.static_webapp_repository_token
   tags                   = var.tags
 }
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 13.1-ServiceBus
 /*

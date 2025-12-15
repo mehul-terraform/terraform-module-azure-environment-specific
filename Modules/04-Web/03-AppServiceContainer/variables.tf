@@ -23,7 +23,7 @@ variable "app_service_container" {
   type = map(object({
     app_service_container_name = string
     docker_image_name          = string
-    app_settings      = map(string)
+    app_settings               = map(string)
     tags                       = map(string)
   }))
 }
