@@ -48,7 +48,7 @@ subnets = [
     }
   },
    {
-    name           = "Firewall"
+    name           = "firewall"
     address_prefix = "10.250.254.0/24"
   },
   {
