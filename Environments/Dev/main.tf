@@ -477,7 +477,7 @@ module "servicebus" {
 */
 #---------------------------------------------------------------------------------------------------
 # 16-AppCOnfiguration
-
+/*
 module "app_configurations" {
   source   = "../../Modules/16-AppConfiguration"
   for_each = var.app_configurations
@@ -489,5 +489,6 @@ module "app_configurations" {
 
   key_values = lookup(each.value, "key_values", {})
 }
-
+*/
+#--------------------------------------------------------------------------------------------------
 
