@@ -47,6 +47,10 @@ subnets = [
       }
     }
   },
+   {
+    name           = "Firewall"
+    address_prefix = "10.250.254.0/24"
+  },
   {
     name           = "GatewaySubnet"
     address_prefix = "10.250.255.0/24"
@@ -459,5 +463,32 @@ host_custome_domain_backend_name  = "api-dev.myexample.co.in"
 
 route_frontend_name = "myexample-dev-frontend-route"
 route_backend_name  = "myexample-dev-backend-route"
+
+#----------------------------------------------------------------------------------------------
+# 16-AppConfiguration
+#----------------------------------------------------------------------------------------------
+
+app_configurations = {
+  backend = {
+    name = "myexample-dev-appconfig-backend"
+
+    key_values = {
+      "Jwt:Issuer" = {
+        value = "auth-api"
+        label = "dev"
+      }
+    }
+  }
+
+  frontend = {
+    name = "myexample-dev-appconfig-frontend"
+
+    key_values = {
+      "Api:BaseUrl" = {
+        value = "https://api.myexample.com"
+      }
+    }
+  }
+}
 
 #----------------------------------------------------------------------------------------------

@@ -476,4 +476,18 @@ module "servicebus" {
 }
 */
 #---------------------------------------------------------------------------------------------------
+# 16-AppCOnfiguration
+
+module "app_configurations" {
+  source   = "../../Modules/16-AppConfiguration"
+  for_each = var.app_configurations
+
+  name                = each.value.name
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+  tags                = var.tags
+
+  key_values = lookup(each.value, "key_values", {})
+}
+
 

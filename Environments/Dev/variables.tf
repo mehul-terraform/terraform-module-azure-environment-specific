@@ -1099,3 +1099,31 @@ variable "custome_domain_backend_name" {
 }
 
 #----------------------------------------------------------------------------------------------
+# 16-AppConfiguration
+#----------------------------------------------------------------------------------------------
+
+variable "app_configurations" {
+  type = map(object({
+    name = string
+    key_values = optional(map(object({
+      value = string
+      label = optional(string)
+    })), {})
+  }))
+}
+
+#----------------------------------------------------------------------------------------------
+
+variable "projectname" {
+  description = "Project name prefix"
+  type        = string
+  default     = "myexample"
+}
+
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+  default     = "development"
+}
+
+#------------------------------------------------------------------------------------------------------
