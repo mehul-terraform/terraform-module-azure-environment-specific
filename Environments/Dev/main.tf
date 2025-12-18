@@ -51,7 +51,7 @@ module "service_plan" {
 
 #--------------------------------------------------------------------------------------------------
 # 04.02-AppService
-
+/*
 module "app_service" {
   source = "../../Modules/04-Web/02-AppService"
 
@@ -67,7 +67,7 @@ module "app_service" {
 #  app_service_id = module.app_service.id
 #  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
 #}
-
+*/
 #---------------------------------------------------------------------------------------------------
 # 04.03-AppServiceContainer
 
