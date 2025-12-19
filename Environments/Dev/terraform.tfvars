@@ -47,7 +47,7 @@ subnets = [
       }
     }
   },
-   {
+  {
     name           = "firewall"
     address_prefix = "10.250.254.0/24"
   },
@@ -210,7 +210,7 @@ app_service = {
 #-----------------------------------------------------------------------------------------------
 
 app_service_container = {
-  frontend = {
+  frontend-container = {
     app_service_container_name = "myexample-dev-container-frontend"
     docker_image_name          = "nginx:alpine"
     app_settings = {
@@ -229,7 +229,7 @@ app_service_container = {
     }
   }
 
-  backend = {
+  backend-container = {
     app_service_container_name = "myexample-dev-container-backend"
     docker_image_name          = "nginx:alpine"
     app_settings = {
@@ -350,38 +350,57 @@ cname_records = null
 txt_records   = null
 
 #-----------------------------------------------------------------------------------------------  
-# 8.1-PrivateDNSZonePostgresSQLFlexible
+# 7.1.1-PrivateDNSZone (PostgresSQLFlexible)
 #-----------------------------------------------------------------------------------------------
 
-private_dns_zone_name     = "privatelink.postgres.database.azure.com"
-virtual_network_link_name = "myexample-dev-psdb-vnet-link"
+private_dns_zones = {
+  webapp = {
+    name = "privatelink.azurewebsites.net"
+  }
+
+  blob = {
+    name = "privatelink.blob.core.windows.net"
+  }
+
+  postgres = {
+    name = "privatelink.postgres.database.azure.com"
+  }
+}
+
 
 #-----------------------------------------------------------------------------------------------
-# 8.1-PrivateEndpointPostgresSQLFlexible
+# 8-PrivateEndpoint
 #-----------------------------------------------------------------------------------------------
 
-private_endpoint_name           = "myexample-dev-db-pg-pep"
-private_dns_zone_group_name     = "privatelink.postgres.database.azure.com"
-private_service_connection_name = "myexample-dev-db-pg-connection"
-is_manual_connection            = false
-subresource_names               = ["postgresqlServer"]
+private_endpoints = {
 
-#-----------------------------------------------------------------------------------------------
-# 8.2-PrivateDNSZoneStorageAccount
-#-----------------------------------------------------------------------------------------------
+  frontend_app = {
+    name                            = "pe-frontend"
+    subnet_key                      = "pe"
+    service_key                     = "frontend"
+    subresource_names               = ["sites"]
+    private_service_connection_name = "psc-frontend"
+    private_dns_zone_key            = "webapp"
+  }
 
-storage_account_private_dns_zone_name     = "privatelink.blob.core.windows.net"
-storage_account_virtual_network_link_name = "myexample-dev-storage-vnet-link"
+  backend_app = {
+    name                            = "pe-backend"
+    subnet_key                      = "pe"
+    service_key                     = "backend"
+    subresource_names               = ["sites"]
+    private_service_connection_name = "psc-backend"
+    private_dns_zone_key            = "webapp"
+  }
 
-#-----------------------------------------------------------------------------------------------
-# 8.2-PrivateEndpointStorageAccount
-#-----------------------------------------------------------------------------------------------
-
-storage_account_private_endpoint_name           = "myexample-dev-storage-pep"
-storage_account_private_dns_zone_group_name     = "privatelink.blob.core.windows.net"
-storage_account_private_service_connection_name = "myexample-dev-storage-connection"
-storage_account_is_manual_connection            = false
-storage_account_subresource_names               = ["blob"]
+  postgres = {
+    name                            = "pe-postgres"
+    subnet_key                      = "pe"
+    service_key                     = "main"
+    subresource_names               = ["postgresqlServer"]
+    private_service_connection_name = "psc-postgres"
+    private_dns_zone_key            = "postgres"
+  }
+}
 
 #-----------------------------------------------------------------------------------------
 # 9-RedisCache

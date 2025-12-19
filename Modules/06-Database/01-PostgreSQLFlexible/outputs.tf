@@ -39,3 +39,15 @@ output "postgresql_flexible_configurations" {
   description = "The map of all postgresql configurations set."
   value       = azurerm_postgresql_flexible_server_configuration.postgresql_flexible_config
 }
+
+output "postgres_ids" {
+  value = {
+    main = azurerm_postgresql_flexible_server.db.id
+  }
+}
+
+output "postgres_ids" {
+  value = {
+    main = azurerm_postgresql_flexible_server.this.id
+  }
+}

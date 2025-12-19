@@ -699,31 +699,13 @@ variable "enable_automatic_failover" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 7.1.1-PrivateDNSZone
+# 7.1-PrivateDNSZone
 #-----------------------------------------------------------------------------------------------
-
-variable "private_dns_zone_name" {
-  description = "Name of the private DNS zone"
-  type        = string
-}
-
-variable "virtual_network_link_name" {
-  description = "Name for the virtual network link"
-  type        = string
-}
-
-#-----------------------------------------------------------------------------------------
-# 7.1.2-PrivateDNSZoneStorageAccount
-#-----------------------------------------------------------------------------------------
-
-variable "storage_account_private_dns_zone_name" {
-  description = "Name of the private DNS zone"
-  type        = string
-}
-
-variable "storage_account_virtual_network_link_name" {
-  description = "Name for the virtual network link"
-  type        = string
+variable "private_dns_zones" {
+  description = "Private DNS Zones to create"
+  type = map(object({
+    name = string
+  }))
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -747,61 +729,19 @@ variable "txt_records" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 8.1-PrivateEndPointPostgresSQLFlexible
+# 8.1-PrivateEndPoint
 #-----------------------------------------------------------------------------------------------
 
-variable "private_endpoint_name" {
-  description = "The name of the private endpoint"
-  type        = string
-}
-
-variable "private_service_connection_name" {
-  description = "The name for the private service connection"
-  type        = string
-}
-
-variable "is_manual_connection" {
-  description = "The ID of the subnet where the private endpoint will be deployed"
-  type        = string
-}
-
-variable "subresource_names" {
-  description = "The ID of the subnet where the private endpoint will be deployed"
-  type        = list(string)
-}
-
-variable "private_dns_zone_group_name" {
-  description = "The ID of the subnet where the private endpoint will be deployed"
-  type        = string
-}
-
-#----------------------------------------------------------------------------------------
-# 8.2-PrivateEndPointStorageAccount
-#----------------------------------------------------------------------------------------
-
-variable "storage_account_private_endpoint_name" {
-  description = "The name of the private endpoint"
-  type        = string
-}
-
-variable "storage_account_private_service_connection_name" {
-  description = "The name for the private service connection"
-  type        = string
-}
-
-variable "storage_account_is_manual_connection" {
-  description = "The ID of the subnet where the private endpoint will be deployed"
-  type        = string
-}
-
-variable "storage_account_subresource_names" {
-  description = "The ID of the subnet where the private endpoint will be deployed"
-  type        = list(string)
-}
-
-variable "storage_account_private_dns_zone_group_name" {
-  description = "The ID of the subnet where the private endpoint will be deployed"
-  type        = string
+variable "private_endpoints" {
+  description = "Private Endpoint definitions (NO Azure IDs)"
+  type = map(object({
+    name                            = string
+    subnet_key                      = string
+    service_key                     = string
+    subresource_names               = list(string)
+    private_service_connection_name = string
+    private_dns_zone_key            = string
+  }))
 }
 
 #-----------------------------------------------------------------------------------------

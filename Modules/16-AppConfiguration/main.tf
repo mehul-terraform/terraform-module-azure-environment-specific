@@ -15,7 +15,7 @@ resource "azurerm_app_configuration_key" "keys" {
   for_each = var.key_values
 
   configuration_store_id = azurerm_app_configuration.this.id
-  key   = each.key
-  value = each.value.value
-  label = lookup(each.value, "label", null)
+  key                    = each.key
+  value                  = each.value.value
+  label                  = lookup(each.value, "label", null)
 }

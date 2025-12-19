@@ -8,6 +8,14 @@ output "subnet_ids" {
   }
 }
 
+output "subnets" {
+  value = {
+    for k, v in azurerm_subnet.subnets : k => {
+      id = v.id
+    }
+  }
+}
+
 output "vm_subnets" {
   value = {
     vm = azurerm_subnet.subnets["vm"].id
