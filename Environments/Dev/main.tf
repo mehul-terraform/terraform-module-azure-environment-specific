@@ -112,7 +112,7 @@ module "storage_account" {
 */
 #--------------------------------------------------------------------------------------------------
 # 06.01-PostgresSQLFlexible
-/*
+
 module "postgre_sql" {
   source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
   resource_group_name             = module.resource_group.name
@@ -125,7 +125,7 @@ module "postgre_sql" {
   postgre_administrator_password  = var.postgre_administrator_password
   tags                            = local.tags
 }
-*/
+
 #-----------------------------------------------------------------------------------------------
 # 7.1.1-PrivateDNSZonePostgresSQLFlexible
 /*
@@ -167,24 +167,31 @@ module "private_dns_zones" {
 
 #---------------------------------------------------------------------------------------------
 # PrivateEndpoints
-/*
-module "private_endpoints" {
-  source = "../../Modules/08-PrivateEndpoints"
 
-  location            = var.location
-  resource_group_name = var.resource_group_name
+module "private_endpoints" {
+  source = "../../Modules/08-PrivateEndPoints"
 
   private_endpoints = {
-    for k, v in var.private_endpoints : k => {
-      name                            = v.name
-      subnet_id                      = module.vnet.subnets[v.subnet_key].id
-      resource_id                    = module.postgres.postgres_ids[v.service_key]
-      subresource_names              = v.subresource_names
-      private_service_connection_name = v.private_service_connection_name
+    postgres = {
+      private_endpoint_name = "myexample-postgres-pe"
+      location              = module.resource_group.location
+      resource_group_name   = module.resource_group.name
+      subnet_id             = module.virtual_network.db_subnets["db"]
+
+      private_dns_zone_group_name = "postgres"
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["postgres"]
+      ]
+
+      private_service_connection_name = "myexample-psc"
+
+      private_connection_resource_id = module.postgre_sql.postgresql_flexible_server_id
+      subresource_names              = ["postgresqlServer"]
+      is_manual_connection           = false
     }
   }
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 09-CacheRedis
 /*

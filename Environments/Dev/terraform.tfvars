@@ -1,3 +1,9 @@
+#------------------------------------------------------------------------------------
+# Project Details
+#------------------------------------------------------------------------------------
+project     = "myexample"
+environment = "dev"
+
 #-------------------------------------------------------------------------------------
 # 01-ResourceGroup
 #-------------------------------------------------------------------------------------
@@ -374,32 +380,18 @@ private_dns_zones = {
 
 private_endpoints = {
 
-  frontend_app = {
-    name                            = "pe-frontend"
-    subnet_key                      = "pe"
-    service_key                     = "frontend"
-    subresource_names               = ["sites"]
-    private_service_connection_name = "psc-frontend"
-    private_dns_zone_key            = "webapp"
-  }
-
-  backend_app = {
-    name                            = "pe-backend"
-    subnet_key                      = "pe"
-    service_key                     = "backend"
-    subresource_names               = ["sites"]
-    private_service_connection_name = "psc-backend"
-    private_dns_zone_key            = "webapp"
-  }
-
   postgres = {
-    name                            = "pe-postgres"
-    subnet_key                      = "pe"
-    service_key                     = "main"
-    subresource_names               = ["postgresqlServer"]
-    private_service_connection_name = "psc-postgres"
-    private_dns_zone_key            = "postgres"
+    name = "pe-postgres-dev"
+    private_service_connection = {
+      name = "psc-postgres"
+    }
+
+    tags = {
+      env = "dev"
+      app = "postgres"
+    }
   }
+
 }
 
 #-----------------------------------------------------------------------------------------

@@ -1,4 +1,17 @@
 #------------------------------------------------------------------------------------
+# Project Details
+#------------------------------------------------------------------------------------
+variable "project" {
+  description = "Project name prefix"
+  type        = string
+}
+
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+}
+
+#------------------------------------------------------------------------------------
 # 0-Tags
 #------------------------------------------------------------------------------------
 
@@ -731,19 +744,54 @@ variable "txt_records" {
 #-----------------------------------------------------------------------------------------------
 # 8.1-PrivateEndPoint
 #-----------------------------------------------------------------------------------------------
+/*
+variable "private_endpoints" {
+  description = "Private Endpoints configuration"
+  type = map(any)
+    
+}
+*/
 
 variable "private_endpoints" {
-  description = "Private Endpoint definitions (NO Azure IDs)"
+  description = "Private Endpoints configuration"
   type = map(object({
-    name                            = string
-    subnet_key                      = string
-    service_key                     = string
-    subresource_names               = list(string)
-    private_service_connection_name = string
-    private_dns_zone_key            = string
+    name = string
+    #location            = string
+    #resource_group_name = string
+    #subnet_id           = string
+
+    #resource_id       = string
+    #subresource_names = list(string)
+
+    #private_dns_zone_ids = list(string)
+    is_manual_connection = optional(bool, false)
+
+    tags = optional(map(string), {})
   }))
 }
 
+/*
+variable "private_endpoints" {
+  description = "Map of private endpoints"
+  type = map(object({
+    name = map(string)
+    location            = string
+    resource_group_name = string
+    subnet_id           = string
+
+    private_service_connection = object({
+      name                           = string
+      private_connection_resource_id = string
+      subresource_names              = list(string)
+      is_manual_connection           = bool
+    })
+
+    private_dns_zone_ids = list(string)
+
+    tags = optional(map(string), {})
+  }))
+}
+*/
 #-----------------------------------------------------------------------------------------
 # 9-RedisCache
 #-----------------------------------------------------------------------------------------
@@ -1054,16 +1102,6 @@ variable "app_configurations" {
 
 #----------------------------------------------------------------------------------------------
 
-variable "projectname" {
-  description = "Project name prefix"
-  type        = string
-  default     = "myexample"
-}
 
-variable "environment" {
-  description = "Deployment environment"
-  type        = string
-  default     = "development"
-}
 
 #------------------------------------------------------------------------------------------------------
