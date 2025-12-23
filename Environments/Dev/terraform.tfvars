@@ -375,15 +375,29 @@ private_dns_zones = {
   postgres = {
     name = "privatelink.postgres.database.azure.com"
   }
+
+  keyvault = {
+    name = "privatelink.vaultcore.azure.net"
+  }
 }
 
 #-----------------------------------------------------------------------------------------------
 # 8-PrivateEndpoint
 #-----------------------------------------------------------------------------------------------
 
-posgresql_private_endpoint_name   = "myexample-dev-db-pe"
-storage_private_endpoint_name     = "myexample-dev-storage-pe"
-app_service_private_endpoint_name = "myexample-dev-frontend-pe"
+posgresql_private_endpoint_name = "myexample-dev-db-pe"
+
+storage_private_endpoint_name = "myexample-dev-storage-pe"
+
+app_service_frontend_private_endpoint_name = "myexample-dev-frontend-pe"
+app_service_backend_private_endpoint_name  = "myexample-dev-backend-pe"
+
+app_service_container_frontend_private_endpoint_name = "myexample-dev-frontend-container-pe"
+app_service_container_backend_private_endpoint_name  = "myexample-dev-backend-container-pe"
+
+keyvault_private_endpoint_name = "myexample-dev-keyvault-pe"
+
+
 
 #-----------------------------------------------------------------------------------------
 # 9-RedisCache

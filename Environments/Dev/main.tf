@@ -211,8 +211,8 @@ module "private_endpoints" {
       }
     }
 
-    webapp = {
-      name                = var.app_service_private_endpoint_name
+    myexample-dev-frontend = {
+      name                = var.app_service_frontend_private_endpoint_name
       location            = var.location
       resource_group_name = var.resource_group_name
       subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
@@ -229,6 +229,83 @@ module "private_endpoints" {
         service = "webapp"
       }
     }
+
+    myexample-dev-backend = {
+      name                = var.app_service_backend_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.app_service.app_service_ids["backend"]
+      subresource_names = ["sites"]
+
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["webapp"]
+      ]
+
+      tags = {
+        env     = "dev"
+        service = "webapp"
+      }
+    }
+
+    myexample-dev-container-frontend = {
+      name                = var.app_service_container_frontend_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.app_service_container.app_service_ids["frontend-container"]
+      subresource_names = ["sites"]
+
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["webapp"]
+      ]
+
+      tags = {
+        env     = "dev"
+        service = "webapp"
+      }
+    }
+
+    myexample-dev-container-backend = {
+      name                = var.app_service_container_backend_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.app_service_container.app_service_ids["backend-container"]
+      subresource_names = ["sites"]
+
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["webapp"]
+      ]
+
+      tags = {
+        env     = "dev"
+        service = "webapp"
+      }
+    }
+    /*
+    keyvault = {
+      name                = var.keyvault_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.keyvault.id
+      subresource_names = ["vault"]
+
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["keyvault"]
+      ]
+
+      tags = {
+        env     = "dev"
+        service = "keyvault"
+      }
+    }
+    */
   }
 }
 

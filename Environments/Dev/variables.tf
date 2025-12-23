@@ -753,7 +753,23 @@ variable "storage_private_endpoint_name" {
   type = string
 }
 
-variable "app_service_private_endpoint_name" {
+variable "app_service_frontend_private_endpoint_name" {
+  type = string
+}
+
+variable "app_service_backend_private_endpoint_name" {
+  type = string
+}
+
+variable "app_service_container_frontend_private_endpoint_name" {
+  type = string
+}
+
+variable "app_service_container_backend_private_endpoint_name" {
+  type = string
+}
+
+variable "keyvault_private_endpoint_name" {
   type = string
 }
 
