@@ -744,6 +744,19 @@ variable "txt_records" {
 #-----------------------------------------------------------------------------------------------
 # 8.1-PrivateEndPoint
 #-----------------------------------------------------------------------------------------------
+variable "posgresql_private_endpoint_name" {
+  description = "Private Endpoint name"
+  type        = string
+}
+
+variable "storage_private_endpoint_name" {
+  type = string
+}
+
+variable "app_service_private_endpoint_name" {
+  type = string
+}
+
 /*
 variable "private_endpoints" {
   description = "Private Endpoints configuration"
@@ -751,7 +764,7 @@ variable "private_endpoints" {
     
 }
 */
-
+/*
 variable "private_endpoints" {
   description = "Private Endpoints configuration"
   type = map(object({
@@ -769,7 +782,7 @@ variable "private_endpoints" {
     tags = optional(map(string), {})
   }))
 }
-
+*/
 /*
 variable "private_endpoints" {
   description = "Map of private endpoints"

@@ -99,7 +99,7 @@ module "storage_account_website" {
 */
 #--------------------------------------------------------------------------------------------------
 # 05.02-StorageAccount
-/*
+
 module "storage_account" {
   source                   = "../../Modules/05-Storage/02-StorageAccount"
   resource_group_name      = module.resource_group.name
@@ -109,7 +109,7 @@ module "storage_account" {
   account_replication_type = var.account_replication_type
   tags                     = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 06.01-PostgresSQLFlexible
 
@@ -172,22 +172,62 @@ module "private_endpoints" {
   source = "../../Modules/08-PrivateEndPoints"
 
   private_endpoints = {
-    postgres = {
-      private_endpoint_name = "myexample-postgres-pe"
-      location              = module.resource_group.location
-      resource_group_name   = module.resource_group.name
-      subnet_id             = module.virtual_network.db_subnets["db"]
 
-      private_dns_zone_group_name = "postgres"
+    postgres = {
+      name                = var.posgresql_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.postgre_sql.postgresql_flexible_server_id
+      subresource_names = ["postgresqlServer"]
+
       private_dns_zone_ids = [
         module.private_dns_zones.private_dns_zone_ids["postgres"]
       ]
 
-      private_service_connection_name = "myexample-psc"
+      tags = {
+        env     = "dev"
+        service = "postgres"
+      }
+    }
 
-      private_connection_resource_id = module.postgre_sql.postgresql_flexible_server_id
-      subresource_names              = ["postgresqlServer"]
-      is_manual_connection           = false
+    storage = {
+      name                = var.storage_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.storage_account.id
+      subresource_names = ["blob"]
+
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["blob"]
+      ]
+
+      tags = {
+        env     = "dev"
+        service = "storage"
+      }
+    }
+
+    webapp = {
+      name                = var.app_service_private_endpoint_name
+      location            = var.location
+      resource_group_name = var.resource_group_name
+      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+
+      resource_id       = module.app_service.app_service_ids["frontend"]
+      subresource_names = ["sites"]
+
+      private_dns_zone_ids = [
+        module.private_dns_zones.private_dns_zone_ids["webapp"]
+      ]
+
+      tags = {
+        env     = "dev"
+        service = "webapp"
+      }
     }
   }
 }

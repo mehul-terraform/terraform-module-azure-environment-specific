@@ -54,6 +54,10 @@ subnets = [
     }
   },
   {
+    name           = "private-endpoint"
+    address_prefix = "10.250.250.0/24"
+  },
+  {
     name           = "firewall"
     address_prefix = "10.250.254.0/24"
   },
@@ -373,26 +377,13 @@ private_dns_zones = {
   }
 }
 
-
 #-----------------------------------------------------------------------------------------------
 # 8-PrivateEndpoint
 #-----------------------------------------------------------------------------------------------
 
-private_endpoints = {
-
-  postgres = {
-    name = "pe-postgres-dev"
-    private_service_connection = {
-      name = "psc-postgres"
-    }
-
-    tags = {
-      env = "dev"
-      app = "postgres"
-    }
-  }
-
-}
+posgresql_private_endpoint_name   = "myexample-dev-db-pe"
+storage_private_endpoint_name     = "myexample-dev-storage-pe"
+app_service_private_endpoint_name = "myexample-dev-frontend-pe"
 
 #-----------------------------------------------------------------------------------------
 # 9-RedisCache

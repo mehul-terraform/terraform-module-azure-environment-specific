@@ -2,11 +2,11 @@ output "id" {
   value = azurerm_virtual_network.vnet.id
 }
 
-output "subnet_ids" {
-  value = {
-    for k, s in azurerm_subnet.subnets : k => s.id
-  }
-}
+#output "subnet_ids" {
+#  value = {
+#    for k, s in azurerm_subnet.subnets : k => s.id
+#  }
+#}
 
 output "subnets" {
   value = {
@@ -43,6 +43,12 @@ output "storage_subnets" {
 output "funcapp_subnets" {
   value = {
     funcapp = azurerm_subnet.subnets["funcapp"].id
+  }
+}
+
+output "private_endpoint_subnets" {
+  value = {
+    private_endpoint = azurerm_subnet.subnets["private-endpoint"].id
   }
 }
 
