@@ -475,7 +475,7 @@ module "azure_front_door" {
 */
 #--------------------------------------------------------------------------------------------------------------
 # 3.1-VirtualMachine
-/*
+
 module "virtual_machine" {
   source                          = "../../Modules/03-Compute/01-VirtualMachine"
   resource_group_name             = module.resource_group.name
@@ -499,7 +499,7 @@ module "virtual_machine" {
   virtual_machine_image_version   = var.virtual_machine_image_version
   tags                            = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 3.2-ContainerRegistry
 /*
