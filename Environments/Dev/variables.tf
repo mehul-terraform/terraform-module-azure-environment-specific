@@ -532,8 +532,14 @@ variable "storage_account_error_404_document" {
 # 5.2-StorageAccount
 #----------------------------------------------------------------------------------------------
 
-variable "storage_account_name" {
-  type = string
+variable "storage_accounts" {
+  description = "Multiple storage accounts"
+  type = map(object({
+    name                     = string
+    account_tier             = string
+    account_replication_type = string
+    tags                     = optional(map(string), {})
+  }))
 }
 
 #-----------------------------------------------------------------------------------------------
@@ -744,12 +750,34 @@ variable "txt_records" {
 #-----------------------------------------------------------------------------------------------
 # 8.1-PrivateEndPoint
 #-----------------------------------------------------------------------------------------------
+
+variable "private_endpoints" {
+  description = "Logical private endpoint definitions"
+  type = map(object({
+    name              = string
+    service           = string           # postgres | storage | webapp | webapp_container | keyvault
+    instance          = optional(string) # frontend | backend | etc (required for webapp*)
+    subresource_names = list(string)
+    tags              = optional(map(string), {})
+  }))
+
+  validation {
+    condition = alltrue([
+      for v in var.private_endpoints :
+      (v.service != "webapp" && v.service != "webapp-container")
+      || v.instance != null
+    ])
+    error_message = "instance is required when service = webapp or webapp_container"
+  }
+}
+
+/*
 variable "posgresql_private_endpoint_name" {
   description = "Private Endpoint name"
   type        = string
 }
 
-variable "storage_private_endpoint_name" {
+variable "storage_frontend_private_endpoint_name" {
   type = string
 }
 
@@ -772,6 +800,17 @@ variable "app_service_container_backend_private_endpoint_name" {
 variable "keyvault_private_endpoint_name" {
   type = string
 }
+
+variable "private_endpoints" {
+  description = "Logical private endpoint definitions"
+  type = map(object({
+    name              = string
+    service           = string   # postgres | storage | webapp | keyvault
+    subresource_names = list(string)
+    tags              = optional(map(string), {})
+  }))
+}
+
 
 /*
 variable "private_endpoints" {

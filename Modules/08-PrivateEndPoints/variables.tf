@@ -1,5 +1,5 @@
 variable "private_endpoints" {
-  description = "Private Endpoints configuration"
+  description = "Resolved private endpoint configuration"
   type = map(object({
     name                = string
     location            = string

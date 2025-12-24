@@ -101,13 +101,12 @@ module "storage_account_website" {
 # 05.02-StorageAccount
 
 module "storage_account" {
-  source                   = "../../Modules/05-Storage/02-StorageAccount"
-  resource_group_name      = module.resource_group.name
-  location                 = module.resource_group.location
-  storage_account_name     = var.storage_account_name
-  account_tier             = var.account_tier
-  account_replication_type = var.account_replication_type
-  tags                     = local.tags
+  source           = "../../Modules/05-Storage/02-StorageAccount"
+  storage_accounts = var.storage_accounts
+
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+  tags                = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -126,32 +125,6 @@ module "postgre_sql" {
   tags                            = local.tags
 }
 
-#-----------------------------------------------------------------------------------------------
-# 7.1.1-PrivateDNSZonePostgresSQLFlexible
-/*
-module "private_dns_zone" {
-  source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.1-PrivateDNSZonePostgresSQLFlexible"
-  private_dns_zone_name     = var.private_dns_zone_group_name
-  resource_group_name       = module.resource_group.name
-  location                  = module.resource_group.location
-  virtual_network_link_name = var.virtual_network_link_name
-  virtual_network_id        = module.virtual_network.id
-  tags                      = local.tags
-}
-*/
-#-------------------------------------------------------------------------------------------------
-# 7.1.2-PrivateDNSZoneStorageAccount
-/*
-module "private_dns_zone_storage_account" {
-  source                    = "../../Modules/07-DNSZone/7.1-PrivateDNSZone/7.1.2-PrivateDNSZoneStorageAccount"
-  private_dns_zone_name     = var.storage_account_private_dns_zone_group_name
-  resource_group_name       = module.resource_group.name
-  location                  = module.resource_group.location
-  virtual_network_link_name = var.storage_account_virtual_network_link_name
-  virtual_network_id        = module.virtual_network.id
-  tags                      = local.tags
-}
-*/
 #--------------------------------------------------------------------------------------------------
 module "private_dns_zones" {
   source = "../../Modules/07-DNSZone/7.1-PrivateDNSZone"
@@ -172,140 +145,34 @@ module "private_endpoints" {
   source = "../../Modules/08-PrivateEndPoints"
 
   private_endpoints = {
-
-    postgres = {
-      name                = var.posgresql_private_endpoint_name
+    for k, v in var.private_endpoints : k => {
+      name                = v.name
       location            = var.location
       resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
+      subresource_names   = v.subresource_names
+      tags                = v.tags
 
-      resource_id       = module.postgre_sql.postgresql_flexible_server_id
-      subresource_names = ["postgresqlServer"]
+      # Use NON-delegated PE subnet
+      subnet_id = module.virtual_network.private_endpoint_subnets["private_endpoint"]
 
-      private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["postgres"]
-      ]
-
-      tags = {
-        env     = "dev"
-        service = "postgres"
-      }
-    }
-
-    storage = {
-      name                = var.storage_private_endpoint_name
-      location            = var.location
-      resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
-
-      resource_id       = module.storage_account.id
-      subresource_names = ["blob"]
+      resource_id = (
+        v.service == "postgres" ? module.postgre_sql.postgresql_flexible_server_id :
+        v.service == "storage" ? module.storage_account.storage_account_ids[v.instance] :
+        v.service == "webapp" ? module.app_service.app_service_ids[v.instance] :
+        v.service == "webapp-container" ? module.app_service_container.app_service_ids[v.instance] :
+        #v.service == "keyvault" ? module.key_vault.key_vault_id :
+        null
+      )
 
       private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["blob"]
+        v.service == "postgres" ? module.private_dns_zones.private_dns_zone_ids["postgres"] :
+        v.service == "storage" ? module.private_dns_zones.private_dns_zone_ids["blob"] :
+        v.service == "webapp" ? module.private_dns_zones.private_dns_zone_ids["webapp"] :
+        v.service == "webapp-container" ? module.private_dns_zones.private_dns_zone_ids["webapp"] :
+        v.service == "keyvault" ? module.private_dns_zones.private_dns_zone_ids["keyvault"] :
+        null
       ]
-
-      tags = {
-        env     = "dev"
-        service = "storage"
-      }
     }
-
-    myexample-dev-frontend = {
-      name                = var.app_service_frontend_private_endpoint_name
-      location            = var.location
-      resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
-
-      resource_id       = module.app_service.app_service_ids["frontend"]
-      subresource_names = ["sites"]
-
-      private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["webapp"]
-      ]
-
-      tags = {
-        env     = "dev"
-        service = "webapp"
-      }
-    }
-
-    myexample-dev-backend = {
-      name                = var.app_service_backend_private_endpoint_name
-      location            = var.location
-      resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
-
-      resource_id       = module.app_service.app_service_ids["backend"]
-      subresource_names = ["sites"]
-
-      private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["webapp"]
-      ]
-
-      tags = {
-        env     = "dev"
-        service = "webapp"
-      }
-    }
-
-    myexample-dev-container-frontend = {
-      name                = var.app_service_container_frontend_private_endpoint_name
-      location            = var.location
-      resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
-
-      resource_id       = module.app_service_container.app_service_ids["frontend-container"]
-      subresource_names = ["sites"]
-
-      private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["webapp"]
-      ]
-
-      tags = {
-        env     = "dev"
-        service = "webapp"
-      }
-    }
-
-    myexample-dev-container-backend = {
-      name                = var.app_service_container_backend_private_endpoint_name
-      location            = var.location
-      resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
-
-      resource_id       = module.app_service_container.app_service_ids["backend-container"]
-      subresource_names = ["sites"]
-
-      private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["webapp"]
-      ]
-
-      tags = {
-        env     = "dev"
-        service = "webapp"
-      }
-    }
-    /*
-    keyvault = {
-      name                = var.keyvault_private_endpoint_name
-      location            = var.location
-      resource_group_name = var.resource_group_name
-      subnet_id           = module.virtual_network.private_endpoint_subnets["private_endpoint"]
-
-      resource_id       = module.keyvault.id
-      subresource_names = ["vault"]
-
-      private_dns_zone_ids = [
-        module.private_dns_zones.private_dns_zone_ids["keyvault"]
-      ]
-
-      tags = {
-        env     = "dev"
-        service = "keyvault"
-      }
-    }
-    */
   }
 }
 

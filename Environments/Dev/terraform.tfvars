@@ -321,7 +321,25 @@ storage_account_error_404_document = "404.html"
 # 5.2-StorageAccount
 #-----------------------------------------------------------------------------------------------
 
-storage_account_name = "myexampledevstorage"
+storage_accounts = {
+  frontend = {
+    name                     = "myexampledevfrontend"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    tags = {
+      service = "backend"
+    }
+  }
+
+  backend = {
+    name                     = "myexampledevbackend"
+    account_tier             = "Standard"
+    account_replication_type = "GRS"
+    tags = {
+      service = "frontend"
+    }
+  }
+}
 
 #-----------------------------------------------------------------------------------------------
 # 6.1-PostgreSQLFlexible
@@ -384,10 +402,58 @@ private_dns_zones = {
 #-----------------------------------------------------------------------------------------------
 # 8-PrivateEndpoint
 #-----------------------------------------------------------------------------------------------
+private_endpoints = {
+  postgres = {
+    name              = "myexample-dev-db-pe"
+    service           = "postgres"
+    subresource_names = ["postgresqlServer"]
+  }
 
-posgresql_private_endpoint_name = "myexample-dev-db-pe"
+  storage-frontend = {
+    name              = "myexample-dev-storage-frontend-pe"
+    service           = "storage"
+    instance          = "frontend"
+    subresource_names = ["blob"]
+  }
 
-storage_private_endpoint_name = "myexample-dev-storage-pe"
+  storage-backend = {
+    name              = "myexample-dev-storage-backend-pe"
+    service           = "storage"
+    instance          = "backend"
+    subresource_names = ["blob"]
+  }
+
+  webapp-frontend = {
+    name              = "myexample-dev-webapp-frontend-pe"
+    service           = "webapp"
+    instance          = "frontend"
+    subresource_names = ["sites"]
+  }
+
+  webapp-backend = {
+    name              = "myexample-dev-webapp-backend-pe"
+    service           = "webapp"
+    instance          = "backend"
+    subresource_names = ["sites"]
+  }
+
+  webapp-container-frontend = {
+    name              = "myexample-dev-webapp-container-frontend-pe"
+    service           = "webapp-container"
+    instance          = "frontend-container"
+    subresource_names = ["sites"]
+  }
+
+  webapp-container-backend = {
+    name              = "myexample-dev-webapp-container-backend-pe"
+    service           = "webapp-container"
+    instance          = "backend-container"
+    subresource_names = ["sites"]
+  }
+}
+
+/*
+storage_frontend_private_endpoint_name = "myexample-dev-storage-frontend-pe"
 
 app_service_frontend_private_endpoint_name = "myexample-dev-frontend-pe"
 app_service_backend_private_endpoint_name  = "myexample-dev-backend-pe"
@@ -396,8 +462,7 @@ app_service_container_frontend_private_endpoint_name = "myexample-dev-frontend-c
 app_service_container_backend_private_endpoint_name  = "myexample-dev-backend-container-pe"
 
 keyvault_private_endpoint_name = "myexample-dev-keyvault-pe"
-
-
+*/
 
 #-----------------------------------------------------------------------------------------
 # 9-RedisCache

@@ -1,8 +1,11 @@
 resource "azurerm_storage_account" "sa" {
-  name                     = var.storage_account_name
+  for_each = var.storage_accounts
+
+  name                     = each.value.name
   resource_group_name      = var.resource_group_name
   location                 = var.location
-  account_tier             = var.account_tier
-  account_replication_type = var.account_replication_type
-  tags                     = merge(var.tags)
+  account_tier             = each.value.account_tier
+  account_replication_type = each.value.account_replication_type
+
+  tags = merge(var.tags, each.value.tags)
 }

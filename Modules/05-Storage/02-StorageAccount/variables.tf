@@ -1,23 +1,9 @@
-variable "resource_group_name" {
-  type = string
-}
-
 variable "location" {
   type = string
 }
 
-variable "storage_account_name" {
+variable "resource_group_name" {
   type = string
-}
-
-variable "account_tier" {
-  type    = string
-  default = "Standard"
-}
-
-variable "account_replication_type" {
-  type    = string
-  default = "LRS"
 }
 
 variable "tags" {
@@ -25,4 +11,12 @@ variable "tags" {
   default = {}
 }
 
-
+variable "storage_accounts" {
+  description = "Storage accounts configuration"
+  type = map(object({
+    name                     = string
+    account_tier             = string
+    account_replication_type = string
+    tags                     = optional(map(string), {})
+  }))
+}
