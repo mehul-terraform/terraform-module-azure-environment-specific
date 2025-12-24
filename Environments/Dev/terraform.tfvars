@@ -323,7 +323,7 @@ storage_accounts = {
     }
 
     tags = {
-      service = "frontend"
+      app = "frontend"
     }
   }
 
@@ -332,7 +332,7 @@ storage_accounts = {
     account_tier             = "Standard"
     account_replication_type = "GRS"
     tags = {
-      service = "backend"
+      app = "backend"
     }
   }
 }
