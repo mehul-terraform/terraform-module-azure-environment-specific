@@ -83,30 +83,16 @@ module "app_service_container" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 05.01-StorageAccountStaticWebSite
-/*
-module "storage_account_website" {
-  source                             = "../../Modules/05-Storage/01-StorageAccountStaticWebsite"
-  resource_group_name                = module.resource_group.name
-  location                           = module.resource_group.location
-  storage_account_name               = var.storage_account_web_name
-  account_tier                       = var.account_tier
-  account_replication_type           = var.account_replication_type
-  storage_account_index_document     = var.storage_account_index_document
-  storage_account_error_404_document = var.storage_account_error_404_document
-  tags                               = local.tags
-}
-*/
-#--------------------------------------------------------------------------------------------------
 # 05.02-StorageAccount
 
 module "storage_account" {
-  source           = "../../Modules/05-Storage/02-StorageAccount"
+  source           = "../../Modules/05-StorageAccount"
   storage_accounts = var.storage_accounts
 
   location            = module.resource_group.location
   resource_group_name = module.resource_group.name
-  tags                = var.tags
+
+  tags = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------

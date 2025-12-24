@@ -308,16 +308,6 @@ function_app_flex_app_settings = {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 5.1-StorageAccountStaticWebsite
-#-----------------------------------------------------------------------------------------------
-
-storage_account_web_name           = "myexampledevestorageweb"
-account_tier                       = "Standard"
-account_replication_type           = "LRS"
-storage_account_index_document     = "index.html"
-storage_account_error_404_document = "404.html"
-
-#-----------------------------------------------------------------------------------------------
 # 5.2-StorageAccount
 #-----------------------------------------------------------------------------------------------
 
@@ -326,8 +316,14 @@ storage_accounts = {
     name                     = "myexampledevfrontend"
     account_tier             = "Standard"
     account_replication_type = "LRS"
+
+    static_website = {
+      index_document     = "index.html"
+      error_404_document = "404.html"
+    }
+
     tags = {
-      service = "backend"
+      service = "frontend"
     }
   }
 
@@ -336,7 +332,7 @@ storage_accounts = {
     account_tier             = "Standard"
     account_replication_type = "GRS"
     tags = {
-      service = "frontend"
+      service = "backend"
     }
   }
 }

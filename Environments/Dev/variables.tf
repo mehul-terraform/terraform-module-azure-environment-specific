@@ -502,43 +502,22 @@ variable "function_app_flex_identity_type" {
   default     = ""
 }
 
-#-----------------------------------------------------------------------------------------------
-# 5.1-StorageAccountWebSite
-#-----------------------------------------------------------------------------------------------
-
-variable "storage_account_web_name" {
-  type = string
-}
-
-variable "account_tier" {
-  type = string
-}
-
-variable "account_replication_type" {
-  type = string
-}
-
-variable "storage_account_index_document" {
-  type    = string
-  default = "index.html"
-}
-
-variable "storage_account_error_404_document" {
-  type    = string
-  default = "404.html"
-}
-
 #----------------------------------------------------------------------------------------------
 # 5.2-StorageAccount
 #----------------------------------------------------------------------------------------------
 
 variable "storage_accounts" {
-  description = "Multiple storage accounts"
   type = map(object({
     name                     = string
     account_tier             = string
     account_replication_type = string
-    tags                     = optional(map(string), {})
+
+    static_website = optional(object({
+      index_document     = string
+      error_404_document = string
+    }))
+
+    tags = optional(map(string), {})
   }))
 }
 
