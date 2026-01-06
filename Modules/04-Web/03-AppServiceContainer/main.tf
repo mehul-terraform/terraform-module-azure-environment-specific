@@ -6,6 +6,7 @@ resource "azurerm_linux_web_app" "app_service_container" {
   service_plan_id                                = var.service_plan_id
   https_only                                     = true
   webdeploy_publish_basic_authentication_enabled = true
+  virtual_network_subnet_id = var.subnet_id
 
   lifecycle {
     ignore_changes = [

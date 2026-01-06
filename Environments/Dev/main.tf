@@ -146,7 +146,7 @@ module "private_endpoints" {
         v.service == "storage" ? module.storage_account.storage_account_ids[v.instance] :
         v.service == "webapp" ? module.app_service.app_service_ids[v.instance] :
         v.service == "webapp-container" ? module.app_service_container.app_service_ids[v.instance] :
-        #v.service == "keyvault" ? module.key_vault.key_vault_id :
+        v.service == "keyvault" ? module.keyvault.id :
         null
       )
 
@@ -183,7 +183,7 @@ module "redis" {
 */
 #--------------------------------------------------------------------------------------------
 # 10-KeyVault
-/*
+
 module "keyvault" {
   source                     = "../../Modules/10-KeyVault"
   resource_group_name        = module.resource_group.name
@@ -197,7 +197,7 @@ module "keyvault" {
   secrets                    = var.key_vault_secrets
   tags                       = local.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------
 # 6.2-CosmosDB
 /*

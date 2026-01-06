@@ -446,6 +446,12 @@ private_endpoints = {
     instance          = "backend-container"
     subresource_names = ["sites"]
   }
+
+  keyvault-backend = {
+    name              = "myexample-dev-keyvault-backend-pe"
+    service           = "keyvault"
+    subresource_names = ["vault"]
+  }
 }
 
 /*
@@ -490,7 +496,7 @@ key_vault_secrets = {
   REDISHOST       = ""
   REDISPORT       = ""
   REDISTLS        = "true"
-  SENTRYDSN       = ""
+  SENTRYDSN       = "123"
 }
 
 #-----------------------------------------------------------------------------------------------
