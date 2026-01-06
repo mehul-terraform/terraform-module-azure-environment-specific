@@ -39,14 +39,13 @@ module "network_security_group" {
 #--------------------------------------------------------------------------------------------------
 # 04.01-AppServicePlan
 
-module "service_plan" {
-  source              = "../../Modules/04-Web/01-AppServicePlan"
-  resource_group_name = module.resource_group.name
+module "app_service_plan" {
+  source        = "../../Modules/04-Web/01-AppServicePlan"
+  service_plans = var.service_plans
+
   location            = module.resource_group.location
-  service_plan_name   = var.service_plan_name
-  asp_os_type         = var.asp_os_type
-  asp_sku_name        = var.asp_sku_name
-  tags                = local.tags
+  resource_group_name = module.resource_group.name
+  tags                = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -58,15 +57,10 @@ module "app_service" {
   app_service         = var.app_service
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
-  service_plan_id     = module.service_plan.id
+  service_plan_id     = module.app_service_plan.ids["linux"]
   subnet_id           = module.virtual_network.webapp_subnets["webapp"]
   tags                = local.tags
 }
-
-#resource "azurerm_app_service_virtual_network_swift_connection" "app_service_vnet_integration" {
-#  app_service_id = module.app_service.id
-#  subnet_id      = module.virtual_network.webapp_subnets["webapp"]
-#}
 
 #---------------------------------------------------------------------------------------------------
 # 04.03-AppServiceContainer
@@ -77,7 +71,7 @@ module "app_service_container" {
   app_service_container = var.app_service_container
   resource_group_name   = module.resource_group.name
   location              = module.resource_group.location
-  service_plan_id       = module.service_plan.id
+  service_plan_id       = module.app_service_plan.ids["linux"]
   subnet_id             = module.virtual_network.webapp_subnets["webapp"]
   tags                  = local.tags
 }

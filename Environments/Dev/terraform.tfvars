@@ -159,9 +159,30 @@ zone_redundancy_enabled       = false
 # 4.1-AppServicePlan
 #-----------------------------------------------------------------------------------------------
 
-service_plan_name = "myexample-dev-asp"
-asp_os_type       = "Linux"
-asp_sku_name      = "B2"
+service_plans = {
+  linux = {
+    name                     = "myexample-dev-linux-asp"
+    os_type                  = "Linux"
+    sku_name                 = "B1"
+    per_site_scaling_enabled = false
+    worker_count             = 2
+    tags = {
+      os = "linux"
+    }
+  }
+
+  windows = {
+    name                     = "myexample-dev-win-asp"
+    os_type                  = "Windows"
+    sku_name                 = "B1"
+    per_site_scaling_enabled = true
+    worker_count             = 1
+    tags = {
+      os = "windows"
+    }
+  }
+}
+
 
 #-----------------------------------------------------------------------------------------------
 # 4.2-AppService

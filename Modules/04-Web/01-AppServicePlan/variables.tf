@@ -1,9 +1,3 @@
-variable "service_plan_name" {
-  type        = string
-  description = "The name of the App Service Plan"
-  default     = null
-}
-
 variable "location" {
   type        = string
   description = "The Azure Region in which all resources in this example should be created."
@@ -15,40 +9,19 @@ variable "resource_group_name" {
 }
 
 variable "tags" {
-  description = "Tags to be applied to resources (inclusive)"
-  type = object({
-    environment = string
-    project     = string
-  })
-}
-
-variable "extra_tags" {
-  description = "extra tags to be applied to resources (in addition to the tags above)"
+  description = "Map of tags to assign to resources."
   type        = map(string)
   default     = {}
 }
 
-variable "asp_os_type" {
-  type        = string
-  description = "OS type: Windows, Linux, or WindowsContainer"
-  default     = "Linux"
+variable "service_plans" {
+  description = "App Service Plans (Linux + Windows)"
+  type = map(object({
+    name                     = string
+    os_type                  = string   # "Linux" or "Windows"
+    sku_name                 = string
+    per_site_scaling_enabled = bool
+    worker_count             = number
+    tags                     = map(string)
+  }))
 }
-
-variable "asp_sku_name" {
-  type        = string
-  description = "The SKU for the plan"
-  default     = "P1v3"
-}
-
-variable "per_site_scaling_enabled" {
-  type        = bool
-  default     = false
-  description = "Enable per site scaling"
-}
-
-variable "worker_count" {
-  type        = number
-  default     = null
-  description = "Number of workers"
-}
-

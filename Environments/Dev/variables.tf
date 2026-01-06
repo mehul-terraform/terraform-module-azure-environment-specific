@@ -278,32 +278,16 @@ variable "zone_redundancy_enabled" {
 # 4.1-AppServicePlan
 #-----------------------------------------------------------------------------------------------
 
-variable "service_plan_name" {
-  type        = string
-  description = "The name of the App Service Plan"
-  default     = null
-}
-
-variable "asp_os_type" {
-  type        = string
-  description = "OS type: Windows, Linux, or WindowsContainer"
-}
-
-variable "asp_sku_name" {
-  type        = string
-  description = "The SKU for the plan"
-}
-
-variable "per_site_scaling_enabled" {
-  type        = bool
-  default     = false
-  description = "Enable per site scaling"
-}
-
-variable "worker_count" {
-  type        = number
-  default     = null
-  description = "Number of workers"
+variable "service_plans" {
+  description = "App Service Plans (Linux + Windows)"
+  type = map(object({
+    name                     = string
+    os_type                  = string # "Linux" or "Windows"
+    sku_name                 = string
+    per_site_scaling_enabled = bool
+    worker_count             = number
+    tags                     = map(string)
+  }))
 }
 
 #-----------------------------------------------------------------------------------------------
