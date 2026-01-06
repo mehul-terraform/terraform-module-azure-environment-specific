@@ -26,12 +26,13 @@ resource "azurerm_windows_web_app" "app_service" {
   }
 
   site_config {
-    always_on = true
-
+    always_on              = true
     vnet_route_all_enabled = true
- 
-    dotnet_version = lookup(each.value.runtime, "dotnet_version", null)
-    node_version   = lookup(each.value.runtime, "node_version", null)
-    php_version    = lookup(each.value.runtime, "php_version", null)
+
+    application_stack {
+      dotnet_version = lookup(each.value.runtime, "dotnet_version", null)
+      node_version   = lookup(each.value.runtime, "node_version", null)
+      php_version    = lookup(each.value.runtime, "php_version", null)
+    }
   }
 }

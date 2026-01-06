@@ -52,12 +52,26 @@ module "app_service_plan" {
 # 04.02-AppService
 
 module "app_service" {
-  source = "../../Modules/04-Web/02-AppService"
+  source = "../../Modules/04-Web/02-AppServiceLinux"
 
   app_service         = var.app_service
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   service_plan_id     = module.app_service_plan.ids["linux"]
+  subnet_id           = module.virtual_network.webapp_subnets["webapp"]
+  tags                = local.tags
+}
+
+#---------------------------------------------------------------------------------------------------
+#04.03-AppServiceWindows
+
+module "windows_web_app" {
+  source = "../../Modules/04-Web/03-AppServiceWindows"
+  app_service_windows = var.app_service_windows
+
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+  service_plan_id     = module.app_service_plan.ids["windows"]
   subnet_id           = module.virtual_network.webapp_subnets["webapp"]
   tags                = local.tags
 }

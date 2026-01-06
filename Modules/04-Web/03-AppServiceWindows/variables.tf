@@ -25,7 +25,7 @@ variable "tags" {
 }
 
 variable "app_service_windows" {
-  description = "Windows App Services configuration"
+  description = "Windows Web Apps configuration"
   type = map(object({
     app_service_name = string
 

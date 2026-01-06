@@ -236,6 +236,31 @@ app_service = {
   }
 }
 
+app_service_windows = {
+  frontend = {
+    app_service_name = "myexample-dev-win-frontend"
+    runtime = {
+      node_version   = null
+      python_version = null
+      dotnet_version = "v10.0"
+    }
+    app_settings = {
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+      JWT_ISSUER                   = "myexample-auth-api"
+      JWT_AUDIENCE                 = "myexample-client"
+      JWT_TOKEN_LIFETIME_MINUTES   = "15"
+      ALLOWED_HOSTS                = "*"
+      LOGGING_DEFAULT              = "Information"
+      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+    }
+    tags = {
+      environment = "dev"
+      team        = "devops"
+    }
+  }
+}
+
 #-----------------------------------------------------------------------------------------------
 # 4.3-AppServiceContainer
 #-----------------------------------------------------------------------------------------------

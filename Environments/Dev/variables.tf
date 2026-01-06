@@ -291,7 +291,7 @@ variable "service_plans" {
 }
 
 #-----------------------------------------------------------------------------------------------
-# 4.2-AppService
+# 4.2-AppServiceLinux
 #-----------------------------------------------------------------------------------------------
 
 variable "app_service" {
@@ -302,6 +302,24 @@ variable "app_service" {
       node_version   = optional(string)
       python_version = optional(string)
       dotnet_version = optional(string)
+    })
+
+    app_settings = map(string)
+    tags         = map(string)
+  }))
+}
+
+#-----------------------------------------------------------------------------------------------
+
+variable "app_service_windows" {
+  description = "Windows Web Apps configuration"
+  type = map(object({
+    app_service_name = string
+
+    runtime = object({
+      dotnet_version = optional(string)
+      node_version   = optional(string)
+      php_version    = optional(string)
     })
 
     app_settings = map(string)
