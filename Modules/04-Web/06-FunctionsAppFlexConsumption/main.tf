@@ -27,6 +27,7 @@ resource "azurerm_function_app_flex_consumption" "function_app" {
   resource_group_name = var.resource_group_name
   location            = var.location
   service_plan_id     = azurerm_service_plan.this.id
+  virtual_network_subnet_id = var.subnet_id
 
   storage_container_type      = "blobContainer"
   storage_container_endpoint  = "${azurerm_storage_account.this.primary_blob_endpoint}${azurerm_storage_container.this.name}"

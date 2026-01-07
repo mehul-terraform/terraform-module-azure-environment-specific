@@ -117,7 +117,7 @@ module "postgres_sql_flexible" {
   private_dns_zone_id = null
   key_vault_id        = module.keyvault.id
 
-  #password_rotation_version = var.password_rotation_version
+  #password_rotation_version = var.password_rotation_versioncd e
   
   tags = var.tags
 }
@@ -137,7 +137,7 @@ module "private_dns_zones" {
 
 #---------------------------------------------------------------------------------------------
 # PrivateEndpoints
-/*
+
 module "private_endpoints" {
   source = "../../Modules/08-PrivateEndPoints"
 
@@ -172,7 +172,7 @@ module "private_endpoints" {
     }
   }
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 09-CacheRedis
 /*
@@ -250,14 +250,10 @@ module "function_app" {
   tags                           = var.tags
 }
 */
-#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
-#  app_service_id = module.function_app.id
-#  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
-#}
 
 #--------------------------------------------------------------------------------------------------
 # 06-FunctionsAppFlexConsumption
-/*
+
 module "function_app_flex" {
   source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
   resource_group_name      = module.resource_group.name
@@ -273,17 +269,13 @@ module "function_app_flex" {
   storage_container_name   = var.function_app_flex_storage_container_name
   sku_name                 = var.function_app_flex_sku_name
   os_type                  = var.function_app_flex_os_type
+  subnet_id             = module.virtual_network.webapp_subnets["webapp"]
 
   identity_type = var.function_app_flex_identity_type
   app_settings  = var.function_app_flex_app_settings
   tags          = var.tags
 }
 
-#resource "azurerm_app_service_virtual_network_swift_connection" "function_app_vnet_integration" {
-#  app_service_id = module.function_app_flex.id
-#  subnet_id      = module.virtual_network.funcapp_subnets["funcapp"]
-#}
-*/
 #--------------------------------------------------------------------------------------------------
 # 11-CommunicationsService
 /*

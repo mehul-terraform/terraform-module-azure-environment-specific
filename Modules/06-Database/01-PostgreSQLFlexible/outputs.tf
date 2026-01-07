@@ -1,10 +1,18 @@
+# output "ids" {
+#   value = {
+#     for k, v in azurerm_postgresql_flexible_server.this :
+#     k => {
+#       id   = v.id
+#       fqdn = v.fqdn
+#     }
+#   }
+# }
+
 output "ids" {
+  description = "PostgreSQL server resource IDs"
   value = {
     for k, v in azurerm_postgresql_flexible_server.this :
-    k => {
-      id   = v.id
-      fqdn = v.fqdn
-    }
+    k => v.id
   }
 }
 

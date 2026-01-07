@@ -80,3 +80,8 @@ variable "storage_container_name" {
   description = "storage container name"
   type        = string
 }
+
+variable "subnet_id" {
+  description = "Subnet ID for VNET integration"
+  type        = string
+}

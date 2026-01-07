@@ -478,10 +478,17 @@ private_dns_zones = {
 # 8-PrivateEndpoint
 #-----------------------------------------------------------------------------------------------
 private_endpoints = {
-  postgres = {
-    name              = "myexample-dev-db-pe"
+  postgres-server1 = {
+    name              = "myexample-dev-db-svr01-pe"
     service           = "postgres"
     instance          = "server1"
+    subresource_names = ["postgresqlServer"]
+  }
+
+  postgres-server2 = {
+    name              = "myexample-dev-db-svr02-pe"
+    service           = "postgres"
+    instance          = "server2"
     subresource_names = ["postgresqlServer"]
   }
 
@@ -533,18 +540,6 @@ private_endpoints = {
     subresource_names = ["vault"]
   }
 }
-
-/*
-storage_frontend_private_endpoint_name = "myexample-dev-storage-frontend-pe"
-
-app_service_frontend_private_endpoint_name = "myexample-dev-frontend-pe"
-app_service_backend_private_endpoint_name  = "myexample-dev-backend-pe"
-
-app_service_container_frontend_private_endpoint_name = "myexample-dev-frontend-container-pe"
-app_service_container_backend_private_endpoint_name  = "myexample-dev-backend-container-pe"
-
-keyvault_private_endpoint_name = "myexample-dev-keyvault-pe"
-*/
 
 #-----------------------------------------------------------------------------------------
 # 9-RedisCache
