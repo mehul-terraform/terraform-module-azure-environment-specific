@@ -256,8 +256,8 @@ module "function_app" {
 
 module "function_app_flex" {
   source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
   function_apps       = var.function_apps
   tags                = var.tags
 }
