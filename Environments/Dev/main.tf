@@ -256,24 +256,10 @@ module "function_app" {
 
 module "function_app_flex" {
   source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
-  resource_group_name      = module.resource_group.name
-  location                 = module.resource_group.location
-  app_service_plan_name    = var.function_app_flex_service_plan_name
-  storage_account_name     = var.function_app_flex_storage_account_name
-  account_tier             = var.function_app_flex_account_tier
-  account_replication_type = var.function_app_flex_account_replication_type
-  function_app_name        = var.function_app_flex_name
-  runtime_name             = var.function_app_flex_runtime_name
-  runtime_version          = var.function_app_flex_runtime_version
-  container_access_type    = var.function_app_flex_container_access_type
-  storage_container_name   = var.function_app_flex_storage_container_name
-  sku_name                 = var.function_app_flex_sku_name
-  os_type                  = var.function_app_flex_os_type
-  subnet_id             = module.virtual_network.webapp_subnets["webapp"]
-
-  identity_type = var.function_app_flex_identity_type
-  app_settings  = var.function_app_flex_app_settings
-  tags          = var.tags
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  function_apps       = var.function_apps
+  tags                = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------

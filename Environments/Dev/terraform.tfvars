@@ -337,20 +337,30 @@ function_app_settings = {
 # 4.6-FunctionAppFlexconsumption
 #----------------------------------------------------------------------------------------------
 
-function_app_flex_name                     = "myexample-dev-func-backend"
-function_app_flex_service_plan_name        = "myexample-dev-backend-asp"
-function_app_flex_storage_account_name     = "myexampledevfuncbackend"
-function_app_flex_account_tier             = "Standard"
-function_app_flex_account_replication_type = "LRS"
-function_app_flex_sku_name                 = "FC1"
-function_app_flex_os_type                  = "Linux"
-function_app_flex_runtime_name             = "node"
-function_app_flex_runtime_version          = "22"
-function_app_flex_container_access_type    = "private"
-function_app_flex_storage_container_name   = "myexample-dev-func-backend-container"
+function_apps = {
+  func-1 = {
+    function_app_name      = "myexample-dev-func1"
+    service_plan_name      = "myexample-dev-func1-asp"
+    storage_account_name   = "devfunc1storage"
+    storage_container_name = "devfunc1storage"
+    runtime_name           = "dotnet-isolated"
+    runtime_version        = "8"
+    os_type                = "Linux"
+    maximum_instance_count = 40
+    instance_memory_in_mb  = 4096
+  }
 
-function_app_flex_app_settings = {
-  MyCustomSetting = "https://my-api.com/key"
+  func-2 = {
+    function_app_name      = "myexample-dev-func2"
+    service_plan_name      = "myexample-dev-func2-asp"
+    storage_account_name   = "devfunc2storage"
+    storage_container_name = "devfunc2storage"
+    runtime_name           = "node"
+    runtime_version        = "20"
+    os_type                = "Linux"
+    maximum_instance_count = 40
+    instance_memory_in_mb  = 2048
+  }
 }
 
 #-----------------------------------------------------------------------------------------------

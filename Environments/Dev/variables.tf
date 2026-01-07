@@ -437,71 +437,19 @@ variable "identity_type" {
 # 4.6-FunctionAppFlexConsumption
 #---------------------------------------------------------------------------------------------
 
-variable "function_app_flex_name" {
-  type        = string
-  description = "Function app name"
-}
-
-variable "function_app_flex_storage_account_name" {
-  type        = string
-  description = "Extension Version"
-}
-
-variable "function_app_flex_account_tier" {
-  description = "Storage account tier name"
-  type        = string
-}
-
-variable "function_app_flex_account_replication_type" {
-  description = "Storage account replication type"
-  type        = string
-}
-
-variable "function_app_flex_service_plan_name" {
-  type        = string
-  description = "Extension Version"
-}
-
-variable "function_app_flex_app_settings" {
-  description = "App application settings"
-  type        = map(any)
-  default     = {}
-}
-
-variable "function_app_flex_runtime_name" {
-  description = "The name of the language worker runtime."
-  type        = string
-}
-
-variable "function_app_flex_runtime_version" {
-  description = "The version of the language worker runtime."
-  type        = string
-}
-
-variable "function_app_flex_sku_name" {
-  description = "Function sku name"
-  type        = string
-}
-
-variable "function_app_flex_os_type" {
-  description = "Function os type"
-  type        = string
-}
-
-variable "function_app_flex_container_access_type" {
-  description = "Function containrer access type"
-  type        = string
-}
-
-variable "function_app_flex_storage_container_name" {
-  description = "storage container name"
-  type        = string
-}
-
-variable "function_app_flex_identity_type" {
-  description = "The Managed Service Identity Type of this Virtual Machine."
-  type        = string
-  default     = ""
+variable "function_apps" {
+  type = map(object({
+    function_app_name       = string
+    service_plan_name       = string
+    storage_account_name    = string
+    storage_container_name  = string
+    runtime_name            = string
+    runtime_version         = string
+    os_type                 = string
+    subnet_id               = optional(string)
+    maximum_instance_count  = optional(number)
+    instance_memory_in_mb   = optional(number)
+  }))
 }
 
 #----------------------------------------------------------------------------------------------
