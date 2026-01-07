@@ -106,17 +106,20 @@ module "storage_account" {
 #--------------------------------------------------------------------------------------------------
 # 06.01-PostgresSQLFlexible
 
-module "postgre_sql" {
-  source                          = "../../Modules/06-Database/01-PostgreSQLFlexible"
-  resource_group_name             = module.resource_group.name
-  location                        = module.resource_group.location
-  postgresql_flexible_server_name = var.postgresql_flexible_server_name
-  postgres_sku_name               = var.postgres_sku_name
-  storage_mb                      = var.storage_mb
-  databases                       = var.databases
-  postgre_administrator_login     = var.postgre_administrator_login
-  postgre_administrator_password  = var.postgre_administrator_password
-  tags                            = local.tags
+module "postgres_sql_flexible" {
+  source = "../../Modules/06-Database/01-PostgreSQLFlexible"
+
+  postgre_sql = var.postgre_sql
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+
+  delegated_subnet_id = null
+  private_dns_zone_id = null
+  key_vault_id        = module.keyvault.id
+
+  #password_rotation_version = var.password_rotation_version
+  
+  tags = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -134,7 +137,7 @@ module "private_dns_zones" {
 
 #---------------------------------------------------------------------------------------------
 # PrivateEndpoints
-
+/*
 module "private_endpoints" {
   source = "../../Modules/08-PrivateEndPoints"
 
@@ -150,7 +153,7 @@ module "private_endpoints" {
       subnet_id = module.virtual_network.private_endpoint_subnets["private_endpoint"]
 
       resource_id = (
-        v.service == "postgres" ? module.postgre_sql.postgresql_flexible_server_id :
+        v.service == "postgres" ? module.postgres_sql_flexible.ids[v.instance] :
         v.service == "storage" ? module.storage_account.storage_account_ids[v.instance] :
         v.service == "webapp" ? module.app_service.app_service_ids[v.instance] :
         v.service == "webapp-container" ? module.app_service_container.app_service_ids[v.instance] :
@@ -169,7 +172,7 @@ module "private_endpoints" {
     }
   }
 }
-
+*/
 #--------------------------------------------------------------------------------------------------
 # 09-CacheRedis
 /*

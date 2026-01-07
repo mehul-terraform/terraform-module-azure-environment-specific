@@ -387,17 +387,50 @@ storage_accounts = {
 # 6.1-PostgreSQLFlexible
 #-----------------------------------------------------------------------------------------------
 
-postgresql_flexible_server_name = "myexample-dev-db-pg"
-postgres_sku_name               = "B_Standard_B1ms"
-storage_mb                      = 32768
-databases = {
-  testdb = {
-    charset   = "UTF8"
-    collation = "en_US.utf8"
+postgre_sql = {
+  server1 = {
+    name                         = "myexample-dev-pgsql-svr01"    
+    sku_name                     = "GP_Standard_D4s_v3"
+    version                      = "15"
+    storage_mb                   = 131072
+    zone                         = "1"
+    tier                         = "GeneralPurpose"
+    admin_login                  = "pgadmin"
+    backup_retention_days        = 7
+    geo_redundant_backup_enabled = false
+    
+    databases = {
+      ordersdb = {
+        charset   = "UTF8"
+        collation = "en_US.utf8"
+      }
+    }
+  },
+
+  server2 = {
+    name                         = "myexample-dev-pgsql-svr02"    
+    sku_name                     = "GP_Standard_D4s_v3"
+    version                      = "15"
+    storage_mb                   = 131072
+    zone                         = "2"
+    tier                         = "GeneralPurpose"
+    admin_login                  = "pgadmin"
+    backup_retention_days        = 7
+    geo_redundant_backup_enabled = false
+    
+    databases = {
+      ordersdb = {
+        charset   = "UTF8"
+        collation = "en_US.utf8"
+      }
+    }
   }
+}  
+
+tags = {
+  environment = "prod"
+  owner       = "platform"
 }
-postgre_administrator_login    = "myexampleadmin"
-postgre_administrator_password = "Admin@123456"
 
 #-----------------------------------------------------------------------------------------------
 # 6.2-CosmosDB
@@ -448,6 +481,7 @@ private_endpoints = {
   postgres = {
     name              = "myexample-dev-db-pe"
     service           = "postgres"
+    instance          = "server1"
     subresource_names = ["postgresqlServer"]
   }
 

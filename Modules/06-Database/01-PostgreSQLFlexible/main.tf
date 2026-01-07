@@ -1,16 +1,43 @@
-resource "azurerm_postgresql_flexible_server" "postgresql_flexible_server" {
-  resource_group_name = var.resource_group_name
-  name                = var.postgresql_flexible_server_name
+resource "random_password" "admin" {
+  for_each = var.postgre_sql
+
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+  min_upper        = 2
+  min_lower        = 2
+  min_numeric      = 2
+
+  # keepers = {
+  #   rotation = var.password_rotation_version
+  # }
+}
+
+resource "azurerm_postgresql_flexible_server" "this" {
+  for_each = var.postgre_sql
+
+  name                = each.value.name
   location            = var.location
+  resource_group_name = var.resource_group_name
 
-  sku_name   = var.postgres_sku_name
-  storage_mb = var.storage_mb
-  version    = var.postgresql_version
+  sku_name   = each.value.sku_name
+  version    = each.value.version
+  storage_mb = each.value.storage_mb
+  zone       = each.value.zone
 
-  zone = var.zone
+  administrator_login    = each.value.admin_login
+  administrator_password = random_password.admin[each.key].result
+
+  backup_retention_days        = each.value.backup_retention_days
+  geo_redundant_backup_enabled = each.value.geo_redundant_backup_enabled
+
+  delegated_subnet_id = var.delegated_subnet_id
+  private_dns_zone_id = var.private_dns_zone_id
+
+  public_network_access_enabled = false
 
   dynamic "high_availability" {
-    for_each = var.standby_zone != null && var.tier != "Burstable" ? toset([var.standby_zone]) : toset([])
+    for_each = (lookup(each.value, "standby_zone", null) != null && each.value.tier != "Burstable") ? [each.value.standby_zone] : []
 
     content {
       mode                      = "ZoneRedundant"
@@ -18,82 +45,45 @@ resource "azurerm_postgresql_flexible_server" "postgresql_flexible_server" {
     }
   }
 
-  administrator_login    = var.postgre_administrator_login
-  administrator_password = var.use_random_string ? random_password.password[0].result : var.postgre_administrator_password
-
-  backup_retention_days        = var.backup_retention_days
-  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
-
   dynamic "maintenance_window" {
-    for_each = var.maintenance_window != null ? toset([var.maintenance_window]) : toset([])
+    for_each = (lookup(each.value, "maintenance_window", null) != null
+      ? [each.value.maintenance_window]
+      : [])
 
     content {
-      day_of_week  = lookup(maintenance_window.value, "day_of_week", 0)
-      start_hour   = lookup(maintenance_window.value, "start_hour", 0)
-      start_minute = lookup(maintenance_window.value, "start_minute", 0)
+      day_of_week  = maintenance_window.value.day_of_week
+      start_hour   = maintenance_window.value.start_hour
+      start_minute = maintenance_window.value.start_minute
     }
   }
 
-  private_dns_zone_id = var.private_dns_zone_id
-  delegated_subnet_id = var.delegated_subnet_id
-
-  tags = merge(var.tags)
-
-  lifecycle {
-    precondition {
-      condition     = var.private_dns_zone_id != null && var.delegated_subnet_id != null || var.private_dns_zone_id == null && var.delegated_subnet_id == null
-      error_message = "var.private_dns_zone_id and var.delegated_subnet_id should either both be set or none of them."
-    }
-  }
+  tags = merge(var.tags, lookup(each.value, "tags", {}))
 }
 
-resource "azurerm_postgresql_flexible_server_database" "postgresql_flexible_db" {
-  for_each = var.databases
+resource "azurerm_postgresql_flexible_server_database" "db" {
+  for_each = merge([
+    for server_key, server in var.postgre_sql : {
+      for db_name, db in server.databases :
+      "${server_key}.${db_name}" => {
+        server_key = server_key
+        name       = db_name
+        charset    = db.charset
+        collation  = db.collation
+      }
+    }
+  ]...)
 
-  name      = each.key
-  server_id = azurerm_postgresql_flexible_server.postgresql_flexible_server.id
+  name      = each.value.name
+  server_id = azurerm_postgresql_flexible_server.this[each.value.server_key].id
   charset   = each.value.charset
   collation = each.value.collation
-
 }
 
-resource "azurerm_postgresql_flexible_server_configuration" "postgresql_flexible_config" {
-  for_each  = var.postgresql_configurations
-  name      = each.key
-  server_id = azurerm_postgresql_flexible_server.postgresql_flexible_server.id
-  value     = each.value
+resource "azurerm_key_vault_secret" "postgres_admin" {
+  for_each = var.postgre_sql
+
+  name         = "${each.value.name}-pgpassword"
+  value        = random_password.admin[each.key].result
+  key_vault_id = var.key_vault_id
 }
 
-resource "azurerm_postgresql_flexible_server_firewall_rule" "firewall_rules" {
-  for_each = var.allowed_cidrs
-
-  name             = each.key
-  server_id        = azurerm_postgresql_flexible_server.postgresql_flexible_server.id
-  start_ip_address = cidrhost(each.value, 0)
-  end_ip_address   = cidrhost(each.value, -1)
-}
-
-resource "random_password" "password" {
-  count = var.use_random_string ? 1 : 0
-
-  length      = 12
-  special     = false
-  min_upper   = 4
-  min_lower   = 5
-  min_numeric = 3
-}
-
-resource "azurerm_key_vault_secret" "secret" {
-  for_each = var.create_key_secret
-
-  name         = each.key
-  value        = var.use_random_string ? random_password.password[0].result : var.postgre_administrator_password
-  key_vault_id = each.value.key_vault_id
-
-  content_type = each.value.content_type
-
-  tags = merge(var.tags)
-
-  expiration_date = each.value.expiration_date
-  not_before_date = each.value.not_before_date
-}
