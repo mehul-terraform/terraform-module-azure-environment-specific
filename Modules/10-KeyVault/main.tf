@@ -28,11 +28,23 @@ resource "azurerm_key_vault" "keyvault" {
 
 resource "azurerm_role_assignment" "kv_secrets_reader" {
   scope                = azurerm_key_vault.keyvault.id
+  role_definition_name = "Key Vault Reader"
+  principal_id         = azurerm_user_assigned_identity.app.principal_id
+}
+
+resource "azurerm_role_assignment" "kv_secrets_user" {
+  scope                = azurerm_key_vault.keyvault.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.app.principal_id
 }
 
-resource "azurerm_role_assignment" "terraform_access" {
+resource "azurerm_role_assignment" "kv_secrets_officer" {
+  scope                = azurerm_key_vault.keyvault.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_user_assigned_identity.app.principal_id
+}
+
+resource "azurerm_role_assignment" "kv_secrets_officer_user" {
   scope                = azurerm_key_vault.keyvault.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azurerm_client_config.current.object_id
@@ -46,7 +58,8 @@ resource "azurerm_key_vault_secret" "secrets" {
   key_vault_id = azurerm_key_vault.keyvault.id
 
   depends_on = [
-    azurerm_role_assignment.terraform_access,
-    azurerm_role_assignment.kv_secrets_reader
+    azurerm_role_assignment.kv_secrets_reader,
+    azurerm_role_assignment.kv_secrets_user,
+    azurerm_role_assignment.kv_secrets_officer  
   ]
 }
