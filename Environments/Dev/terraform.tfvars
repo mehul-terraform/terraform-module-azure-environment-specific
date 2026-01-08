@@ -2,20 +2,20 @@
 # Project Details
 #------------------------------------------------------------------------------------
 project     = "myexample"
-environment = "dev"
+environment = "tst"
 
 #-------------------------------------------------------------------------------------
 # 01-ResourceGroup
 #-------------------------------------------------------------------------------------
 
-resource_group_name = "myexample-dev-rg"
+resource_group_name = "myexample-tst-rg"
 location            = "WEST US 3"
 
 #-------------------------------------------------------------------------------------
 # 02-VirtualNetwork
 #-------------------------------------------------------------------------------------
 
-virtual_network_name = "myexample-dev-vnet"
+virtual_network_name = "myexample-tst-vnet"
 address_space        = ["10.250.0.0/16"]
 
 subnets = [
@@ -71,7 +71,7 @@ subnets = [
 # 2.2-NetworkSecurityGroup
 #------------------------------------------------------------------------------------------------
 
-network_security_group_name = "myexample-dev-nsg"
+network_security_group_name = "myexample-tst-nsg"
 network_security_group_rules = [
   {
     name                       = "Allow-RDP"
@@ -115,8 +115,8 @@ network_security_group_rules = [
 # 2.3-VirtualNetworkGateway
 #-------------------------------------------------------------------------------------------------
 
-virtual_network_gateway_name                        = "myexample-dev-vnet-gateway01"
-virtual_network_gateway_public_ip_name              = "myexample-dev-vnet-gateway-ip"
+virtual_network_gateway_name                        = "myexample-tst-vnet-gateway01"
+virtual_network_gateway_public_ip_name              = "myexample-tst-vnet-gateway-ip"
 gateway_type                                        = "Vpn"
 vpn_type                                            = "RouteBased"
 active_active                                       = false
@@ -127,15 +127,15 @@ virtual_network_gateway_public_ip_allocation_method = "Static"
 # 3.1-Virtual Machine  
 #-----------------------------------------------------------------------------------------------
 
-virtual_machine_public_ip_name              = "myexample-dev-vm-ip"
+virtual_machine_public_ip_name              = "myexample-tst-vm-ip"
 virtual_machine_public_ip_allocation_method = "Static"
-virtual_machine_name                        = "myexampledevvm"
+virtual_machine_name                        = "myexampletstvm"
 virtual_machine_size                        = "Standard_F2"
 admin_username                              = "myexample"
 admin_password                              = "Admin@123456"
-network_interface_name                      = "myexample-dev-vm01-nic"
+network_interface_name                      = "myexample-tst-vm01-nic"
 private_ip_address_allocation               = "Static"
-private_ip_address_name                     = "myexample-dev-vm01-private-ip"
+private_ip_address_name                     = "myexample-tst-vm01-private-ip"
 private_ip_address                          = "10.250.1.11"
 os_disk_caching                             = "ReadWrite"
 os_disk_storage_account_type                = "Standard_LRS"
@@ -148,7 +148,7 @@ virtual_machine_image_version               = "latest"
 # 3.2-ContainerRegistry
 #-------------------------------------------------------------------------------------------------
 
-container_registry_name       = "myexampledevacr"
+container_registry_name       = "myexampletstacr"
 container_registry_sku        = "Basic"
 admin_enabled                 = true
 public_network_access_enabled = true
@@ -161,7 +161,7 @@ zone_redundancy_enabled       = false
 
 service_plans = {
   linux = {
-    name                     = "myexample-dev-linux-asp"
+    name                     = "myexample-tst-linux-asp"
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
@@ -172,7 +172,7 @@ service_plans = {
   }
 
   windows = {
-    name                     = "myexample-dev-win-asp"
+    name                     = "myexample-tst-win-asp"
     os_type                  = "Windows"
     sku_name                 = "B1"
     per_site_scaling_enabled = true
@@ -190,14 +190,14 @@ service_plans = {
 
 app_service = {
   frontend = {
-    app_service_name = "myexample-dev-frontend"
+    app_service_name = "myexample-tst-frontend"
     runtime = {
       node_version   = null
       python_version = null
       dotnet_version = "10.0"
     }
     app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
       JWT_ISSUER                   = "myexample-auth-api"
       JWT_AUDIENCE                 = "myexample-client"
@@ -207,20 +207,20 @@ app_service = {
       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
-      environment = "dev"
-      team        = "devops"
+      environment = "tst"
+      team        = "tstops"
     }
   }
 
   backend = {
-    app_service_name = "myexample-dev-backend"
+    app_service_name = "myexample-tst-backend"
     runtime = {
       node_version   = "22-lts"
       python_version = null
       dotnet_version = null
     }
     app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
       JWT_ISSUER                   = "myexample-auth-api"
       JWT_AUDIENCE                 = "myexample-client"
@@ -230,22 +230,22 @@ app_service = {
       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
-      environment = "dev"
-      team        = "devops"
+      environment = "tst"
+      team        = "tstops"
     }
   }
 }
 
 app_service_windows = {
   frontend = {
-    app_service_name = "myexample-dev-win-frontend"
+    app_service_name = "myexample-tst-win-frontend"
     runtime = {
       node_version   = null
       python_version = null
       dotnet_version = "v10.0"
     }
     app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
       JWT_ISSUER                   = "myexample-auth-api"
       JWT_AUDIENCE                 = "myexample-client"
@@ -255,8 +255,8 @@ app_service_windows = {
       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
-      environment = "dev"
-      team        = "devops"
+      environment = "tst"
+      team        = "tstops"
     }
   }
 }
@@ -267,10 +267,10 @@ app_service_windows = {
 
 app_service_container = {
   frontend-container = {
-    app_service_container_name = "myexample-dev-container-frontend"
+    app_service_container_name = "myexample-tst-container-frontend"
     docker_image_name          = "nginx:alpine"
     app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
       JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
       JWT_ISSUER                   = "myexample-auth-api"
       JWT_AUDIENCE                 = "myexample-client"
@@ -280,16 +280,16 @@ app_service_container = {
       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
-      environment = "dev"
-      team        = "devops"
+      environment = "tst"
+      team        = "tstops"
     }
   }
 
   backend-container = {
-    app_service_container_name = "myexample-dev-container-backend"
+    app_service_container_name = "myexample-tst-container-backend"
     docker_image_name          = "nginx:alpine"
     app_settings = {
-      DATABASE_URL               = "@Microsoft.KeyVault(SecretUri=https://myexample-dev-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      DATABASE_URL               = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
       JWT_SECRET                 = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
       JWT_ISSUER                 = "myexample-auth-api"
       JWT_AUDIENCE               = "myexample-client"
@@ -298,8 +298,8 @@ app_service_container = {
       LOGGING_DEFAULT            = "Information"
     }
     tags = {
-      environment = "dev"
-      team        = "devops"
+      environment = "tst"
+      team        = "tstops"
     }
   }
 }
@@ -308,11 +308,11 @@ app_service_container = {
 # 4.4-StaticWebApp
 #-----------------------------------------------------------------------------------------------
 
-static_webapp_name              = "myexample-dev-static-webapp"
+static_webapp_name              = "myexample-tst-static-webapp"
 static_webapp_sku_size          = "Free"
 static_webapp_sku_tier          = "Free"
 static_webapp_repository_url    = "https://myexample.co.in/github"
-static_webapp_repository_branch = "develop"
+static_webapp_repository_branch = "tstelop"
 static_webapp_repository_token  = "ABCDEFGHIJKLMNOPQ"
 static_webapp_location          = "westus2"
 static_webapp_api_location      = "api"
@@ -322,7 +322,7 @@ static_webapp_output_location   = "build"
 # 4.5-FunctionApp
 #-----------------------------------------------------------------------------------------------
 
-function_app_name              = "myexample-dev-funcapp"
+function_app_name              = "myexample-tst-funcapp"
 dotnet_version                 = "dotnet6"
 identity_type                  = "SystemAssigned"
 run_from_package               = "1"
@@ -339,22 +339,22 @@ function_app_settings = {
 
 function_apps = {
   func-1 = {
-    function_app_name      = "myexample-dev-func1"
-    service_plan_name      = "myexample-dev-func1-asp"
-    storage_account_name   = "devfunc1storage"
-    storage_container_name = "devfunc1storage"
+    function_app_name      = "myexample-tst-func1"
+    service_plan_name      = "myexample-tst-func1-asp"
+    storage_account_name   = "tstfunc1storage"
+    storage_container_name = "tstfunc1storage"
     runtime_name           = "dotnet-isolated"
-    runtime_version        = "8"
+    runtime_version        = "8.0"
     os_type                = "Linux"
     maximum_instance_count = 40
     instance_memory_in_mb  = 4096
   }
 
   func-2 = {
-    function_app_name      = "myexample-dev-func2"
-    service_plan_name      = "myexample-dev-func2-asp"
-    storage_account_name   = "devfunc2storage"
-    storage_container_name = "devfunc2storage"
+    function_app_name      = "myexample-tst-func2"
+    service_plan_name      = "myexample-tst-func2-asp"
+    storage_account_name   = "tstfunc2storage"
+    storage_container_name = "tstfunc2storage"
     runtime_name           = "node"
     runtime_version        = "20"
     os_type                = "Linux"
@@ -369,7 +369,7 @@ function_apps = {
 
 storage_accounts = {
   frontend = {
-    name                     = "myexampledevfrontend"
+    name                     = "myexampletstfrontend"
     account_tier             = "Standard"
     account_replication_type = "LRS"
 
@@ -384,7 +384,7 @@ storage_accounts = {
   }
 
   backend = {
-    name                     = "myexampledevbackend"
+    name                     = "myexampletstbackend"
     account_tier             = "Standard"
     account_replication_type = "GRS"
     tags = {
@@ -399,18 +399,18 @@ storage_accounts = {
 
 postgre_sql = {
   server1 = {
-    name                         = "myexample-dev-pgsql-svr01"    
-    sku_name                     = "GP_Standard_D4s_v3"
+    name                         = "myexample-tst-pgsql-svr01"
+    sku_name                     = "B_Standard_B2ms"
+    tier                         = "Burstable"
     version                      = "15"
-    storage_mb                   = 131072
+    storage_mb                   = 131072 # 128 GB (max allowed for burstable)
     zone                         = "1"
-    tier                         = "GeneralPurpose"
     admin_login                  = "pgadmin"
     backup_retention_days        = 7
     geo_redundant_backup_enabled = false
-    
+
     databases = {
-      ordersdb = {
+      testdb = {
         charset   = "UTF8"
         collation = "en_US.utf8"
       }
@@ -418,24 +418,24 @@ postgre_sql = {
   },
 
   server2 = {
-    name                         = "myexample-dev-pgsql-svr02"    
-    sku_name                     = "GP_Standard_D4s_v3"
+    name                         = "myexample-tst-pgsql-svr02"
+    sku_name                     = "B_Standard_B2ms"
+    tier                         = "Burstable"
     version                      = "15"
-    storage_mb                   = 131072
+    storage_mb                   = 131072 # 128 GB (max allowed for burstable)
     zone                         = "2"
-    tier                         = "GeneralPurpose"
     admin_login                  = "pgadmin"
     backup_retention_days        = 7
     geo_redundant_backup_enabled = false
-    
+
     databases = {
-      ordersdb = {
+      testdb = {
         charset   = "UTF8"
         collation = "en_US.utf8"
       }
     }
   }
-}  
+}
 
 tags = {
   environment = "prod"
@@ -446,7 +446,7 @@ tags = {
 # 6.2-CosmosDB
 #-----------------------------------------------------------------------------------------------
 
-cosmosdb_account_name     = "myexample-dev-cosmosdb"
+cosmosdb_account_name     = "myexample-tst-cosmosdb"
 database_name             = "myexampledb"
 consistency_level         = "Session"
 max_interval_in_seconds   = 5
@@ -489,63 +489,63 @@ private_dns_zones = {
 #-----------------------------------------------------------------------------------------------
 private_endpoints = {
   postgres-server1 = {
-    name              = "myexample-dev-db-svr01-pe"
+    name              = "myexample-tst-db-svr01-pe"
     service           = "postgres"
     instance          = "server1"
     subresource_names = ["postgresqlServer"]
   }
 
   postgres-server2 = {
-    name              = "myexample-dev-db-svr02-pe"
+    name              = "myexample-tst-db-svr02-pe"
     service           = "postgres"
     instance          = "server2"
     subresource_names = ["postgresqlServer"]
   }
 
   storage-frontend = {
-    name              = "myexample-dev-storage-frontend-pe"
+    name              = "myexample-tst-storage-frontend-pe"
     service           = "storage"
     instance          = "frontend"
     subresource_names = ["blob"]
   }
 
   storage-backend = {
-    name              = "myexample-dev-storage-backend-pe"
+    name              = "myexample-tst-storage-backend-pe"
     service           = "storage"
     instance          = "backend"
     subresource_names = ["blob"]
   }
 
   webapp-frontend = {
-    name              = "myexample-dev-webapp-frontend-pe"
+    name              = "myexample-tst-webapp-frontend-pe"
     service           = "webapp"
     instance          = "frontend"
     subresource_names = ["sites"]
   }
 
   webapp-backend = {
-    name              = "myexample-dev-webapp-backend-pe"
+    name              = "myexample-tst-webapp-backend-pe"
     service           = "webapp"
     instance          = "backend"
     subresource_names = ["sites"]
   }
 
   webapp-container-frontend = {
-    name              = "myexample-dev-webapp-container-frontend-pe"
+    name              = "myexample-tst-webapp-container-frontend-pe"
     service           = "webapp-container"
     instance          = "frontend-container"
     subresource_names = ["sites"]
   }
 
   webapp-container-backend = {
-    name              = "myexample-dev-webapp-container-backend-pe"
+    name              = "myexample-tst-webapp-container-backend-pe"
     service           = "webapp-container"
     instance          = "backend-container"
     subresource_names = ["sites"]
   }
 
   keyvault-backend = {
-    name              = "myexample-dev-keyvault-backend-pe"
+    name              = "myexample-tst-keyvault-backend-pe"
     service           = "keyvault"
     subresource_names = ["vault"]
   }
@@ -555,7 +555,7 @@ private_endpoints = {
 # 9-RedisCache
 #-----------------------------------------------------------------------------------------
 
-cache_name                                = "myexample-dev-redis-cache"
+cache_name                                = "myexample-tst-redis-cache"
 capacity                                  = 2
 family                                    = "C"
 redis_cache_sku                           = "Basic"
@@ -569,9 +569,8 @@ cluster_shard_count                       = 1
 # 10-KeyVault
 #------------------------------------------------------------------------------------------
 
-key_vault_name                       = "myexample-dev-backend-kv"
-key_vault_tenant_id                  = "8fc36c8e-1077-4442-a9a3-ef873f9cc6c7"
-key_vault_object_id                  = "myexample-dev-bkd-kv"
+key_vault_name                       = "myexample-tst-backend-kv"
+key_vault_object_id                  = "myexample-tst-bkd-kv"
 key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false
 key_vault_soft_delete_retention_days = "7"
@@ -588,8 +587,8 @@ key_vault_secrets = {
 # 11-CommunicationService
 #-----------------------------------------------------------------------------------------------
 
-communication_service_name      = "myexample-dev-acs"
-email_service_name              = "myexample-dev-acs-email"
+communication_service_name      = "myexample-tst-acs"
+email_service_name              = "myexample-tst-acs-email"
 domain_name                     = "myexample.co.in"
 enable_user_engagement_tracking = true
 data_location                   = "United States"
@@ -598,39 +597,39 @@ data_location                   = "United States"
 # 13.1-ServiceBus
 #-------------------------------------------------------------------------------------------------
 
-servicebus_namespace_name = "myexample-dev-sb-ns"
+servicebus_namespace_name = "myexample-tst-sb-ns"
 servicebus_sku            = "Standard"
 servicebus_capacity       = null
-servicebus_topic_name     = "myexample-dev-sb-topic"
-servicebus_queue_name     = "myexample-dev-sb-queue"
+servicebus_topic_name     = "myexample-tst-sb-topic"
+servicebus_queue_name     = "myexample-tst-sb-queue"
 
 #-----------------------------------------------------------------------------------------------
 # 15.1-FrontDoor
 #-----------------------------------------------------------------------------------------------
 
-front_door_name     = "myexample-dev-afd"
+front_door_name     = "myexample-tst-afd"
 front_door_sku_name = "Standard_AzureFrontDoor"
 
-endpoint_frontend_name = "myexample-dev-frontend"
-endpoint_backend_name  = "myexample-dev-backend"
+endpoint_frontend_name = "myexample-tst-frontend"
+endpoint_backend_name  = "myexample-tst-backend"
 
-origin_group_frontend_name = "myexample-dev-frontend-origin-group"
-origin_group_backend_name  = "myexample-dev-backend-origin-group"
+origin_group_frontend_name = "myexample-tst-frontend-origin-group"
+origin_group_backend_name  = "myexample-tst-backend-origin-group"
 
-origin_frontend_name = "myexample-dev-frontend-origin"
-origin_backend_name  = "myexample-dev-backend-origin"
+origin_frontend_name = "myexample-tst-frontend-origin"
+origin_backend_name  = "myexample-tst-backend-origin"
 
-origin_host_frontend_name = "myexample-dev-frontend.web.core.windows.net"
-origin_host_backend_name  = "myexample-dev-backend-code.azurewebsites.net"
+origin_host_frontend_name = "myexample-tst-frontend.web.core.windows.net"
+origin_host_backend_name  = "myexample-tst-backend-code.azurewebsites.net"
 
-custome_domain_frontend_name = "myexample-dev-frontend"
-custome_domain_backend_name  = "myexample-dev-backend"
+custome_domain_frontend_name = "myexample-tst-frontend"
+custome_domain_backend_name  = "myexample-tst-backend"
 
-host_custome_domain_frontend_name = "dev.myexample.co.in"
-host_custome_domain_backend_name  = "api-dev.myexample.co.in"
+host_custome_domain_frontend_name = "tst.myexample.co.in"
+host_custome_domain_backend_name  = "api-tst.myexample.co.in"
 
-route_frontend_name = "myexample-dev-frontend-route"
-route_backend_name  = "myexample-dev-backend-route"
+route_frontend_name = "myexample-tst-frontend-route"
+route_backend_name  = "myexample-tst-backend-route"
 
 #----------------------------------------------------------------------------------------------
 # 16-AppConfiguration
@@ -638,18 +637,18 @@ route_backend_name  = "myexample-dev-backend-route"
 
 app_configurations = {
   backend = {
-    name = "myexample-dev-appconfig-backend"
+    name = "myexample-tst-appconfig-backend"
 
     key_values = {
       "Jwt:Issuer" = {
         value = "auth-api"
-        label = "dev"
+        label = "tst"
       }
     }
   }
 
   frontend = {
-    name = "myexample-dev-appconfig-frontend"
+    name = "myexample-tst-appconfig-frontend"
 
     key_values = {
       "Api:BaseUrl" = {

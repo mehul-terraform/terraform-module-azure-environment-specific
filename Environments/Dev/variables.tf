@@ -439,16 +439,16 @@ variable "identity_type" {
 
 variable "function_apps" {
   type = map(object({
-    function_app_name       = string
-    service_plan_name       = string
-    storage_account_name    = string
-    storage_container_name  = string
-    runtime_name            = string
-    runtime_version         = string
-    os_type                 = string
-    subnet_id               = optional(string)
-    maximum_instance_count  = optional(number)
-    instance_memory_in_mb   = optional(number)
+    function_app_name      = string
+    service_plan_name      = string
+    storage_account_name   = string
+    storage_container_name = string
+    runtime_name           = string
+    runtime_version        = string
+    os_type                = string
+    subnet_id              = optional(string)
+    maximum_instance_count = optional(number)
+    instance_memory_in_mb  = optional(number)
   }))
 }
 
@@ -477,7 +477,7 @@ variable "storage_accounts" {
 
 variable "postgre_sql" {
   type = map(object({
-    name                         = string    
+    name                         = string
     sku_name                     = string
     version                      = string
     storage_mb                   = number
@@ -485,7 +485,7 @@ variable "postgre_sql" {
     tier                         = string
     admin_login                  = string
     backup_retention_days        = number
-    geo_redundant_backup_enabled = bool         
+    geo_redundant_backup_enabled = bool
 
     standby_zone = optional(string)
 
@@ -816,11 +816,6 @@ variable "redis_firewall_rule" {
 variable "key_vault_name" {
   type        = string
   description = "The name of the Key Vault."
-}
-
-variable "key_vault_tenant_id" {
-  type        = string
-  description = "The Tenant ID for Azure AD."
 }
 
 variable "key_vault_object_id" {

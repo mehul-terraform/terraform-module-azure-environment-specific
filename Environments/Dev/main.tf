@@ -66,7 +66,7 @@ module "app_service" {
 #04.03-AppServiceWindows
 
 module "windows_web_app" {
-  source = "../../Modules/04-Web/03-AppServiceWindows"
+  source              = "../../Modules/04-Web/03-AppServiceWindows"
   app_service_windows = var.app_service_windows
 
   location            = module.resource_group.location
@@ -109,7 +109,7 @@ module "storage_account" {
 module "postgres_sql_flexible" {
   source = "../../Modules/06-Database/01-PostgreSQLFlexible"
 
-  postgre_sql = var.postgre_sql
+  postgre_sql         = var.postgre_sql
   location            = module.resource_group.location
   resource_group_name = module.resource_group.name
 
@@ -117,8 +117,10 @@ module "postgres_sql_flexible" {
   private_dns_zone_id = null
   key_vault_id        = module.keyvault.id
 
+  depends_on = [module.keyvault.id]
+
   #password_rotation_version = var.password_rotation_versioncd e
-  
+
   tags = var.tags
 }
 
@@ -200,7 +202,6 @@ module "keyvault" {
   resource_group_name        = module.resource_group.name
   location                   = module.resource_group.location
   key_vault_name             = var.key_vault_name
-  tenant_id                  = var.key_vault_tenant_id
   object_id                  = var.key_vault_object_id
   sku_name                   = var.key_vault_sku_name
   purge_protection_enabled   = var.key_vault_purge_protection_enabled
@@ -255,7 +256,7 @@ module "function_app" {
 # 06-FunctionsAppFlexConsumption
 
 module "function_app_flex" {
-  source                   = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
+  source              = "../../Modules/04-Web/06-FunctionsAppFlexConsumption"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   function_apps       = var.function_apps

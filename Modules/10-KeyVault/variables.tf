@@ -13,11 +13,6 @@ variable "resource_group_name" {
   description = "The name of the resource group."
 }
 
-variable "tenant_id" {
-  type        = string
-  description = "The Tenant ID for Azure AD."
-}
-
 variable "object_id" {
   type        = string
   description = "The Object ID of the Azure AD user/service principal that will have access to the Key Vault."
