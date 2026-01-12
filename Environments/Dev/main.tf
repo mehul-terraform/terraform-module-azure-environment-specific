@@ -109,7 +109,7 @@ module "storage_account" {
 module "postgres_sql_flexible" {
   source = "../../Modules/06-Database/01-PostgreSQLFlexible"
 
-  postgre_sql         = var.postgre_sql
+  postgre_sql         = var.postgres_sql
   location            = module.resource_group.location
   resource_group_name = module.resource_group.name
 
@@ -117,7 +117,7 @@ module "postgres_sql_flexible" {
   private_dns_zone_id = null
   key_vault_id        = module.keyvault.id
 
-  depends_on = [module.keyvault.id]
+  depends_on = [module.keyvault.key_vault_secret_ids]
 
   #password_rotation_version = var.password_rotation_versioncd e
 
@@ -380,29 +380,29 @@ module "virtual_network_gateway" {
 */
 #--------------------------------------------------------------------------------------------------
 # 7.2-DNSZone
-/*
-module "example_dns_zone" {
-  source              = "../../Modules/07-DNSZone/7.2-DNSZone"
-  dns_zone_name       = var.dns_zone_name
-  resource_group_name = module.resource_group.name
 
-  cname_records = {
-    api-dev = module.azure_front_door.backend_endpoint
-    dev     = module.azure_front_door.frontend_endpoint
-  }
+# module "example_dns_zone" {
+#   source              = "../../Modules/07-DNSZone/7.2-DNSZone"
+#   dns_zone_name       = var.dns_zone_name
+#   resource_group_name = module.resource_group.name
 
-  txt_records = {
-    "_dnsauth.dev" = module.azure_front_door.frontdoor_frontend_validation_token
-    "_dnsauth.api-dev"  = module.azure_front_door.frontdoor_backend_validation_token
-  }
+#   cname_records = {
+#     api-dev = module.azure_front_door.backend_endpoint
+#     dev     = module.azure_front_door.frontend_endpoint
+#   }
 
-  depends_on = [
-    module.azure_front_door
-  ]
+#   txt_records = {
+#     "_dnsauth.dev" = module.azure_front_door.frontdoor_frontend_validation_token
+#     "_dnsauth.api-dev"  = module.azure_front_door.frontdoor_backend_validation_token
+#   }
 
-  tags = local.tags
-}
-*/
+#   depends_on = [
+#     module.azure_front_door
+#   ]
+
+#   tags = local.tags
+# }
+
 #---------------------------------------------------------------------------------------------------
 # 04-StaticWebApp
 /*
@@ -437,6 +437,18 @@ module "servicebus" {
   tags                = var.tags
 }
 */
+#---------------------------------------------------------------------------------------------------
+# 13.2-EventGrid
+
+# module "eventgrid" {
+#   source = "../../Modules/13-Integration/03-EventGrid"
+
+#   resource_group_name     = var.resource_group_name
+#   location                = var.location
+#   eventgrid_topics        = var.eventgrid_topics
+#   eventgrid_subscriptions = var.eventgrid_subscriptions
+# }
+
 #---------------------------------------------------------------------------------------------------
 # 16-AppCOnfiguration
 /*

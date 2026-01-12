@@ -397,7 +397,7 @@ storage_accounts = {
 # 6.1-PostgreSQLFlexible
 #-----------------------------------------------------------------------------------------------
 
-postgre_sql = {
+postgres_sql = {
   server1 = {
     name                         = "myexample-tst-pgsql-svr01"
     sku_name                     = "B_Standard_B2ms"
@@ -602,6 +602,41 @@ servicebus_sku            = "Standard"
 servicebus_capacity       = null
 servicebus_topic_name     = "myexample-tst-sb-topic"
 servicebus_queue_name     = "myexample-tst-sb-queue"
+
+#-----------------------------------------------------------------------------------------------
+# 13.3-EventGrid
+#-----------------------------------------------------------------------------------------------
+
+eventgrid_topics = {
+  orders = {
+    name     = "eg-orders-topic"
+    identity = true
+    tags = {
+      env = "dev"
+    }
+  }
+
+  payments = {
+    name = "eg-payments-topic"
+  }
+}
+
+eventgrid_subscriptions = {
+  orders-webhook = {
+    topic_key        = "orders"
+    name             = "orders-webhook-sub"
+    webhook_endpoint = "https://example.com/webhook"
+    included_event_types = [
+      "Microsoft.Storage.BlobCreated"
+    ]
+  }
+
+  payments-function = {
+    topic_key          = "payments"
+    name               = "payments-func-sub"
+    azure_function_id  = "/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.Web/sites/app/functions/ProcessPayment"
+  }
+}
 
 #-----------------------------------------------------------------------------------------------
 # 15.1-FrontDoor

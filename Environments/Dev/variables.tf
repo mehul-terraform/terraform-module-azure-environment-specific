@@ -475,7 +475,7 @@ variable "storage_accounts" {
 # 6.1-PostgresSQLFlexible
 #-----------------------------------------------------------------------------------------------
 
-variable "postgre_sql" {
+variable "postgres_sql" {
   type = map(object({
     name                         = string
     sku_name                     = string
@@ -901,6 +901,17 @@ variable "servicebus_topic_name" {
 variable "servicebus_queue_name" {
   type        = string
   description = "Name of the Service Bus queue."
+}
+
+#-----------------------------------------------------------------------------------------------
+# 13.3-EventGrid
+
+variable "eventgrid_topics" {
+  type = any
+}
+
+variable "eventgrid_subscriptions" {
+  type = any
 }
 
 #-----------------------------------------------------------------------------------------------
