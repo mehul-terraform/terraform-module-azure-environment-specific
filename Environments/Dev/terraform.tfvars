@@ -574,15 +574,8 @@ key_vault_object_id                  = "myexample-tst-bkd-kv"
 key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false
 key_vault_soft_delete_retention_days = "7"
-key_vault_secrets = {
-  DATABASEURL     = "https://myexample.db.com/"
-  DATABASEREADURL = "https://myexample.db.com/"
-  REDISHOST       = ""
-  REDISPORT       = ""
-  REDISTLS        = "true"
-  SENTRYDSN       = "123"
-}
-
+key_vault_secrets = {}
+ 
 #-----------------------------------------------------------------------------------------------
 # 11-CommunicationService
 #-----------------------------------------------------------------------------------------------
