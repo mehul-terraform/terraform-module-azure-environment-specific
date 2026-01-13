@@ -117,7 +117,9 @@ module "postgres_sql_flexible" {
   private_dns_zone_id = null
   key_vault_id        = module.keyvault.id
 
-  depends_on = [module.keyvault.key_vault_secret_ids]
+   depends_on = [
+    module.keyvault.terraform_kv_secrets_officer_role_assignment_id
+  ]
 
   #password_rotation_version = var.password_rotation_versioncd e
 

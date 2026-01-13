@@ -574,8 +574,8 @@ key_vault_object_id                  = "myexample-tst-bkd-kv"
 key_vault_sku_name                   = "standard"
 key_vault_purge_protection_enabled   = false
 key_vault_soft_delete_retention_days = "7"
-key_vault_secrets = {}
- 
+key_vault_secrets                    = {}
+
 #-----------------------------------------------------------------------------------------------
 # 11-CommunicationService
 #-----------------------------------------------------------------------------------------------
@@ -625,9 +625,9 @@ eventgrid_subscriptions = {
   }
 
   payments-function = {
-    topic_key          = "payments"
-    name               = "payments-func-sub"
-    azure_function_id  = "/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.Web/sites/app/functions/ProcessPayment"
+    topic_key         = "payments"
+    name              = "payments-func-sub"
+    azure_function_id = "/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.Web/sites/app/functions/ProcessPayment"
   }
 }
 

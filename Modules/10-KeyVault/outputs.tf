@@ -13,3 +13,9 @@ output "key_vault_secret_ids" {
     k => v.id
   }
 }
+
+output "terraform_kv_secrets_officer_role_assignment_id" {
+  description = "Role Assignment ID for Terraform identity as Key Vault Secrets Officer"
+  value       = azurerm_role_assignment.kv_secrets_officer_user
+}
+
