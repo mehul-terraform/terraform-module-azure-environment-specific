@@ -136,7 +136,6 @@ module "private_dns_zones" {
 
   private_dns_zones = var.private_dns_zones
   depends_on        = [module.resource_group.id]
-
 }
 
 #---------------------------------------------------------------------------------------------
