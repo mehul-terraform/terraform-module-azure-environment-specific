@@ -117,7 +117,7 @@ module "postgres_sql_flexible" {
   private_dns_zone_id = null
   key_vault_id        = module.keyvault.id
 
-   depends_on = [
+  depends_on = [
     module.keyvault.terraform_kv_secrets_officer_role_assignment_id
   ]
 
