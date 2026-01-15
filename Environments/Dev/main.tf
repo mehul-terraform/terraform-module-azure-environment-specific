@@ -65,7 +65,7 @@ module "app_service" {
 #---------------------------------------------------------------------------------------------------
 #04.03-AppServiceWindows
 
-module "windows_web_app" {
+module "app_service_windows" {
   source              = "../../Modules/04-Web/03-AppServiceWindows"
   app_service_windows = var.app_service_windows
 
