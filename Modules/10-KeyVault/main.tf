@@ -44,6 +44,12 @@ resource "azurerm_role_assignment" "kv_secrets_officer" {
   principal_id         = azurerm_user_assigned_identity.app.principal_id
 }
 
+resource "azurerm_role_assignment" "kv_secrets_reader_user" {
+  scope                = azurerm_key_vault.keyvault.id
+  role_definition_name = "Key Vault Reader"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
 resource "azurerm_role_assignment" "kv_secrets_officer_user" {
   scope                = azurerm_key_vault.keyvault.id
   role_definition_name = "Key Vault Secrets Officer"
