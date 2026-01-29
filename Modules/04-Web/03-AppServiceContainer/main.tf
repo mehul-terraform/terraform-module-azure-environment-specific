@@ -4,13 +4,13 @@ resource "azurerm_linux_web_app" "app_service_container" {
   location                                       = var.location
   resource_group_name                            = var.resource_group_name
   service_plan_id                                = var.service_plan_id
+  virtual_network_subnet_id                      = var.subnet_id
   https_only                                     = true
   webdeploy_publish_basic_authentication_enabled = true
-  virtual_network_subnet_id = var.subnet_id
+  vnet_image_pull_enabled                        = true
 
   lifecycle {
     ignore_changes = [
-      tags,
       app_settings,
       site_config,
     ]
@@ -29,5 +29,5 @@ resource "azurerm_linux_web_app" "app_service_container" {
 
   identity { type = "SystemAssigned" }
 
-  tags = each.value.tags
+  tags = var.tags
 }

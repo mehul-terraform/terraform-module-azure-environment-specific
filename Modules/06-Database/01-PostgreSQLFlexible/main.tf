@@ -34,7 +34,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
   delegated_subnet_id = var.delegated_subnet_id
   private_dns_zone_id = var.private_dns_zone_id
 
-  public_network_access_enabled = false
+  public_network_access_enabled = lookup(each.value, "public_network_access_enabled", true)
 
   dynamic "high_availability" {
     for_each = (lookup(each.value, "standby_zone", null) != null && each.value.tier != "Burstable") ? [each.value.standby_zone] : []
@@ -48,7 +48,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
   dynamic "maintenance_window" {
     for_each = (lookup(each.value, "maintenance_window", null) != null
       ? [each.value.maintenance_window]
-      : [])
+    : [])
 
     content {
       day_of_week  = maintenance_window.value.day_of_week

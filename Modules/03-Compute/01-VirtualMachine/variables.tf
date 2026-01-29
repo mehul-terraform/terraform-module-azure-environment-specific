@@ -106,9 +106,7 @@ variable "virtual_machine_image_version" {
 }
 
 variable "tags" {
-  description = "Tags to be applied to resources (inclusive)"
-  type = object({
-    environment = string
-    project     = string
-  })
+  description = "Tags to be applied to resources"
+  type        = map(string)
+  default     = {}
 }

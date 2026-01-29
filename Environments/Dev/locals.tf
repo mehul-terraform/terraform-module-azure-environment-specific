@@ -1,7 +1,7 @@
 locals {
   tags = {
-    environment = "development"
-    project     = "myexample"
+    projectname = "myexample"
+    environment = "tst"
   }
   extra_tags = {
     owner = "myexample"

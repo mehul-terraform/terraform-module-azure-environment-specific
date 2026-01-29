@@ -280,8 +280,8 @@ app_service_container = {
       LOGGING_MICROSOFT_ASPNETCORE = "Warning"
     }
     tags = {
+      projectname = "myexample"
       environment = "tst"
-      team        = "tstops"
     }
   }
 
@@ -298,8 +298,8 @@ app_service_container = {
       LOGGING_DEFAULT            = "Information"
     }
     tags = {
+      projectname = "myexample"
       environment = "tst"
-      team        = "tstops"
     }
   }
 }
@@ -400,9 +400,9 @@ storage_accounts = {
 postgres_sql = {
   server1 = {
     name                         = "myexample-tst-pgsql-svr01"
-    sku_name                     = "B_Standard_B2ms"
+    sku_name                     = "B_Standard_B1ms"
     tier                         = "Burstable"
-    version                      = "15"
+    version                      = "18"
     storage_mb                   = 131072 # 128 GB (max allowed for burstable)
     zone                         = "1"
     admin_login                  = "pgadmin"
@@ -421,7 +421,7 @@ postgres_sql = {
     name                         = "myexample-tst-pgsql-svr02"
     sku_name                     = "B_Standard_B2ms"
     tier                         = "Burstable"
-    version                      = "15"
+    version                      = "18"
     storage_mb                   = 131072 # 128 GB (max allowed for burstable)
     zone                         = "2"
     admin_login                  = "pgadmin"
