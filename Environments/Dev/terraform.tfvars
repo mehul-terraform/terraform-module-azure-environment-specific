@@ -127,33 +127,69 @@ virtual_network_gateway_public_ip_allocation_method = "Static"
 # 3.1-Virtual Machine  
 #-----------------------------------------------------------------------------------------------
 
-virtual_machine_public_ip_name              = "myexample-tst-vm-ip"
-virtual_machine_public_ip_allocation_method = "Static"
-virtual_machine_name                        = "myexampletstvm"
-virtual_machine_size                        = "Standard_F2"
-admin_username                              = "myexample"
-admin_password                              = "Admin@123456"
-network_interface_name                      = "myexample-tst-vm01-nic"
-private_ip_address_allocation               = "Static"
-private_ip_address_name                     = "myexample-tst-vm01-private-ip"
-private_ip_address                          = "10.250.1.11"
-os_disk_caching                             = "ReadWrite"
-os_disk_storage_account_type                = "Standard_LRS"
-virtual_machine_image_publisher             = "MicrosoftWindowsServer"
-virtual_machine_image_offer                 = "WindowsServer"
-virtual_machine_image_sku                   = "2022-datacenter"
-virtual_machine_image_version               = "latest"
+virtual_machines = {
+  vm1 = {
+    name           = "myexampletstvm1"
+    size           = "Standard_F2"
+    admin_username = "myexample"
+
+    public_ip_name               = "myexample-tst-vm-ip"
+    public_ip_allocation_method  = "Static"
+    network_interface_name       = "myexample-tst-vm01-nic"
+    private_ip_name              = "myexample-tst-vm01-private-ip"
+    private_ip_allocation        = "Static"
+    private_ip_address           = "10.250.1.11"
+    os_disk_caching              = "ReadWrite"
+    os_disk_storage_account_type = "Standard_LRS"
+    image_publisher              = "MicrosoftWindowsServer"
+    image_offer                  = "WindowsServer"
+    image_sku                    = "2022-datacenter"
+    image_version                = "latest"
+  },
+
+  vm2 = {
+    name           = "myexampletstvm2"
+    size           = "Standard_F2"
+    admin_username = "myexample"
+
+    public_ip_name               = "myexample-tst-vm-ip"
+    public_ip_allocation_method  = "Static"
+    network_interface_name       = "myexample-tst-vm02-nic"
+    private_ip_name              = "myexample-tst-vm02-private-ip"
+    private_ip_allocation        = "Static"
+    private_ip_address           = "10.250.1.12"
+    os_disk_caching              = "ReadWrite"
+    os_disk_storage_account_type = "Standard_LRS"
+    image_publisher              = "MicrosoftWindowsServer"
+    image_offer                  = "WindowsServer"
+    image_sku                    = "2022-datacenter"
+    image_version                = "latest"
+  }
+}
 
 #-------------------------------------------------------------------------------------------------
 # 3.2-ContainerRegistry
 #-------------------------------------------------------------------------------------------------
 
-container_registry_name       = "myexampletstacr"
-container_registry_sku        = "Basic"
-admin_enabled                 = true
-public_network_access_enabled = true
-quarantine_policy_enabled     = false
-zone_redundancy_enabled       = false
+container_registries = {
+  acr1 = {
+    name                          = "myexampletstacr01"
+    sku                           = "Basic"
+    admin_enabled                 = true
+    public_network_access_enabled = true
+    quarantine_policy_enabled     = false
+    zone_redundancy_enabled       = false
+  },
+
+  acr2 = {
+    name                          = "myexampletstacr02"
+    sku                           = "Basic"
+    admin_enabled                 = true
+    public_network_access_enabled = true
+    quarantine_policy_enabled     = false
+    zone_redundancy_enabled       = false
+  }
+}
 
 #-----------------------------------------------------------------------------------------------
 # 4.1-AppServicePlan
@@ -308,30 +344,42 @@ app_service_container = {
 # 4.4-StaticWebApp
 #-----------------------------------------------------------------------------------------------
 
-static_webapp_name              = "myexample-tst-static-webapp"
-static_webapp_sku_size          = "Free"
-static_webapp_sku_tier          = "Free"
-static_webapp_repository_url    = "https://myexample.co.in/github"
-static_webapp_repository_branch = "tstelop"
-static_webapp_repository_token  = "ABCDEFGHIJKLMNOPQ"
-static_webapp_location          = "westus2"
-static_webapp_api_location      = "api"
-static_webapp_output_location   = "build"
+static_web_apps = {
+  app1 = {
+    name              = "myexample-tst-static-webapp"
+    location          = "westus2"
+    sku_tier          = "Free"
+    sku_size          = "Free"
+    repository_url    = "https://myexample.co.in/github"
+    repository_branch = "tstelop"
+    repository_token  = "ABCDEFGHIJKLMNOPQ"
+  },
+
+  app2 = {
+    name              = "myexample-tst-static-webapp"
+    location          = "westus2"
+    sku_tier          = "Free"
+    sku_size          = "Free"
+    repository_url    = "https://myexample.co.in/github"
+    repository_branch = "tstelop"
+    repository_token  = "ABCDEFGHIJKLMNOPQ"
+  }
+}
 
 #-----------------------------------------------------------------------------------------------
 # 4.5-FunctionApp
 #-----------------------------------------------------------------------------------------------
 
-function_app_name              = "myexample-tst-funcapp"
-dotnet_version                 = "dotnet6"
-identity_type                  = "SystemAssigned"
-run_from_package               = "1"
-worker_runtime                 = "dotnet"
-function_app_node_version      = "~14"
-function_app_extension_version = "~4"
-function_app_settings = {
-  MyCustomSetting = "https://my-api.com/key"
-}
+# function_app_name              = "myexample-tst-funcapp"
+# dotnet_version                 = "dotnet6"
+# identity_type                  = "SystemAssigned"
+# run_from_package               = "1"
+# worker_runtime                 = "dotnet"
+# function_app_node_version      = "~14"
+# function_app_extension_version = "~4"
+# function_app_settings = {
+#   MyCustomSetting = "https://my-api.com/key"
+# }
 
 #----------------------------------------------------------------------------------------------
 # 4.6-FunctionAppFlexconsumption
@@ -569,12 +617,29 @@ cluster_shard_count                       = 1
 # 10-KeyVault
 #------------------------------------------------------------------------------------------
 
-key_vault_name                       = "myexample-tst-backend-kv"
-key_vault_object_id                  = "myexample-tst-bkd-kv"
-key_vault_sku_name                   = "standard"
-key_vault_purge_protection_enabled   = false
-key_vault_soft_delete_retention_days = "7"
-key_vault_secrets                    = {}
+key_vaults = {
+  backend = {
+    name                        = "myexample-tst-be-kv"
+    sku_name                    = "standard"
+    soft_delete_retention_days  = 7
+    purge_protection_enabled    = false
+    enable_rbac_authorization   = true
+    enabled_for_disk_encryption = true
+    network_acls                = null
+    tags                        = {}
+  },
+
+  frontend = {
+    name                        = "myexample-tst-fe-kv"
+    sku_name                    = "standard"
+    soft_delete_retention_days  = 7
+    purge_protection_enabled    = false
+    enable_rbac_authorization   = true
+    enabled_for_disk_encryption = true
+    network_acls                = null
+    tags                        = {}
+  }
+}
 
 #-----------------------------------------------------------------------------------------------
 # 11-CommunicationService
@@ -590,46 +655,58 @@ data_location                   = "United States"
 # 13.1-ServiceBus
 #-------------------------------------------------------------------------------------------------
 
-servicebus_namespace_name = "myexample-tst-sb-ns"
-servicebus_sku            = "Standard"
-servicebus_capacity       = null
-servicebus_topic_name     = "myexample-tst-sb-topic"
-servicebus_queue_name     = "myexample-tst-sb-queue"
+service_buses = {
+  sb1 = {
+    name       = "myexample-tst-sb-ns01"
+    sku        = "Standard"
+    topic_name = "myexample-tst-sb-topic"
+    queue_name = "myexample-tst-sb-queue"
+    tags       = {}
+  },
+
+  sb2 = {
+    name       = "myexample-tst-sb-ns02"
+    sku        = "Standard"
+    topic_name = "myexample-tst-sb-topic"
+    queue_name = "myexample-tst-sb-queue"
+    tags       = {}
+  }
+}
 
 #-----------------------------------------------------------------------------------------------
 # 13.3-EventGrid
 #-----------------------------------------------------------------------------------------------
 
-eventgrid_topics = {
-  orders = {
-    name     = "eg-orders-topic"
-    identity = true
-    tags = {
-      env = "dev"
-    }
-  }
+# eventgrid_topics = {
+#   orders = {
+#     name     = "eg-orders-topic"
+#     identity = true
+#     tags = {
+#       env = "dev"
+#     }
+#   }
 
-  payments = {
-    name = "eg-payments-topic"
-  }
-}
+#   payments = {
+#     name = "eg-payments-topic"
+#   }
+# }
 
-eventgrid_subscriptions = {
-  orders-webhook = {
-    topic_key        = "orders"
-    name             = "orders-webhook-sub"
-    webhook_endpoint = "https://example.com/webhook"
-    included_event_types = [
-      "Microsoft.Storage.BlobCreated"
-    ]
-  }
+# eventgrid_subscriptions = {
+#   orders-webhook = {
+#     topic_key        = "orders"
+#     name             = "orders-webhook-sub"
+#     webhook_endpoint = "https://example.com/webhook"
+#     included_event_types = [
+#       "Microsoft.Storage.BlobCreated"
+#     ]
+#   }
 
-  payments-function = {
-    topic_key         = "payments"
-    name              = "payments-func-sub"
-    azure_function_id = "/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.Web/sites/app/functions/ProcessPayment"
-  }
-}
+#   payments-function = {
+#     topic_key         = "payments"
+#     name              = "payments-func-sub"
+#     azure_function_id = "/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.Web/sites/app/functions/ProcessPayment"
+#   }
+# }
 
 #-----------------------------------------------------------------------------------------------
 # 15.1-FrontDoor

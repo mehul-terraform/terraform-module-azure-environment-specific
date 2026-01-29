@@ -1,15 +1,15 @@
-output "login_server" {
-  description = "ACR login server"
-  value       = azurerm_container_registry.acr.login_server
+output "login_servers" {
+  description = "ACR login servers"
+  value       = { for k, v in azurerm_container_registry.acr : k => v.login_server }
 }
 
-output "admin_username" {
-  description = "Admin username (if enabled)"
-  value       = azurerm_container_registry.acr.admin_username
+output "admin_usernames" {
+  description = "Admin usernames (if enabled)"
+  value       = { for k, v in azurerm_container_registry.acr : k => v.admin_username }
 }
 
-output "admin_password" {
-  description = "Admin password (if enabled)"
-  value       = azurerm_container_registry.acr.admin_password
+output "admin_passwords" {
+  description = "Admin passwords (if enabled)"
+  value       = { for k, v in azurerm_container_registry.acr : k => v.admin_password }
   sensitive   = true
 }

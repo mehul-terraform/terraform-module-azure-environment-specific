@@ -1,5 +1,1 @@
-#data "azurerm_subnet" "private" {
-#  name                 = "private"
-#  virtual_network_name = "myexample-dev-vnet"
-#  resource_group_name  = "myexample-dev-rg"
-#}
+data "azurerm_client_config" "current" {}

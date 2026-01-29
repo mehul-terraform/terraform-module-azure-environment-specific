@@ -1,71 +1,37 @@
-data "azurerm_client_config" "current" {}
+resource "azurerm_key_vault" "this" {
+  for_each = var.key_vaults
 
-resource "azurerm_user_assigned_identity" "app" {
-  name                = "${var.key_vault_name}-uami"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  tags                = var.tags
-}
+  name                        = each.value.name
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
+  enabled_for_disk_encryption = lookup(each.value, "enabled_for_disk_encryption", true)
+  tenant_id                   = var.tenant_id
+  soft_delete_retention_days  = lookup(each.value, "soft_delete_retention_days", 7)
+  purge_protection_enabled    = lookup(each.value, "purge_protection_enabled", false)
 
-resource "azurerm_key_vault" "keyvault" {
-  name                          = var.key_vault_name
-  location                      = var.location
-  resource_group_name           = var.resource_group_name
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  sku_name                      = var.sku_name
-  soft_delete_retention_days    = var.soft_delete_retention_days
-  purge_protection_enabled      = var.purge_protection_enabled
-  rbac_authorization_enabled    = true
-  public_network_access_enabled = true
+  sku_name = lookup(each.value, "sku_name", "standard")
 
-  network_acls {
-    default_action = "Allow"
-    bypass         = "AzureServices"
+  enabled_for_deployment          = lookup(each.value, "enabled_for_deployment", false)
+  enabled_for_template_deployment = lookup(each.value, "enabled_for_template_deployment", false)
+  rbac_authorization_enabled      = lookup(each.value, "rbac_authorization_enabled", lookup(each.value, "enable_rbac_authorization", false))
+  public_network_access_enabled   = lookup(each.value, "public_network_access_enabled", true)
+
+  dynamic "network_acls" {
+    for_each = lookup(each.value, "network_acls", null) != null ? [each.value.network_acls] : []
+    content {
+      bypass                     = lookup(network_acls.value, "bypass", "AzureServices")
+      default_action             = lookup(network_acls.value, "default_action", "Allow")
+      ip_rules                   = lookup(network_acls.value, "ip_rules", [])
+      virtual_network_subnet_ids = lookup(network_acls.value, "virtual_network_subnet_ids", [])
+    }
   }
 
-  tags = var.tags
+  tags = merge(var.tags, lookup(each.value, "tags", {}))
 }
 
-resource "azurerm_role_assignment" "kv_secrets_reader" {
-  scope                = azurerm_key_vault.keyvault.id
-  role_definition_name = "Key Vault Reader"
-  principal_id         = azurerm_user_assigned_identity.app.principal_id
-}
-
-resource "azurerm_role_assignment" "kv_secrets_user" {
-  scope                = azurerm_key_vault.keyvault.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.app.principal_id
-}
-
-resource "azurerm_role_assignment" "kv_secrets_officer" {
-  scope                = azurerm_key_vault.keyvault.id
+resource "azurerm_role_assignment" "this" {
+  for_each             = var.key_vaults
+  scope                = azurerm_key_vault.this[each.key].id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = azurerm_user_assigned_identity.app.principal_id
-}
-
-resource "azurerm_role_assignment" "kv_secrets_reader_user" {
-  scope                = azurerm_key_vault.keyvault.id
-  role_definition_name = "Key Vault Reader"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
-
-resource "azurerm_role_assignment" "kv_secrets_officer_user" {
-  scope                = azurerm_key_vault.keyvault.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
-
-resource "azurerm_key_vault_secret" "secrets" {
-  for_each = var.secrets
-
-  name         = each.key
-  value        = each.value
-  key_vault_id = azurerm_key_vault.keyvault.id
-
-  depends_on = [
-    azurerm_role_assignment.kv_secrets_reader,
-    azurerm_role_assignment.kv_secrets_user,
-    azurerm_role_assignment.kv_secrets_officer  
-  ]
+  principal_id         = var.current_user_object_id
 }

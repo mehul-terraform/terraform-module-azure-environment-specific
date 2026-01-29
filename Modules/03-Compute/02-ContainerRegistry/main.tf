@@ -1,12 +1,13 @@
 resource "azurerm_container_registry" "acr" {
-  name                          = var.container_registry_name
+  for_each                      = var.container_registries
+  name                          = each.value.name
   resource_group_name           = var.resource_group_name
   location                      = var.location
-  sku                           = var.container_registry_sku
-  admin_enabled                 = var.admin_enabled
-  public_network_access_enabled = var.public_network_access_enabled
-  quarantine_policy_enabled     = var.quarantine_policy_enabled
-  zone_redundancy_enabled       = var.zone_redundancy_enabled
-  tags                          = merge(var.tags)
+  sku                           = lookup(each.value, "sku", "Basic")
+  admin_enabled                 = lookup(each.value, "admin_enabled", true)
+  public_network_access_enabled = lookup(each.value, "public_network_access_enabled", true)
+  quarantine_policy_enabled     = lookup(each.value, "quarantine_policy_enabled", false)
+  zone_redundancy_enabled       = lookup(each.value, "zone_redundancy_enabled", false)
+  tags                          = merge(var.tags, lookup(each.value, "tags", {}))
 }
 

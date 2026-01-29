@@ -1,27 +1,31 @@
 resource "azurerm_servicebus_namespace" "this" {
-  name                = var.namespace_name
+  for_each            = var.service_buses
+  name                = each.value.name
   location            = var.location
   resource_group_name = var.resource_group_name
-  sku                 = var.sku
-  capacity            = var.capacity
-  tags                = var.tags
+  sku                 = lookup(each.value, "sku", "Standard")
+  capacity            = lookup(each.value, "capacity", null)
+  tags                = merge(var.tags, lookup(each.value, "tags", {}))
 }
 
 resource "azurerm_servicebus_topic" "this" {
-  name         = var.topic_name
-  namespace_id = azurerm_servicebus_namespace.this.id
+  for_each     = var.service_buses
+  name         = each.value.topic_name
+  namespace_id = azurerm_servicebus_namespace.this[each.key].id
 }
 
 resource "azurerm_servicebus_queue" "this" {
-  name         = var.queue_name
-  namespace_id = azurerm_servicebus_namespace.this.id
+  for_each     = var.service_buses
+  name         = each.value.queue_name
+  namespace_id = azurerm_servicebus_namespace.this[each.key].id
 
 }
 
 # Optional: Authorization Rule
 resource "azurerm_servicebus_topic_authorization_rule" "this" {
+  for_each = var.service_buses
   name     = "auth-rule"
-  topic_id = azurerm_servicebus_topic.this.id
+  topic_id = azurerm_servicebus_topic.this[each.key].id
 
   listen = true
   send   = true

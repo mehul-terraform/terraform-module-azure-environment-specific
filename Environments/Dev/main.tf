@@ -115,10 +115,10 @@ module "postgres_sql_flexible" {
 
   delegated_subnet_id = null
   private_dns_zone_id = null
-  key_vault_id        = module.keyvault.id
+  key_vault_id        = module.keyvault.ids["backend"]
 
   depends_on = [
-    module.keyvault.terraform_kv_secrets_officer_role_assignment_id
+    module.keyvault.terraform_kv_secrets_officer_role_assignment_ids
   ]
 
   #password_rotation_version = var.password_rotation_versioncd e
@@ -160,7 +160,7 @@ module "private_endpoints" {
         v.service == "storage" ? module.storage_account.storage_account_ids[v.instance] :
         v.service == "webapp" ? module.app_service.app_service_ids[v.instance] :
         v.service == "webapp-container" ? module.app_service_container.app_service_ids[v.instance] :
-        v.service == "keyvault" ? module.keyvault.id :
+        v.service == "keyvault" ? module.keyvault.ids["backend"] :
         null
       )
 
@@ -199,16 +199,13 @@ module "redis" {
 # 10-KeyVault
 
 module "keyvault" {
-  source                     = "../../Modules/10-KeyVault"
-  resource_group_name        = module.resource_group.name
-  location                   = module.resource_group.location
-  key_vault_name             = var.key_vault_name
-  object_id                  = var.key_vault_object_id
-  sku_name                   = var.key_vault_sku_name
-  purge_protection_enabled   = var.key_vault_purge_protection_enabled
-  soft_delete_retention_days = var.key_vault_soft_delete_retention_days
-  secrets                    = var.key_vault_secrets
-  tags                       = local.tags
+  source                 = "../../Modules/10-KeyVault"
+  key_vaults             = var.key_vaults
+  resource_group_name    = module.resource_group.name
+  location               = module.resource_group.location
+  tenant_id              = data.azurerm_client_config.current.tenant_id
+  current_user_object_id = data.azurerm_client_config.current.object_id
+  tags                   = local.tags
 }
 
 #---------------------------------------------------------------------------------------------
@@ -321,45 +318,28 @@ module "azure_front_door" {
 # 3.1-VirtualMachine
 
 module "virtual_machine" {
-  source                          = "../../Modules/03-Compute/01-VirtualMachine"
-  resource_group_name             = module.resource_group.name
-  location                        = module.resource_group.location
-  virtual_machine_name            = var.virtual_machine_name
-  virtual_machine_size            = var.virtual_machine_size
-  admin_username                  = var.admin_username
-  admin_password                  = var.admin_password
-  network_interface_name          = var.network_interface_name
-  subnet_id                       = module.virtual_network.vm_subnets["vm"]
-  private_ip_address_allocation   = var.private_ip_address_allocation
-  private_ip_address              = var.private_ip_address
-  private_ip_address_name         = var.private_ip_address_name
-  virtual_machine_public_ip_name  = var.virtual_machine_public_ip_name
-  public_ip_allocation_method     = var.virtual_machine_public_ip_allocation_method
-  os_disk_caching                 = var.os_disk_caching
-  os_disk_storage_account_type    = var.os_disk_storage_account_type
-  virtual_machine_image_publisher = var.virtual_machine_image_publisher
-  virtual_machine_image_offer     = var.virtual_machine_image_offer
-  virtual_machine_image_sku       = var.virtual_machine_image_sku
-  virtual_machine_image_version   = var.virtual_machine_image_version
-  tags                            = local.tags
+  source              = "../../Modules/03-Compute/01-VirtualMachineWindows"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  subnet_id           = module.virtual_network.vm_subnets["vm"]
+  virtual_machines    = var.virtual_machines
+  key_vault_id        = module.keyvault.ids["backend"]
+  tags                = local.tags
+
+  depends_on = [module.keyvault]
 }
 
 #--------------------------------------------------------------------------------------------------
 # 3.2-ContainerRegistry
-/*
+
 module "container_registry" {
-  source                        = "../../Modules/03-Compute/02-ContainerRegistry"
-  container_registry_name       = var.container_registry_name
-  resource_group_name           = module.resource_group.name
-  location                      = module.resource_group.location
-  container_registry_sku        = var.container_registry_sku
-  admin_enabled                 = var.admin_enabled
-  public_network_access_enabled = var.public_network_access_enabled
-  quarantine_policy_enabled     = var.quarantine_policy_enabled
-  zone_redundancy_enabled       = var.zone_redundancy_enabled
-  tags                          = local.tags
+  source               = "../../Modules/03-Compute/02-ContainerRegistry"
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
+  container_registries = var.container_registries
+  tags                 = local.tags
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 # 3.3-VirtualNetworkGateway
 /*
@@ -406,38 +386,25 @@ module "virtual_network_gateway" {
 
 #---------------------------------------------------------------------------------------------------
 # 04-StaticWebApp
-/*
+
 module "static_web_app" {
-  source                 = "../../Modules/04-Web/04-StaticWebApp"
-  static_webapp_name     = var.static_webapp_name
-  resource_group_name    = module.resource_group.name
-  static_webapp_location = var.static_webapp_location
-  sku_tier               = var.static_webapp_sku_tier
-  sku_size               = var.static_webapp_sku_size
-  app_location           = var.static_webapp_location
-  api_location           = var.static_webapp_api_location
-  output_location        = var.static_webapp_output_location
-  repository_url         = var.static_webapp_repository_url
-  repository_branch      = var.static_webapp_repository_branch
-  repository_token       = var.static_webapp_repository_token
-  tags                   = var.tags
+  source              = "../../Modules/04-Web/04-StaticWebApp"
+  resource_group_name = module.resource_group.name
+  static_web_apps     = var.static_web_apps
+  tags                = var.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 13.1-ServiceBus
-/*
+
 module "servicebus" {
   source              = "../../Modules/13-Integration/01-ServiceBus"
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
-  namespace_name      = var.servicebus_namespace_name
-  sku                 = var.servicebus_sku
-  capacity            = var.servicebus_capacity
-  topic_name          = var.servicebus_topic_name
-  queue_name          = var.servicebus_queue_name
+  service_buses       = var.service_buses
   tags                = var.tags
 }
-*/
+
 #---------------------------------------------------------------------------------------------------
 # 13.2-EventGrid
 
@@ -452,18 +419,15 @@ module "servicebus" {
 
 #---------------------------------------------------------------------------------------------------
 # 16-AppCOnfiguration
-/*
+
 module "app_configurations" {
-  source   = "../../Modules/16-AppConfiguration"
-  for_each = var.app_configurations
+  source = "../../Modules/16-AppConfiguration"
 
-  name                = each.value.name
-  location            = module.resource_group.location
   resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+  app_configurations  = var.app_configurations
   tags                = var.tags
-
-  key_values = lookup(each.value, "key_values", {})
 }
-*/
+
 #--------------------------------------------------------------------------------------------------
 

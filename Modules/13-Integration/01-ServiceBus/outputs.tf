@@ -1,11 +1,11 @@
-output "namespace_id" {
-  value = azurerm_servicebus_namespace.this.id
+output "namespace_ids" {
+  value = { for k, v in azurerm_servicebus_namespace.this : k => v.id }
 }
 
-output "topic_id" {
-  value = azurerm_servicebus_topic.this.id
+output "topic_ids" {
+  value = { for k, v in azurerm_servicebus_topic.this : k => v.id }
 }
 
-output "queue_id" {
-  value = azurerm_servicebus_queue.this.id
+output "queue_ids" {
+  value = { for k, v in azurerm_servicebus_queue.this : k => v.id }
 }

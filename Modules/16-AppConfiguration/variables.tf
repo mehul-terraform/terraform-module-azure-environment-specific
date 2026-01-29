@@ -1,12 +1,17 @@
-variable "name" { type = string }
-variable "location" { type = string }
-variable "resource_group_name" { type = string }
-variable "tags" { type = map(string) }
+variable "app_configurations" {
+  description = "Map of App Configurations"
+  type        = map(any)
+}
 
-variable "key_values" {
-  type = map(object({
-    value = string
-    label = optional(string)
-  }))
+variable "location" {
+  type = string
+}
+
+variable "resource_group_name" {
+  type = string
+}
+
+variable "tags" {
+  type    = map(string)
   default = {}
 }

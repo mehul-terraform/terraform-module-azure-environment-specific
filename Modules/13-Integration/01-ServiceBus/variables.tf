@@ -6,24 +6,9 @@ variable "location" {
   type = string
 }
 
-variable "namespace_name" {
-  type = string
-}
-
-variable "sku" {
-  type = string
-}
-
-variable "capacity" {
-  type = number
-}
-
-variable "topic_name" {
-  type = string
-}
-
-variable "queue_name" {
-  type = string
+variable "service_buses" {
+  description = "Map of Service Bus Namespaces, Topics, and Queues to create."
+  type        = map(any)
 }
 
 variable "tags" {

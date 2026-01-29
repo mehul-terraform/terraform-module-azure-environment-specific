@@ -1,43 +1,31 @@
-variable "key_vault_name" {
-  type        = string
-  description = "The name of the Key Vault."
+variable "key_vaults" {
+  description = "Map of Key Vaults to create"
+  type        = map(any)
 }
 
 variable "location" {
+  description = "Azure region"
   type        = string
-  description = "Azure location where the Key Vault will be created."
 }
 
 variable "resource_group_name" {
+  description = "Resource Group Name"
   type        = string
-  description = "The name of the resource group."
 }
 
-variable "object_id" {
+variable "tenant_id" {
+  description = "The Azure Active Directory Tenant ID"
   type        = string
-  description = "The Object ID of the Azure AD user/service principal that will have access to the Key Vault."
-}
-
-variable "sku_name" {
-  type        = string
-  description = "SKU Name of the Key Vault. Possible values are 'standard' and 'premium'."
-}
-
-variable "soft_delete_retention_days" {
-  type        = number
-  description = "Number of days to retain soft deleted key vault objects."
-}
-
-variable "purge_protection_enabled" {
-  type        = bool
-  description = "Enable purge protection on the Key Vault."
 }
 
 variable "tags" {
+  description = "A mapping of tags to assign to the resources"
   type        = map(string)
-  description = "Tags to be applied to the Key Vault."
+  default     = {}
 }
 
-variable "secrets" {
-  type = map(string)
+variable "current_user_object_id" {
+  description = "The Object ID of the user running Terraform"
+  type        = string
+  default     = null
 }
