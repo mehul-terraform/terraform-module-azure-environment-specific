@@ -1,12 +1,6 @@
-variable "location" {
-  description = "Azure Region"
-  type        = string
-}
-
-variable "resource_group_name" {
-  description = "Name of the resource group"
-  type        = string
-  default     = null
+variable "resource_groups" {
+  description = "Map of Resource Groups to create"
+  type        = map(any)
 }
 
 variable "tags" {

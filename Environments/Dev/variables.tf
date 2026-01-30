@@ -1,6 +1,7 @@
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # Project Details
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+
 variable "project" {
   description = "Project name prefix"
   type        = string
@@ -11,9 +12,9 @@ variable "environment" {
   type        = string
 }
 
-#------------------------------------------------------------------------------------
-# 0-Tags
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 00-Tags
+#--------------------------------------------------------------------------------------------------
 
 variable "tags" {
   type    = map(string)
@@ -26,112 +27,81 @@ variable "extra_tags" {
   default     = {}
 }
 
-#----------------------------------------------------------------------------------------------
-# 1-ResourceGroup
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 01-ResourceGroup
+#--------------------------------------------------------------------------------------------------
 
-variable "location" {
-  description = "Azure region for the virtual network"
-  type        = string
+variable "resource_groups" {
+  description = "Map of Resource Groups to create"
+  type        = map(any)
 }
 
-variable "resource_group_name" {
-  description = "The name of the resource group"
-  type        = string
-}
+#--------------------------------------------------------------------------------------------------
+# 02-Networking
+#--------------------------------------------------------------------------------------------------
 
-#----------------------------------------------------------------------------------------------
-# 2.1-VirtualNetwork
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 02.01-VirtualNetwork
+#--------------------------------------------------------------------------------------------------
 
-variable "virtual_network_name" {
-  description = "The name of the virtual network"
-  type        = string
-}
-
-variable "address_space" {
-  description = "Address space for the virtual network"
-  type        = list(string)
-}
-
-variable "dns_servers" {
-  description = "DNS servers for the virtual network"
-  type        = list(string)
-  default     = []
-}
-
-variable "subnets" {
-  description = "List of subnets to create"
-  type = list(object({
-    name           = string
-    address_prefix = string
-    delegation = optional(object({
-      name = string
-      service_delegation = object({
-        name    = string
-        actions = list(string)
-      })
+variable "virtual_networks" {
+  description = "Map of Virtual Networks to create"
+  type = map(object({
+    name          = string
+    address_space = list(string)
+    tags          = optional(map(string), {})
+    subnets = list(object({
+      name           = string
+      address_prefix = string
+      delegation = optional(object({
+        name = string
+        service_delegation = object({
+          name    = string
+          actions = list(string)
+        })
+      }))
     }))
   }))
+  default = {}
 }
 
-#-----------------------------------------------------------------------------------------------
-# 2.2-NetworkSecurityGroup
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 02.02-NetworkSecurityGroup
+#--------------------------------------------------------------------------------------------------
 
-variable "network_security_group_name" {
-  description = "The name of the Network Security Group."
-  type        = string
+variable "network_security_groups" {
+  description = "Map of Network Security Groups to create"
+  type        = map(any)
+  default     = {}
 }
 
-variable "network_security_group_rules" {
-  description = "List of security rules to apply to the NSG."
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default = []
-}
-
-#-----------------------------------------------------------------------------------------------
-# 2.3-VirtualNetworkGateway
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 02.03-VirtualNetworkGateway
+#--------------------------------------------------------------------------------------------------
 
 variable "virtual_network_gateway_name" {
   description = "Name of the virtual network gateway"
   type        = string
-
 }
 
 variable "gateway_type" {
   description = "Gateway type"
   type        = string
-
 }
 
 variable "vpn_type" {
   description = "VPN type"
   type        = string
-
 }
 
 variable "active_active" {
   description = "Active-active mode"
   type        = bool
-
 }
 
 variable "virtual_network_gateway_sku" {
   description = "Gateway SKU"
   type        = string
-
 }
 
 variable "virtual_network_gateway_public_ip_name" {
@@ -142,30 +112,43 @@ variable "virtual_network_gateway_public_ip_name" {
 variable "virtual_network_gateway_public_ip_allocation_method" {
   description = "Gateway SKU"
   type        = string
-
 }
 
-#-----------------------------------------------------------------------------------------------
-# 3.1-VirtualMachine
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 03-Compute
+#--------------------------------------------------------------------------------------------------
 
-variable "virtual_machines" {
+#--------------------------------------------------------------------------------------------------
+# 03.01-VirtualMachine
+#--------------------------------------------------------------------------------------------------
+
+variable "virtual_machines_windows" {
   description = "Map of Windows Virtual Machines to create"
   type        = map(any)
 }
 
-#-----------------------------------------------------------------------------------------------
-# 3.3-ContainerRegistry
-#-----------------------------------------------------------------------------------------------
+variable "virtual_machines_linux" {
+  description = "Map of Linux Virtual Machines to create"
+  type        = map(any)
+  default     = {}
+}
+
+#--------------------------------------------------------------------------------------------------
+# 03.02-ContainerRegistry
+#--------------------------------------------------------------------------------------------------
 
 variable "container_registries" {
   description = "Map of Container Registries to create"
   type        = map(any)
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.1-AppServicePlan
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04-Web
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 04.01-AppServicePlan
+#--------------------------------------------------------------------------------------------------
 
 variable "service_plans" {
   description = "App Service Plans (Linux + Windows)"
@@ -179,9 +162,9 @@ variable "service_plans" {
   }))
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.2-AppServiceLinux
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.02-AppServiceLinux
+#--------------------------------------------------------------------------------------------------
 
 variable "app_service" {
   type = map(object({
@@ -198,7 +181,9 @@ variable "app_service" {
   }))
 }
 
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.03-AppServiceWindows
+#--------------------------------------------------------------------------------------------------
 
 variable "app_service_windows" {
   description = "Windows Web Apps configuration"
@@ -216,9 +201,9 @@ variable "app_service_windows" {
   }))
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.3-AppServiceContainer
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.03-AppServiceContainer
+#--------------------------------------------------------------------------------------------------
 
 variable "app_service_container" {
   type = map(object({
@@ -229,62 +214,64 @@ variable "app_service_container" {
   }))
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.4-StaticWebApp
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.04-StaticWebApp
+#--------------------------------------------------------------------------------------------------
 
 variable "static_web_apps" {
   description = "Map of Static Web Apps to create"
   type        = map(any)
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.5-FunctionApp
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.05-FunctionsAppLinux
+#--------------------------------------------------------------------------------------------------
 
-# variable "function_app_name" {
-#   type        = string
-#   description = "Function app name"
-# }
+variable "function_apps_linux" {
+  description = "Map of Linux Function Apps to create"
+  type = map(object({
+    function_app_name    = string
+    service_plan_name    = string
+    storage_account_name = string
+    sku_name             = optional(string, "Y1")
+    runtime_stack        = string # "dotnet", "node", "python", "java", "powershell"
+    runtime_version      = string
+    app_settings         = optional(map(string), {})
+    always_on            = optional(bool, false)
+    ftps_state           = optional(string, "Disabled")
+    https_only           = optional(bool, true)
+    tags                 = optional(map(string), {})
+  }))
+  default = {}
+}
 
-# variable "dotnet_version" {
-#   type = string
-# }
+#--------------------------------------------------------------------------------------------------
+# 04.06-FunctionsAppWindows
+#--------------------------------------------------------------------------------------------------
 
-# variable "run_from_package" {
-#   type = string
-# }
+variable "function_apps_windows" {
+  description = "Map of Windows Function Apps to create"
+  type = map(object({
+    function_app_name    = string
+    service_plan_name    = string
+    storage_account_name = string
+    sku_name             = optional(string, "Y1")
+    runtime_stack        = string # "dotnet", "node", "java", "powershell"
+    runtime_version      = string
+    app_settings         = optional(map(string), {})
+    always_on            = optional(bool, false)
+    ftps_state           = optional(string, "Disabled")
+    https_only           = optional(bool, true)
+    tags                 = optional(map(string), {})
+  }))
+  default = {}
+}
 
-# variable "worker_runtime" {
-#   type = string
-# }
+#--------------------------------------------------------------------------------------------------
+# 04.07-FunctionsAppFlexConsumption
+#--------------------------------------------------------------------------------------------------
 
-# variable "function_app_node_version" {
-#   type = string
-# }
-
-# variable "function_app_extension_version" {
-#   type        = string
-#   description = "Extension Version"
-# }
-
-# variable "function_app_settings" {
-#   description = "App application settings"
-#   type        = map(any)
-#   default     = {}
-# }
-
-# variable "identity_type" {
-#   description = "The Managed Service Identity Type of this Virtual Machine."
-#   type        = string
-#   default     = ""
-# }
-
-#---------------------------------------------------------------------------------------------
-# 4.6-FunctionAppFlexConsumption
-#---------------------------------------------------------------------------------------------
-
-variable "function_apps" {
+variable "function_apps_flex" {
   type = map(object({
     function_app_name      = string
     service_plan_name      = string
@@ -299,9 +286,9 @@ variable "function_apps" {
   }))
 }
 
-#----------------------------------------------------------------------------------------------
-# 5.2-StorageAccount
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 05-StorageAccount
+#--------------------------------------------------------------------------------------------------
 
 variable "storage_accounts" {
   type = map(object({
@@ -318,9 +305,13 @@ variable "storage_accounts" {
   }))
 }
 
-#-----------------------------------------------------------------------------------------------
-# 6.1-PostgresSQLFlexible
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 06-Database
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 06.01-PostgresSQLFlexible
+#--------------------------------------------------------------------------------------------------
 
 variable "postgres_sql" {
   type = map(object({
@@ -351,60 +342,33 @@ variable "postgres_sql" {
   }))
 }
 
-# variable "password_rotation_version" {
-#   description = "Global PostgreSQL admin password rotation version"
-#   type        = string
-#   default     = "v1"
-# }
+#--------------------------------------------------------------------------------------------------
+# 06.02-CosmosDB
+#--------------------------------------------------------------------------------------------------
 
-
-#-----------------------------------------------------------------------------------------------
-# 6.2-CosmosDB
-#-----------------------------------------------------------------------------------------------
-
-variable "cosmosdb_account_name" {
-  description = "Cosmos DB account name"
-  type        = string
+variable "cosmos_dbs" {
+  description = "Map of Cosmos DB accounts to create"
+  type = map(object({
+    name                      = string
+    database_name             = string
+    consistency_level         = optional(string, "Session")
+    max_interval_in_seconds   = optional(number, 5)
+    max_staleness_prefix      = optional(number, 100)
+    capabilities              = optional(list(string), [])
+    enable_automatic_failover = optional(bool, false)
+    tags                      = optional(map(string), {})
+  }))
+  default = {}
 }
 
-variable "database_name" {
-  description = "Cosmos DB SQL database name"
-  type        = string
-}
+#--------------------------------------------------------------------------------------------------
+# 07-DNSZone
+#--------------------------------------------------------------------------------------------------
 
-variable "consistency_level" {
-  description = "Consistency level"
-  type        = string
-  default     = "Session"
-}
+#--------------------------------------------------------------------------------------------------
+# 07.01-PrivateDNSZone
+#--------------------------------------------------------------------------------------------------
 
-variable "max_interval_in_seconds" {
-  description = "Max interval for bounded staleness"
-  type        = number
-  default     = 5
-}
-
-variable "max_staleness_prefix" {
-  description = "Max staleness prefix"
-  type        = number
-  default     = 100
-}
-
-variable "capabilities" {
-  description = "Cosmos DB capabilities"
-  type        = list(string)
-  default     = []
-}
-
-variable "enable_automatic_failover" {
-  description = "Enable automatic failover"
-  type        = bool
-  default     = false
-}
-
-#-----------------------------------------------------------------------------------------------
-# 7.1-PrivateDNSZone
-#-----------------------------------------------------------------------------------------------
 variable "private_dns_zones" {
   description = "Private DNS Zones to create"
   type = map(object({
@@ -412,29 +376,24 @@ variable "private_dns_zones" {
   }))
 }
 
-#-----------------------------------------------------------------------------------------------
-# 7.2-DNSZone
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 07.02-DNSZone
+#--------------------------------------------------------------------------------------------------
 
-variable "dns_zone_name" {
-  description = "The name of the DNS zone."
-  type        = string
+variable "dns_zones" {
+  description = "Map of DNS Zones and their records"
+  type = map(object({
+    name          = string
+    cname_records = optional(map(string), {})
+    txt_records   = optional(map(string), {})
+    tags          = optional(map(string), {})
+  }))
+  default = {}
 }
 
-variable "cname_records" {
-  type        = map(string)
-  description = "Map of CNAME records: key = record name, value = target"
-}
-
-variable "txt_records" {
-  type        = map(string)
-  description = "TXT records: key = record name, value = TXT value"
-  default     = {}
-}
-
-#-----------------------------------------------------------------------------------------------
-# 8.1-PrivateEndPoint
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 08-PrivateEndPoints
+#--------------------------------------------------------------------------------------------------
 
 variable "private_endpoints" {
   description = "Logical private endpoint definitions"
@@ -456,120 +415,66 @@ variable "private_endpoints" {
   }
 }
 
-#-----------------------------------------------------------------------------------------
-# 9-RedisCache
-#-----------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 09-CacheRedis
+#--------------------------------------------------------------------------------------------------
 
-variable "cache_name" {
-  description = "The name of the Redis cache instance"
-  type        = string
-}
-
-variable "capacity" {
-  description = "The size of the Redis cache to deploy"
-  type        = number
-}
-
-variable "family" {
-  description = "The family of the Redis cache to deploy"
-  type        = string
-}
-
-variable "redis_cache_sku" {
-  description = "The SKU of the Redis cache to deploy. Must be [Basic/Standard/Premium]"
-  type        = string
-}
-
-variable "enable_non_ssl_port" {
-  description = "Enable non-SSL port on Redis cache"
-  type        = bool
-  default     = false
-}
-
-variable "minimum_tls_version" {
-  description = "The minimum TLS version for the Redis cache"
-  type        = string
-  default     = "1.0"
-}
-
-variable "cluster_shard_count" {
-  description = "The number of shards for the Redis cache"
-  type        = number
-  default     = 0
-}
-
-variable "private_static_ip_address" {
-  description = "The static IP address for the Redis cache"
-  type        = string
-  default     = null
-}
-
-variable "subnet_id" {
-  description = "The ID of the subnet in which the Redis cache is deployed"
-  type        = string
-  default     = null
-}
-
-variable "redis_cache_public_network_access_enabled" {
-  description = "Enable public network access for the Redis cache"
-  type        = bool
-  default     = true
-}
-
-variable "redis_version" {
-  description = "The version of Redis to deploy"
-  type        = string
-}
-
-variable "zones" {
-  description = "The availability zones in which to create the Redis cache"
-  type        = list(string)
-  default     = []
-}
-
-variable "redis_configurations" {
-  description = "A map of Redis configurations."
+variable "redis_caches" {
+  description = "Map of Redis Caches to create"
   type = map(object({
-    aof_backup_enabled              = optional(bool)
-    aof_storage_connection_string_0 = optional(string)
-    aof_storage_connection_string_1 = optional(string)
-    enable_authentication           = optional(bool)
-    maxmemory_reserved              = optional(number)
-    maxmemory_delta                 = optional(number)
-    maxmemory_policy                = optional(string)
-    maxfragmentationmemory_reserved = optional(number)
-    rdb_backup_enabled              = optional(bool)
-    rdb_backup_frequency            = optional(number)
-    rdb_backup_max_snapshot_count   = optional(number)
-    rdb_storage_connection_string   = optional(string)
+    name                          = string
+    capacity                      = number
+    family                        = string
+    sku                           = string
+    enable_non_ssl_port           = optional(bool, false)
+    minimum_tls_version           = optional(string, "1.2")
+    cluster_shard_count           = optional(number, 0)
+    private_static_ip_address     = optional(string)
+    subnet_id                     = optional(string)
+    public_network_access_enabled = optional(bool, true)
+    redis_version                 = optional(string, "6")
+    zones                         = optional(list(string), [])
+
+    redis_configuration = optional(object({
+      aof_backup_enabled              = optional(bool)
+      aof_storage_connection_string_0 = optional(string)
+      aof_storage_connection_string_1 = optional(string)
+
+      maxmemory_reserved              = optional(number)
+      maxmemory_delta                 = optional(number)
+      maxmemory_policy                = optional(string)
+      maxfragmentationmemory_reserved = optional(number)
+      rdb_backup_enabled              = optional(bool)
+      rdb_backup_frequency            = optional(number)
+      rdb_backup_max_snapshot_count   = optional(number)
+      rdb_storage_connection_string   = optional(string)
+    }), null)
+
+    patch_schedule = optional(map(object({
+      day_of_week        = string
+      start_hour_utc     = optional(number)
+      maintenance_window = optional(string)
+    })), {})
+
+    tags = optional(map(string), {})
   }))
   default = {}
 }
 
-variable "patch_schedule" {
-  description = "A map of patch schedule settings for the Redis cache."
+variable "redis_firewall_rules" {
+  description = "Map of firewall rules for all Redis caches."
   type = map(object({
-    day_of_week        = string
-    start_hour_utc     = optional(number)
-    maintenance_window = optional(string)
+    redis_cache_key = string
+    name            = string
+    start_ip        = string
+    end_ip          = string
   }))
   default = {}
 }
 
-variable "redis_firewall_rule" {
-  type = map(object({
-    name     = string
-    count    = number
-    start_ip = string
-    end_ip   = string
-  }))
-  description = "A map of firewall rules for the Redis cache."
-  default     = {}
-}
-
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # 10-KeyVault
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
 variable "key_vaults" {
   description = "Map of Key Vaults to create"
@@ -577,47 +482,47 @@ variable "key_vaults" {
   default     = {}
 }
 
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # 11-CommunicationServices
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
-variable "communication_service_name" {
-  description = "The name of the Azure Communication Service."
-  type        = string
-}
-
-variable "email_service_name" {
-  description = "The name of the Email Communication Service."
-  type        = string
-}
-
-variable "data_location" {
-  description = "The data location for the Communication Services."
-  type        = string
-}
-
-variable "domain_name" {
-  description = "The custom domain name for the Email Communication Service."
-  type        = string
-}
-
-variable "enable_user_engagement_tracking" {
-  description = "Enable user engagement tracking for the Email Communication Service domain."
-  type        = bool
-  default     = false
-}
-
-#-------------------------------------------------------------------------------------------------
-# 13.1 ServiceBus
-#-------------------------------------------------------------------------------------------------
-
-variable "service_buses" {
-  description = "Map of Service Bus Namespaces"
+variable "communication_services" {
+  description = "Map of Communication Services to create"
   type        = map(any)
 }
 
-#-----------------------------------------------------------------------------------------------
-# 13.3-EventGrid
+#--------------------------------------------------------------------------------------------------
+# 12-NotificationsHub
+#--------------------------------------------------------------------------------------------------
+
+variable "notification_hub_namespaces" {
+  description = "Map of Notification Hub Namespaces"
+  type        = map(any)
+}
+
+#--------------------------------------------------------------------------------------------------
+# 13-Integration
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 13.01-ServiceBus
+#--------------------------------------------------------------------------------------------------
+
+variable "service_buses" {
+  type = map(any)
+}
+
+#--------------------------------------------------------------------------------------------------
+# 13.02-EventHub
+#--------------------------------------------------------------------------------------------------
+
+variable "eventhub_namespaces" {
+  type = map(any)
+}
+
+#--------------------------------------------------------------------------------------------------
+# 13.03-EventGrid (commented)
+#--------------------------------------------------------------------------------------------------
 
 # variable "eventgrid_topics" {
 #   type = map(any)
@@ -627,9 +532,13 @@ variable "service_buses" {
 #   type = map(any)
 # }
 
-#-----------------------------------------------------------------------------------------------
-# 15.1-FrontDoor
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 15-LoadBalancer
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 15.01-FrontDoor
+#--------------------------------------------------------------------------------------------------
 
 variable "front_door_sku_name" {
   description = "Azure SKU"
@@ -711,9 +620,9 @@ variable "custome_domain_backend_name" {
   type        = string
 }
 
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # 16-AppConfiguration
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
 variable "app_configurations" {
   type = map(object({
@@ -725,8 +634,4 @@ variable "app_configurations" {
   }))
 }
 
-#----------------------------------------------------------------------------------------------
-
-
-
-#------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------

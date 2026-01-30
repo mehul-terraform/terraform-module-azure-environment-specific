@@ -1,27 +1,28 @@
 resource "azurerm_redis_cache" "redis-cache" {
-  name                = var.cache_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  capacity            = var.capacity
-  family              = var.family
-  sku_name            = var.sku
-  #enable_non_ssl_port           = var.enable_non_ssl_port
-  minimum_tls_version           = var.minimum_tls_version
-  shard_count                   = var.sku == "Premium" ? var.cluster_shard_count : 0
-  private_static_ip_address     = var.private_static_ip_address
-  subnet_id                     = var.subnet_id
-  public_network_access_enabled = var.public_network_access_enabled
-  redis_version                 = var.redis_version
-  zones                         = var.zones
+  for_each = var.redis_caches
+
+  name                          = each.value.name
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  capacity                      = each.value.capacity
+  family                        = each.value.family
+  sku_name                      = each.value.sku
+  non_ssl_port_enabled          = lookup(each.value, "non_ssl_port_enabled", false)
+  minimum_tls_version           = lookup(each.value, "minimum_tls_version", "1.2")
+  shard_count                   = each.value.sku == "Premium" ? lookup(each.value, "cluster_shard_count", 0) : 0
+  private_static_ip_address     = lookup(each.value, "private_static_ip_address", null)
+  subnet_id                     = lookup(each.value, "subnet_id", null)
+  public_network_access_enabled = lookup(each.value, "public_network_access_enabled", true)
+  redis_version                 = lookup(each.value, "redis_version", "6")
+  zones                         = lookup(each.value, "zones", [])
 
   dynamic "redis_configuration" {
-    for_each = var.redis_configurations
+    for_each = each.value.redis_configuration != null ? [each.value.redis_configuration] : []
 
     content {
       aof_backup_enabled              = redis_configuration.value.aof_backup_enabled
       aof_storage_connection_string_0 = redis_configuration.value.aof_storage_connection_string_0
       aof_storage_connection_string_1 = redis_configuration.value.aof_storage_connection_string_1
-      #enable_authentication           = redis_configuration.value.enable_authentication
       maxmemory_reserved              = redis_configuration.value.maxmemory_reserved
       maxmemory_delta                 = redis_configuration.value.maxmemory_delta
       maxmemory_policy                = redis_configuration.value.maxmemory_policy
@@ -34,7 +35,7 @@ resource "azurerm_redis_cache" "redis-cache" {
   }
 
   dynamic "patch_schedule" {
-    for_each = var.patch_schedule
+    for_each = lookup(each.value, "patch_schedule", {})
 
     content {
       day_of_week        = patch_schedule.value.day_of_week
@@ -42,7 +43,8 @@ resource "azurerm_redis_cache" "redis-cache" {
       maintenance_window = patch_schedule.value.maintenance_window
     }
   }
-  tags = merge(var.tags)
+
+  tags = merge(var.tags, lookup(each.value, "tags", {}))
 
   lifecycle {
     ignore_changes = [redis_configuration[0].rdb_storage_connection_string]
@@ -50,10 +52,10 @@ resource "azurerm_redis_cache" "redis-cache" {
 }
 
 resource "azurerm_redis_firewall_rule" "primary" {
-  for_each = var.redis_firewall_rule
+  for_each = var.redis_firewall_rules
 
   name                = each.value.name
-  redis_cache_name    = azurerm_redis_cache.redis-cache.name
+  redis_cache_name    = azurerm_redis_cache.redis-cache[each.value.redis_cache_key].name
   resource_group_name = var.resource_group_name
   start_ip            = each.value.start_ip
   end_ip              = each.value.end_ip

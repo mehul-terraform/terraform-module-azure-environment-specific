@@ -1,11 +1,13 @@
 resource "azurerm_network_security_group" "nsg" {
-  name                = var.network_security_group_name
+  for_each = var.network_security_groups
+
+  name                = each.value.name
   resource_group_name = var.resource_group_name
   location            = var.location
-  tags                = merge(var.tags)
+  tags                = merge(var.tags, lookup(each.value, "tags", {}))
 
   dynamic "security_rule" {
-    for_each = var.network_security_group_rules
+    for_each = lookup(each.value, "rules", [])
     content {
       name                       = security_rule.value.name
       priority                   = security_rule.value.priority
@@ -21,17 +23,19 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "vm_subnet_nsg" {
-  subnet_id                 = var.vm_subnet_id
-  network_security_group_id = azurerm_network_security_group.nsg.id
-}
+resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
+  for_each = {
+    for item in flatten([
+      for nsg_key, nsg in var.network_security_groups : [
+        for subnet_key, subnet_id in lookup(nsg, "subnet_ids", {}) : {
+          key       = "${nsg_key}-${subnet_key}"
+          nsg_key   = nsg_key
+          subnet_id = subnet_id
+        }
+      ]
+    ]) : item.key => item
+  }
 
-resource "azurerm_subnet_network_security_group_association" "db_subnet_nsg" {
-  subnet_id                 = var.db_subnet_id
-  network_security_group_id = azurerm_network_security_group.nsg.id
-}
-
-resource "azurerm_subnet_network_security_group_association" "webapp_subnet_nsg" {
-  subnet_id                 = var.webapp_subnet_id
-  network_security_group_id = azurerm_network_security_group.nsg.id
+  subnet_id                 = each.value.subnet_id
+  network_security_group_id = azurerm_network_security_group.nsg[each.value.nsg_key].id
 }

@@ -1,3 +1,8 @@
+variable "virtual_networks" {
+  description = "Map of Virtual Networks to create"
+  type        = map(any)
+}
+
 variable "resource_group_name" {
   type        = string
   description = "Resource group name"
@@ -6,31 +11,6 @@ variable "resource_group_name" {
 variable "location" {
   type        = string
   description = "Location of resources"
-}
-
-variable "virtual_network_name" {
-  type        = string
-  description = "Name of the virtual network"
-}
-
-variable "address_space" {
-  type        = list(string)
-  description = "VNet address space"
-}
-
-variable "subnets" {
-  description = "List of subnets to create"
-  type = list(object({
-    name           = string
-    address_prefix = string
-    delegation = optional(object({
-      name = string
-      service_delegation = object({
-        name    = string
-        actions = list(string)
-      })
-    }))
-  }))
 }
 
 variable "tags" {

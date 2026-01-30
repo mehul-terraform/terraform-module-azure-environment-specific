@@ -1,11 +1,6 @@
-variable "communication_service_name" {
-  description = "The name of the Azure Communication Service."
-  type        = string
-}
-
-variable "email_service_name" {
-  description = "The name of the Email Communication Service."
-  type        = string
+variable "communication_services" {
+  description = "Map of Communication Services to create"
+  type        = map(any)
 }
 
 variable "resource_group_name" {
@@ -13,14 +8,10 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "data_location" {
-  description = "The data location for the Communication Services."
-  type        = string
-}
-
-variable "domain_name" {
-  description = "The custom domain name for the Email Communication Service."
-  type        = string
+variable "tags" {
+  description = "Tags for the resources."
+  type        = map(string)
+  default     = {}
 }
 
 variable "enable_user_engagement_tracking" {
@@ -29,8 +20,4 @@ variable "enable_user_engagement_tracking" {
   default     = false
 }
 
-variable "tags" {
-  description = "Tags for the resources."
-  type        = map(string)
-  default     = {}
-}
+

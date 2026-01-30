@@ -18,7 +18,7 @@ variable "service_plans" {
   description = "App Service Plans (Linux + Windows)"
   type = map(object({
     name                     = string
-    os_type                  = string   # "Linux" or "Windows"
+    os_type                  = string # "Linux" or "Windows"
     sku_name                 = string
     per_site_scaling_enabled = bool
     worker_count             = number

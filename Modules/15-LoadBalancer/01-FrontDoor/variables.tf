@@ -89,15 +89,6 @@ variable "custome_domain_backend_name" {
 }
 
 variable "tags" {
-  description = "Tags to be applied to resources (inclusive)"
-  type = object({
-    environment = string
-    project     = string
-  })
-}
-
-variable "extra_tags" {
-  description = "extra tags to be applied to resources (in addition to the tags above)"
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }

@@ -3,21 +3,21 @@ resource "azurerm_cdn_frontdoor_profile" "frontdoor_profile" {
   resource_group_name = var.resource_group_name
   sku_name            = var.front_door_sku_name
 
-  tags = merge(var.tags, var.extra_tags)
+  tags = merge(var.tags)
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "endpoint_frontend" {
   name                     = var.endpoint_frontend_name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
 
-  tags = merge(var.tags, var.extra_tags)
+  tags = merge(var.tags)
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "endpoint_backend" {
   name                     = var.endpoint_backend_name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.frontdoor_profile.id
 
-  tags = merge(var.tags, var.extra_tags)
+  tags = merge(var.tags)
 }
 
 resource "azurerm_cdn_frontdoor_origin_group" "origin_group_frontend" {

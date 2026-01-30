@@ -1,59 +1,25 @@
-output "id" {
-  value = azurerm_virtual_network.vnet.id
+output "ids" {
+  description = "Map of Virtual Network IDs"
+  value       = { for k, v in azurerm_virtual_network.vnet : k => v.id }
 }
 
-#output "subnet_ids" {
-#  value = {
-#    for k, s in azurerm_subnet.subnets : k => s.id
-#  }
-#}
+output "names" {
+  description = "Map of Virtual Network names"
+  value       = { for k, v in azurerm_virtual_network.vnet : k => v.name }
+}
 
 output "subnets" {
+  description = "Map of all subnet IDs"
   value = {
     for k, v in azurerm_subnet.subnets : k => {
-      id = v.id
+      id   = v.id
+      name = v.name
     }
   }
 }
 
-output "vm_subnets" {
-  value = {
-    vm = azurerm_subnet.subnets["vm"].id
-  }
-}
-
-output "webapp_subnets" {
-  value = {
-    webapp = azurerm_subnet.subnets["webapp"].id
-  }
-}
-
-output "db_subnets" {
-  value = {
-    db = azurerm_subnet.subnets["db"].id
-  }
-}
-
-output "storage_subnets" {
-  value = {
-    storage = azurerm_subnet.subnets["storage"].id
-  }
-}
-
-output "funcapp_subnets" {
-  value = {
-    funcapp = azurerm_subnet.subnets["funcapp"].id
-  }
-}
-
-output "private_endpoint_subnets" {
-  value = {
-    private_endpoint = azurerm_subnet.subnets["private-endpoint"].id
-  }
-}
-
-output "gateway_subnets" {
-  value = {
-    gateway = azurerm_subnet.subnets["GatewaySubnet"].id
-  }
+# Helper outputs for common subnet lookups
+output "subnet_ids" {
+  description = "Flat map of subnet IDs by their key (vnet_key-subnet_name)"
+  value       = { for k, v in azurerm_subnet.subnets : k => v.id }
 }

@@ -5,7 +5,7 @@ resource "azurerm_service_plan" "asp" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  os_type   = each.value.os_type
+  os_type  = each.value.os_type
   sku_name = each.value.sku_name
 
   per_site_scaling_enabled = each.value.per_site_scaling_enabled

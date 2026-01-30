@@ -8,52 +8,22 @@ variable "location" {
   type        = string
 }
 
-variable "cosmosdb_account_name" {
-  description = "Cosmos DB account name"
-  type        = string
-}
-
-variable "database_name" {
-  description = "Cosmos DB SQL database name"
-  type        = string
-}
-
-variable "consistency_level" {
-  description = "Consistency level"
-  type        = string
-  default     = "Session"
-  validation {
-    condition     = contains(["Strong", "BoundedStaleness", "Session", "Eventual", "ConsistentPrefix"], var.consistency_level)
-    error_message = "Must be one of Strong, BoundedStaleness, Session, Eventual, ConsistentPrefix."
-  }
-}
-
-variable "max_interval_in_seconds" {
-  description = "Max interval for bounded staleness"
-  type        = number
-  default     = 5
-}
-
-variable "max_staleness_prefix" {
-  description = "Max staleness prefix for bounded staleness"
-  type        = number
-  default     = 100
-}
-
-variable "capabilities" {
-  description = "Cosmos DB capabilities"
-  type        = list(string)
-  default     = []
-}
-
-variable "enable_automatic_failover" {
-  description = "Enable automatic failover"
-  type        = bool
-  default     = false
+variable "cosmos_dbs" {
+  description = "Map of Cosmos DB accounts to create"
+  type = map(object({
+    name                    = string
+    database_name           = string
+    consistency_level       = optional(string, "Session")
+    max_interval_in_seconds = optional(number, 5)
+    max_staleness_prefix    = optional(number, 100)
+    capabilities            = optional(list(string), [])
+    tags                    = optional(map(string), {})
+  }))
+  default = {}
 }
 
 variable "tags" {
   type        = map(string)
   default     = {}
-  description = "Tags to be applied to the Key Vault."
+  description = "Tags to be applied to resources."
 }

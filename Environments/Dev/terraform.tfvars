@@ -1,119 +1,154 @@
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # Project Details
-#------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+
 project     = "myexample"
 environment = "tst"
 
-#-------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # 01-ResourceGroup
-#-------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
-resource_group_name = "myexample-tst-rg"
-location            = "WEST US 3"
+resource_groups = {
+  main = {
+    name     = "myexample-tst-rg"
+    location = "WEST US 3"
+    tags     = {}
+  },
 
-#-------------------------------------------------------------------------------------
-# 02-VirtualNetwork
-#-------------------------------------------------------------------------------------
-
-virtual_network_name = "myexample-tst-vnet"
-address_space        = ["10.250.0.0/16"]
-
-subnets = [
-  {
-    name           = "vm"
-    address_prefix = "10.250.1.0/24"
-  },
-  {
-    name           = "webapp"
-    address_prefix = "10.250.2.0/24"
-    delegation = {
-      name = "delegation"
-      service_delegation = {
-        name    = "Microsoft.Web/serverFarms"
-        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
-      }
-    }
-  },
-  {
-    name           = "db"
-    address_prefix = "10.250.3.0/24"
-  },
-  {
-    name           = "storage"
-    address_prefix = "10.250.4.0/24"
-  },
-  {
-    name           = "funcapp"
-    address_prefix = "10.250.5.0/24"
-    delegation = {
-      name = "delegation"
-      service_delegation = {
-        name    = "Microsoft.Web/serverFarms"
-        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
-      }
-    }
-  },
-  {
-    name           = "private-endpoint"
-    address_prefix = "10.250.250.0/24"
-  },
-  {
-    name           = "firewall"
-    address_prefix = "10.250.254.0/24"
-  },
-  {
-    name           = "GatewaySubnet"
-    address_prefix = "10.250.255.0/24"
+  dev = {
+    name     = "myexample-dev-rg"
+    location = "WEST US 2"
+    tags     = {}
   }
-]
+}
 
-#-------------------------------------------------------------------------------------------------
-# 2.2-NetworkSecurityGroup
-#------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 02-Networking
+#--------------------------------------------------------------------------------------------------
 
-network_security_group_name = "myexample-tst-nsg"
-network_security_group_rules = [
-  {
-    name                       = "Allow-RDP"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "3389"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    description                = "Allow RDP from any source"
+#--------------------------------------------------------------------------------------------------
+# 02.01-VirtualNetwork
+#--------------------------------------------------------------------------------------------------
+
+virtual_networks = {
+  main = {
+    name          = "myexample-tst-vnet1"
+    address_space = ["10.250.0.0/16"]
+    subnets = [
+      {
+        name           = "vm"
+        address_prefix = "10.250.1.0/24"
+      },
+      {
+        name           = "webapp"
+        address_prefix = "10.250.2.0/24"
+        delegation = {
+          name = "delegation"
+          service_delegation = {
+            name    = "Microsoft.Web/serverFarms"
+            actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+          }
+        }
+      },
+      {
+        name           = "db"
+        address_prefix = "10.250.3.0/24"
+      },
+      {
+        name           = "storage"
+        address_prefix = "10.250.4.0/24"
+      },
+      {
+        name           = "funcapp"
+        address_prefix = "10.250.5.0/24"
+        delegation = {
+          name = "delegation"
+          service_delegation = {
+            name    = "Microsoft.Web/serverFarms"
+            actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+          }
+        }
+      },
+      {
+        name           = "private-endpoint"
+        address_prefix = "10.250.250.0/24"
+      },
+      {
+        name           = "firewall"
+        address_prefix = "10.250.254.0/24"
+      },
+      {
+        name           = "GatewaySubnet"
+        address_prefix = "10.250.255.0/24"
+      }
+    ]
   },
-  {
-    name                       = "Allow-PGSQL"
-    priority                   = 1001
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "5432"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    description                = "Allow PGSQL from any source"
-  },
-  {
-    name                       = "Allow-HTTP"
-    priority                   = 1002
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "80"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-    description                = "Allow HTTP from any source"
+
+  vnet2 = {
+    name          = "myexample-tst-vnet2"
+    address_space = ["10.251.0.0/16"]
+    subnets = [
+      {
+        name           = "vm"
+        address_prefix = "10.251.1.0/24"
+      },
+    ]
   }
-]
+}
 
-#-------------------------------------------------------------------------------------------------
-# 2.3-VirtualNetworkGateway
-#-------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 02.02-NetworkSecurityGroup
+#--------------------------------------------------------------------------------------------------
+
+network_security_groups = {
+  main = {
+    name = "myexample-tst-nsg"
+    rules = [
+      {
+        name                       = "Allow-RDP"
+        priority                   = 100
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "3389"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+        description                = "Allow RDP from any source"
+      },
+      {
+        name                       = "Allow-PGSQL"
+        priority                   = 1001
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "5432"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+        description                = "Allow PGSQL from any source"
+      },
+      {
+        name                       = "Allow-HTTP"
+        priority                   = 1002
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "80"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+        description                = "Allow HTTP from any source"
+      }
+    ]
+    subnet_names = ["vm", "webapp", "db"]
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 02.03-VirtualNetworkGateway
+#--------------------------------------------------------------------------------------------------
 
 virtual_network_gateway_name                        = "myexample-tst-vnet-gateway01"
 virtual_network_gateway_public_ip_name              = "myexample-tst-vnet-gateway-ip"
@@ -123,22 +158,25 @@ active_active                                       = false
 virtual_network_gateway_sku                         = "VpnGw1"
 virtual_network_gateway_public_ip_allocation_method = "Static"
 
-#-----------------------------------------------------------------------------------------------
-# 3.1-Virtual Machine  
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 03-Compute
+#--------------------------------------------------------------------------------------------------
 
-virtual_machines = {
+#--------------------------------------------------------------------------------------------------
+# 03.01-VirtualMachineWindows
+#--------------------------------------------------------------------------------------------------
+
+virtual_machines_windows = {
   vm1 = {
     name           = "myexampletstvm1"
     size           = "Standard_F2"
     admin_username = "myexample"
 
-    public_ip_name               = "myexample-tst-vm-ip"
+    public_ip_name               = "myexample-tst-vm1-ip"
     public_ip_allocation_method  = "Static"
-    network_interface_name       = "myexample-tst-vm01-nic"
-    private_ip_name              = "myexample-tst-vm01-private-ip"
-    private_ip_allocation        = "Static"
-    private_ip_address           = "10.250.1.11"
+    network_interface_name       = "myexample-tst-vm1-nic"
+    private_ip_name              = "myexample-tst-vm1-private-ip"
+    private_ip_allocation        = "Dynamic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
     image_publisher              = "MicrosoftWindowsServer"
@@ -152,12 +190,11 @@ virtual_machines = {
     size           = "Standard_F2"
     admin_username = "myexample"
 
-    public_ip_name               = "myexample-tst-vm-ip"
+    public_ip_name               = "myexample-tst-vm2-ip"
     public_ip_allocation_method  = "Static"
-    network_interface_name       = "myexample-tst-vm02-nic"
-    private_ip_name              = "myexample-tst-vm02-private-ip"
-    private_ip_allocation        = "Static"
-    private_ip_address           = "10.250.1.12"
+    network_interface_name       = "myexample-tst-vm2-nic"
+    private_ip_name              = "myexample-tst-vm2-private-ip"
+    private_ip_allocation        = "Dynamic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
     image_publisher              = "MicrosoftWindowsServer"
@@ -167,9 +204,33 @@ virtual_machines = {
   }
 }
 
-#-------------------------------------------------------------------------------------------------
-# 3.2-ContainerRegistry
-#-------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 03.01-VirtualMachineLinux
+#--------------------------------------------------------------------------------------------------
+
+virtual_machines_linux = {
+  linux-vm1 = {
+    name           = "myexampletstlinux1"
+    size           = "Standard_F2"
+    admin_username = "azureuser"
+
+    public_ip_name               = "myexample-tst-linux-vm1-ip"
+    public_ip_allocation_method  = "Static"
+    network_interface_name       = "myexample-tst-linux-vm1-nic"
+    private_ip_name              = "myexample-tst-linux-vm1-private-ip"
+    private_ip_allocation        = "Dynamic"
+    os_disk_caching              = "ReadWrite"
+    os_disk_storage_account_type = "Standard_LRS"
+    image_publisher              = "Canonical"
+    image_offer                  = "0001-com-ubuntu-server-jammy"
+    image_sku                    = "22_04-lts"
+    image_version                = "latest"
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 03.02-ContainerRegistry
+#--------------------------------------------------------------------------------------------------
 
 container_registries = {
   acr1 = {
@@ -191,9 +252,13 @@ container_registries = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.1-AppServicePlan
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04-Web
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 04.01-AppServicePlan
+#--------------------------------------------------------------------------------------------------
 
 service_plans = {
   linux = {
@@ -219,10 +284,9 @@ service_plans = {
   }
 }
 
-
-#-----------------------------------------------------------------------------------------------
-# 4.2-AppService
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.02-AppServiceLinux
+#--------------------------------------------------------------------------------------------------
 
 app_service = {
   frontend = {
@@ -272,6 +336,10 @@ app_service = {
   }
 }
 
+#--------------------------------------------------------------------------------------------------
+# 04.03-AppServiceWindows
+#--------------------------------------------------------------------------------------------------
+
 app_service_windows = {
   frontend = {
     app_service_name = "myexample-tst-win-frontend"
@@ -297,9 +365,9 @@ app_service_windows = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.3-AppServiceContainer
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.03-AppServiceContainer
+#--------------------------------------------------------------------------------------------------
 
 app_service_container = {
   frontend-container = {
@@ -340,13 +408,13 @@ app_service_container = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.4-StaticWebApp
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.04-StaticWebApp
+#--------------------------------------------------------------------------------------------------
 
 static_web_apps = {
   app1 = {
-    name              = "myexample-tst-static-webapp"
+    name              = "myexample-tst-static-webapp1"
     location          = "westus2"
     sku_tier          = "Free"
     sku_size          = "Free"
@@ -356,7 +424,7 @@ static_web_apps = {
   },
 
   app2 = {
-    name              = "myexample-tst-static-webapp"
+    name              = "myexample-tst-static-webapp2"
     location          = "westus2"
     sku_tier          = "Free"
     sku_size          = "Free"
@@ -366,31 +434,48 @@ static_web_apps = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 4.5-FunctionApp
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.05-FunctionsAppLinux
+#--------------------------------------------------------------------------------------------------
 
-# function_app_name              = "myexample-tst-funcapp"
-# dotnet_version                 = "dotnet6"
-# identity_type                  = "SystemAssigned"
-# run_from_package               = "1"
-# worker_runtime                 = "dotnet"
-# function_app_node_version      = "~14"
-# function_app_extension_version = "~4"
-# function_app_settings = {
-#   MyCustomSetting = "https://my-api.com/key"
-# }
+function_apps_linux = {
+  func-linux = {
+    function_app_name    = "myexample-tst-lnx-funcapp1"
+    service_plan_name    = "myexample-tst-lnx-funcapp1-asp"
+    storage_account_name = "tstlnxfuncappstg1"
+    sku_name             = "B1"
+    runtime_stack        = "dotnet"
+    runtime_version      = "8.0"
+    always_on            = true
+  }
+}
 
-#----------------------------------------------------------------------------------------------
-# 4.6-FunctionAppFlexconsumption
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 04.06-FunctionsAppWindows
+#--------------------------------------------------------------------------------------------------
 
-function_apps = {
+function_apps_windows = {
+  func-win = {
+    function_app_name    = "myexample-tst-win-funcapp1"
+    service_plan_name    = "myexample-tst-win-funcapp1-asp"
+    storage_account_name = "tstwinfuncappstg1"
+    sku_name             = "B1"
+    runtime_stack        = "dotnet"
+    runtime_version      = "v8.0"
+    always_on            = false
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.07-FunctionsAppFlexConsumption
+#--------------------------------------------------------------------------------------------------
+
+function_apps_flex = {
   func-1 = {
     function_app_name      = "myexample-tst-func1"
     service_plan_name      = "myexample-tst-func1-asp"
-    storage_account_name   = "tstfunc1storage"
-    storage_container_name = "tstfunc1storage"
+    storage_account_name   = "tstfuncflexstg1"
+    storage_container_name = "tstfuncflexstg1"
     runtime_name           = "dotnet-isolated"
     runtime_version        = "8.0"
     os_type                = "Linux"
@@ -401,8 +486,8 @@ function_apps = {
   func-2 = {
     function_app_name      = "myexample-tst-func2"
     service_plan_name      = "myexample-tst-func2-asp"
-    storage_account_name   = "tstfunc2storage"
-    storage_container_name = "tstfunc2storage"
+    storage_account_name   = "tstfuncflexstg2"
+    storage_container_name = "tstfuncflexstg2"
     runtime_name           = "node"
     runtime_version        = "20"
     os_type                = "Linux"
@@ -411,9 +496,9 @@ function_apps = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 5.2-StorageAccount
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 05-StorageAccount
+#--------------------------------------------------------------------------------------------------
 
 storage_accounts = {
   frontend = {
@@ -441,9 +526,13 @@ storage_accounts = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 6.1-PostgreSQLFlexible
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 06-Database
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 06.01-PostgresSQLFlexible
+#--------------------------------------------------------------------------------------------------
 
 postgres_sql = {
   server1 = {
@@ -490,29 +579,39 @@ tags = {
   owner       = "platform"
 }
 
-#-----------------------------------------------------------------------------------------------
-# 6.2-CosmosDB
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 06.02-CosmosDB
+#--------------------------------------------------------------------------------------------------
 
-cosmosdb_account_name     = "myexample-tst-cosmosdb"
-database_name             = "myexampledb"
-consistency_level         = "Session"
-max_interval_in_seconds   = 5
-max_staleness_prefix      = 100
-capabilities              = []
-enable_automatic_failover = false
+cosmos_dbs = {
+  cosmos1 = {
+    name                    = "myexample-tst-cosmosdb1"
+    database_name           = "myexampledb"
+    consistency_level       = "Session"
+    max_interval_in_seconds = 5
+    max_staleness_prefix    = 100
+    capabilities            = []
+    tags                    = {}
+  }
 
-#-----------------------------------------------------------------------------------------------
-# 7.2-DNSZone
-#-----------------------------------------------------------------------------------------------
+  cosmos2 = {
+    name                    = "myexample-tst-cosmosdb2"
+    database_name           = "myexampledb"
+    consistency_level       = "Session"
+    max_interval_in_seconds = 5
+    max_staleness_prefix    = 100
+    capabilities            = []
+    tags                    = {}
+  }
+}
 
-dns_zone_name = "myexample.co.in"
-cname_records = null
-txt_records   = null
+#--------------------------------------------------------------------------------------------------
+# 07-DNSZone
+#--------------------------------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------------------------------  
-# 7.1.1-PrivateDNSZone (PostgresSQLFlexible)
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 07.01-PrivateDNSZone
+#--------------------------------------------------------------------------------------------------
 
 private_dns_zones = {
   webapp = {
@@ -532,9 +631,28 @@ private_dns_zones = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 8-PrivateEndpoint
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 07.02-DNSZone
+#--------------------------------------------------------------------------------------------------
+
+dns_zones = {
+  myexample-in = {
+    name          = "myexample.co.in"
+    cname_records = null
+    txt_records   = null
+  },
+
+  myexample-us = {
+    name          = "myexample.co.us"
+    cname_records = null
+    txt_records   = null
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 08-PrivateEndPoints
+#--------------------------------------------------------------------------------------------------
+
 private_endpoints = {
   postgres-server1 = {
     name              = "myexample-tst-db-svr01-pe"
@@ -599,23 +717,39 @@ private_endpoints = {
   }
 }
 
-#-----------------------------------------------------------------------------------------
-# 9-RedisCache
-#-----------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 09-CacheRedis
+#--------------------------------------------------------------------------------------------------
 
-cache_name                                = "myexample-tst-redis-cache"
-capacity                                  = 2
-family                                    = "C"
-redis_cache_sku                           = "Basic"
-redis_cache_public_network_access_enabled = true
-redis_version                             = "6"
-enable_non_ssl_port                       = false
-minimum_tls_version                       = "1.2"
-cluster_shard_count                       = 1
+redis_caches = {
+  redis1 = {
+    name                          = "myexample-tst-redis-cache1"
+    capacity                      = 2
+    family                        = "C"
+    sku                           = "Basic"
+    non_ssl_port_enabled          = false
+    minimum_tls_version           = "1.2"
+    cluster_shard_count           = 1
+    public_network_access_enabled = true
+    redis_version                 = "6"
+  }
 
-#------------------------------------------------------------------------------------------
+  redis2 = {
+    name                          = "myexample-tst-redis-cache2"
+    capacity                      = 2
+    family                        = "C"
+    sku                           = "Basic"
+    non_ssl_port_enabled          = false
+    minimum_tls_version           = "1.2"
+    cluster_shard_count           = 1
+    public_network_access_enabled = true
+    redis_version                 = "6"
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
 # 10-KeyVault
-#------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
 key_vaults = {
   backend = {
@@ -641,19 +775,46 @@ key_vaults = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 11-CommunicationService
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 11-CommunicationServices
+#--------------------------------------------------------------------------------------------------
 
-communication_service_name      = "myexample-tst-acs"
-email_service_name              = "myexample-tst-acs-email"
-domain_name                     = "myexample.co.in"
-enable_user_engagement_tracking = true
-data_location                   = "United States"
+communication_services = {
+  service1 = {
+    communication_service_name      = "myexample-tst-acs"
+    email_service_name              = "myexample-tst-acs-email"
+    domain_name                     = "myexample.co.in"
+    enable_user_engagement_tracking = true
+    data_location                   = "United States"
+    tags                            = {}
+  }
+}
 
-#-------------------------------------------------------------------------------------------------
-# 13.1-ServiceBus
-#-------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 12-NotificationsHub
+#--------------------------------------------------------------------------------------------------
+
+notification_hub_namespaces = {
+  nh1 = {
+    name = "myexample-tst-nh-ns01"
+    sku  = "Free"
+    tags = {}
+
+    notification_hubs = {
+      hub1 = {
+        name = "myexample-tst-nh-hub1"
+      }
+    }
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 13-Integration
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 13.01-ServiceBus
+#--------------------------------------------------------------------------------------------------
 
 service_buses = {
   sb1 = {
@@ -673,9 +834,29 @@ service_buses = {
   }
 }
 
-#-----------------------------------------------------------------------------------------------
-# 13.3-EventGrid
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 13.02-EventHub
+#--------------------------------------------------------------------------------------------------
+
+eventhub_namespaces = {
+  eh1 = {
+    name = "myexample-tst-eh-ns01"
+    sku  = "Standard"
+    tags = {}
+
+    eventhubs = {
+      hub1 = {
+        name              = "myexample-tst-eh-hub1"
+        partition_count   = 2
+        message_retention = 1
+      }
+    }
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 13.03-EventGrid (commented)
+#--------------------------------------------------------------------------------------------------
 
 # eventgrid_topics = {
 #   orders = {
@@ -685,12 +866,12 @@ service_buses = {
 #       env = "dev"
 #     }
 #   }
-
+#
 #   payments = {
 #     name = "eg-payments-topic"
 #   }
 # }
-
+#
 # eventgrid_subscriptions = {
 #   orders-webhook = {
 #     topic_key        = "orders"
@@ -700,7 +881,7 @@ service_buses = {
 #       "Microsoft.Storage.BlobCreated"
 #     ]
 #   }
-
+#
 #   payments-function = {
 #     topic_key         = "payments"
 #     name              = "payments-func-sub"
@@ -708,9 +889,13 @@ service_buses = {
 #   }
 # }
 
-#-----------------------------------------------------------------------------------------------
-# 15.1-FrontDoor
-#-----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+# 15-LoadBalancer
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 15.01-FrontDoor
+#--------------------------------------------------------------------------------------------------
 
 front_door_name     = "myexample-tst-afd"
 front_door_sku_name = "Standard_AzureFrontDoor"
@@ -736,9 +921,9 @@ host_custome_domain_backend_name  = "api-tst.myexample.co.in"
 route_frontend_name = "myexample-tst-frontend-route"
 route_backend_name  = "myexample-tst-backend-route"
 
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 # 16-AppConfiguration
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
 
 app_configurations = {
   backend = {
@@ -763,4 +948,4 @@ app_configurations = {
   }
 }
 
-#----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
