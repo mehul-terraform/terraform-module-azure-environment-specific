@@ -8,48 +8,46 @@ variable "location" {
   type        = string
 }
 
-variable "virtual_network_gateway_name" {
-  description = "Name of the virtual network gateway"
-  type        = string
-}
 
-variable "virtual_network_id" {
-  description = "ID of the virtual network"
-  type        = string
-}
-
-variable "public_ip_address_id" {
-  description = "ID of the public IP address resource"
-  type        = string
-}
-
-variable "allocation_method" {
-  description = "ID of the public IP address resource"
-  type        = string
-}
-
-variable "gateway_type" {
-  description = "The type of this virtual network gateway. Possible values are 'Vpn' and 'ExpressRoute'"
-  type        = string
-  default     = "Vpn"
-}
-
-variable "vpn_type" {
-  description = "The type of VPN. Possible values are 'PolicyBased' and 'RouteBased'"
-  type        = string
-  default     = "RouteBased"
-}
-
-variable "active_active" {
-  description = "Whether active-active mode is enabled"
-  type        = bool
-  default     = false
-}
-
-variable "virtual_network_gateway_sku" {
-  description = "The SKU of the virtual network gateway. Possible values: 'Basic', 'VpnGw1', 'VpnGw2', etc."
-  type        = string
-  default     = "VpnGw1"
+variable "virtual_network_gateways" {
+  description = "Map of Virtual Network Gateways to create"
+  type = map(object({
+    name                             = string
+    public_ip_name                   = string
+    public_ip_allocation_method      = optional(string, "Static")
+    gateway_type                     = optional(string, "Vpn")
+    vpn_type                         = optional(string, "RouteBased")
+    active_active                    = optional(bool, false)
+    sku                              = optional(string, "VpnGw1")
+    default_local_network_gateway_id = optional(string)
+    enable_bgp                       = optional(bool, false)
+    generation                       = optional(string, "Generation1")
+    private_ip_address_allocation    = optional(string, "Dynamic")
+    bgp_settings = optional(object({
+      asn         = number
+      peer_weight = number
+      peering_addresses = list(object({
+        ip_configuration_name = optional(string)
+        apipa_addresses       = list(string)
+      }))
+    }))
+    vpn_client_configuration = optional(object({
+      address_space = list(string)
+      root_certificate = list(object({
+        name             = string
+        public_cert_data = string
+      }))
+      revoked_certificate = list(object({
+        name       = string
+        thumbprint = string
+      }))
+      radius_server_address = optional(string)
+      radius_server_secret  = optional(string)
+      vpn_client_protocols  = optional(list(string))
+      vpn_auth_types        = optional(list(string))
+    }))
+    tags = optional(map(string), {})
+  }))
 }
 
 variable "tags" {

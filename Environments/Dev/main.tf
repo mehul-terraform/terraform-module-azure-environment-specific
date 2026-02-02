@@ -49,23 +49,17 @@ module "network_security_group" {
 # 02.03-VirtualNetworkGateway (commented)
 #--------------------------------------------------------------------------------------------------
 
-/*
+
 module "virtual_network_gateway" {
-  source                       = "../../Modules/02-Networking/03-VirtualNetworkGateway"
-  resource_group_name          = module.resource_group.names["main"]
-  location                     = module.resource_group.locations["main"]
-  virtual_network_gateway_name = var.virtual_network_gateway_name
-  virtual_network_id           = module.virtual_network.ids["main"]
-  subnet_id                    = module.virtual_network.subnet_ids["main-GatewaySubnet"]
-  public_ip_address_id         = var.virtual_network_gateway_public_ip_name
-  allocation_method            = var.virtual_network_gateway_public_ip_allocation_method
-  gateway_type                 = var.gateway_type
-  vpn_type                     = var.vpn_type
-  active_active                = var.active_active
-  virtual_network_gateway_sku  = var.virtual_network_gateway_sku
-  tags                         = var.tags
+  source                   = "../../Modules/02-Networking/03-VirtualNetworkGateway"
+  resource_group_name      = module.resource_group.names["main"]
+  location                 = module.resource_group.locations["main"]
+  virtual_network_gateways = var.virtual_network_gateways
+
+  subnet_id = module.virtual_network.subnet_ids["main-GatewaySubnet"]
+  tags      = var.tags
 }
-*/
+
 
 #--------------------------------------------------------------------------------------------------
 # 03-Compute
@@ -148,21 +142,6 @@ module "app_service" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.03-AppServiceWindows
-#--------------------------------------------------------------------------------------------------
-
-module "app_service_windows" {
-  source              = "../../Modules/04-Web/03-AppServiceWindows"
-  app_service_windows = var.app_service_windows
-
-  location            = module.resource_group.locations["main"]
-  resource_group_name = module.resource_group.names["main"]
-  service_plan_id     = module.app_service_plan.ids["windows"]
-  subnet_id           = module.virtual_network.subnet_ids["main-webapp"]
-  tags                = local.tags
-}
-
-#--------------------------------------------------------------------------------------------------
 # 04.03-AppServiceContainer
 #--------------------------------------------------------------------------------------------------
 
@@ -178,22 +157,37 @@ module "app_service_container" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.04-StaticWebApp
+# 04.04-AppServiceWindows
+#--------------------------------------------------------------------------------------------------
+
+module "app_service_windows" {
+  source              = "../../Modules/04-Web/04-AppServiceWindows"
+  app_service_windows = var.app_service_windows
+
+  location            = module.resource_group.locations["main"]
+  resource_group_name = module.resource_group.names["main"]
+  service_plan_id     = module.app_service_plan.ids["windows"]
+  subnet_id           = module.virtual_network.subnet_ids["main-webapp"]
+  tags                = local.tags
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.05-StaticWebApp
 #--------------------------------------------------------------------------------------------------
 
 module "static_web_app" {
-  source              = "../../Modules/04-Web/04-StaticWebApp"
+  source              = "../../Modules/04-Web/05-StaticWebApp"
   resource_group_name = module.resource_group.names["main"]
   static_web_apps     = var.static_web_apps
   tags                = var.tags
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.05-FunctionsAppLinux
+# 04.06-FunctionsAppLinux
 #--------------------------------------------------------------------------------------------------
 
 module "function_app_linux" {
-  source              = "../../Modules/04-Web/05-FunctionsAppLinux"
+  source              = "../../Modules/04-Web/06-FunctionsAppLinux"
   resource_group_name = module.resource_group.names["main"]
   location            = module.resource_group.locations["main"]
   function_apps       = var.function_apps_linux
@@ -201,11 +195,11 @@ module "function_app_linux" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.06-FunctionsAppWindows
+# 04.07-FunctionsAppWindows
 #--------------------------------------------------------------------------------------------------
 
 module "function_app_windows" {
-  source              = "../../Modules/04-Web/06-FunctionsAppWindows"
+  source              = "../../Modules/04-Web/07-FunctionsAppWindows"
   resource_group_name = module.resource_group.names["main"]
   location            = module.resource_group.locations["main"]
   function_apps       = var.function_apps_windows
@@ -213,11 +207,11 @@ module "function_app_windows" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.07-FunctionsAppFlexConsumption
+# 04.08-FunctionsAppFlexConsumption
 #--------------------------------------------------------------------------------------------------
 
 module "function_app_flex" {
-  source              = "../../Modules/04-Web/07-FunctionsAppFlexConsumption"
+  source              = "../../Modules/04-Web/08-FunctionsAppFlexConsumption"
   resource_group_name = module.resource_group.names["main"]
   location            = module.resource_group.locations["main"]
   function_apps       = var.function_apps_flex
@@ -307,12 +301,26 @@ module "example_dns_zone" {
     for zone_key, zone in var.dns_zones : zone_key => (
       contains(["myexample-in", "myexample-us"], zone_key) ? merge(zone, {
         cname_records = merge(try(zone.cname_records, {}), {
-          "api-dev" = module.azure_front_door.backend_endpoint
-          "dev"     = module.azure_front_door.frontend_endpoint
+          # Main (tst)
+          "api-tst" = module.azure_front_door.backend_endpoint["main"]
+          "tst"     = module.azure_front_door.frontend_endpoint["main"]
+          # Dev
+          "api-dev" = module.azure_front_door.backend_endpoint["dev"]
+          "dev"     = module.azure_front_door.frontend_endpoint["dev"]
+          # Stage
+          "api-stage" = module.azure_front_door.backend_endpoint["stage"]
+          "stage"     = module.azure_front_door.frontend_endpoint["stage"]
         })
         txt_records = merge(try(zone.txt_records, {}), {
-          "_dnsauth.dev"     = module.azure_front_door.frontdoor_frontend_validation_token
-          "_dnsauth.api-dev" = module.azure_front_door.frontdoor_backend_validation_token
+          # Main (tst)
+          "_dnsauth.tst"     = module.azure_front_door.frontdoor_frontend_validation_token["main"]
+          "_dnsauth.api-tst" = module.azure_front_door.frontdoor_backend_validation_token["main"]
+          # Dev
+          "_dnsauth.dev"     = module.azure_front_door.frontdoor_frontend_validation_token["dev"]
+          "_dnsauth.api-dev" = module.azure_front_door.frontdoor_backend_validation_token["dev"]
+          # Stage
+          "_dnsauth.stage"     = module.azure_front_door.frontdoor_frontend_validation_token["stage"]
+          "_dnsauth.api-stage" = module.azure_front_door.frontdoor_backend_validation_token["stage"]
         })
       }) : zone
     )
@@ -466,38 +474,32 @@ module "eventhub" {
 #--------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------------------------------
-# 15.01-FrontDoor
+# 15.01-FrontDoorWafPolicy
+#--------------------------------------------------------------------------------------------------
+
+module "waf_policy" {
+  source              = "../../Modules/15-LoadBalancer/05-FrontDoorWafPolicy"
+  resource_group_name = module.resource_group.names["main"]
+  waf_policies        = var.waf_policies
+  tags                = local.tags
+}
+
+#--------------------------------------------------------------------------------------------------
+# 15.02-FrontDoor
 #--------------------------------------------------------------------------------------------------
 
 module "azure_front_door" {
-  source              = "../../Modules/15-LoadBalancer/01-FrontDoor"
-  front_door_name     = var.front_door_name
+  source = "../../Modules/15-LoadBalancer/01-FrontDoor"
+  front_doors = {
+    for k, v in var.front_doors : k => merge(v, {
+      waf_policy_link_id = try(module.waf_policy.ids[k], null)
+    })
+  }
   resource_group_name = module.resource_group.names["main"]
   location            = module.resource_group.locations["main"]
-  front_door_sku_name = var.front_door_sku_name
+  tags                = local.tags
 
-  endpoint_frontend_name = var.endpoint_frontend_name
-  endpoint_backend_name  = var.endpoint_backend_name
-
-  origin_group_frontend_name = var.origin_group_frontend_name
-  origin_group_backend_name  = var.origin_group_backend_name
-
-  origin_frontend_name = var.origin_frontend_name
-  origin_backend_name  = var.origin_backend_name
-
-  origin_host_frontend_name = module.app_service_container.default_hostnames["frontend-container"]
-  origin_host_backend_name  = module.app_service_container.default_hostnames["backend-container"]
-
-  custome_domain_frontend_name = var.custome_domain_frontend_name
-  custome_domain_backend_name  = var.custome_domain_backend_name
-
-  host_custome_domain_frontend_name = var.host_custome_domain_frontend_name
-  host_custome_domain_backend_name  = var.host_custome_domain_backend_name
-
-  route_frontend_name = var.route_frontend_name
-  route_backend_name  = var.route_backend_name
-
-  tags = local.tags
+  depends_on = [module.waf_policy]
 }
 
 #--------------------------------------------------------------------------------------------------

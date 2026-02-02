@@ -150,13 +150,17 @@ network_security_groups = {
 # 02.03-VirtualNetworkGateway
 #--------------------------------------------------------------------------------------------------
 
-virtual_network_gateway_name                        = "myexample-tst-vnet-gateway01"
-virtual_network_gateway_public_ip_name              = "myexample-tst-vnet-gateway-ip"
-gateway_type                                        = "Vpn"
-vpn_type                                            = "RouteBased"
-active_active                                       = false
-virtual_network_gateway_sku                         = "VpnGw1"
-virtual_network_gateway_public_ip_allocation_method = "Static"
+virtual_network_gateways = {
+  gw1 = {
+    name                        = "myexample-tst-vnet-gateway01"
+    public_ip_name              = "myexample-tst-vnet-gateway-ip"
+    gateway_type                = "Vpn"
+    vpn_type                    = "RouteBased"
+    active_active               = false
+    sku                         = "VpnGw1"
+    public_ip_allocation_method = "Static"
+  }
+}
 
 #--------------------------------------------------------------------------------------------------
 # 03-Compute
@@ -337,35 +341,6 @@ app_service = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.03-AppServiceWindows
-#--------------------------------------------------------------------------------------------------
-
-app_service_windows = {
-  frontend = {
-    app_service_name = "myexample-tst-win-frontend"
-    runtime = {
-      node_version   = null
-      python_version = null
-      dotnet_version = "v10.0"
-    }
-    app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-      JWT_ISSUER                   = "myexample-auth-api"
-      JWT_AUDIENCE                 = "myexample-client"
-      JWT_TOKEN_LIFETIME_MINUTES   = "15"
-      ALLOWED_HOSTS                = "*"
-      LOGGING_DEFAULT              = "Information"
-      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
-    }
-    tags = {
-      environment = "tst"
-      team        = "tstops"
-    }
-  }
-}
-
-#--------------------------------------------------------------------------------------------------
 # 04.03-AppServiceContainer
 #--------------------------------------------------------------------------------------------------
 
@@ -409,7 +384,36 @@ app_service_container = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.04-StaticWebApp
+# 04.04-AppServiceWindows
+#--------------------------------------------------------------------------------------------------
+
+app_service_windows = {
+  frontend = {
+    app_service_name = "myexample-tst-win-frontend"
+    runtime = {
+      node_version   = null
+      python_version = null
+      dotnet_version = "v10.0"
+    }
+    app_settings = {
+      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
+      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
+      JWT_ISSUER                   = "myexample-auth-api"
+      JWT_AUDIENCE                 = "myexample-client"
+      JWT_TOKEN_LIFETIME_MINUTES   = "15"
+      ALLOWED_HOSTS                = "*"
+      LOGGING_DEFAULT              = "Information"
+      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
+    }
+    tags = {
+      environment = "tst"
+      team        = "tstops"
+    }
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.05-StaticWebApp
 #--------------------------------------------------------------------------------------------------
 
 static_web_apps = {
@@ -435,7 +439,7 @@ static_web_apps = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.05-FunctionsAppLinux
+# 04.06-FunctionsAppLinux
 #--------------------------------------------------------------------------------------------------
 
 function_apps_linux = {
@@ -451,7 +455,7 @@ function_apps_linux = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.06-FunctionsAppWindows
+# 04.07-FunctionsAppWindows
 #--------------------------------------------------------------------------------------------------
 
 function_apps_windows = {
@@ -467,7 +471,7 @@ function_apps_windows = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.07-FunctionsAppFlexConsumption
+# 04.08-FunctionsAppFlexConsumption
 #--------------------------------------------------------------------------------------------------
 
 function_apps_flex = {
@@ -894,32 +898,103 @@ eventhub_namespaces = {
 #--------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------------------------------
-# 15.01-FrontDoor
+# 15.01-FrontDoorWafPolicy
 #--------------------------------------------------------------------------------------------------
 
-front_door_name     = "myexample-tst-afd"
-front_door_sku_name = "Standard_AzureFrontDoor"
+waf_policies = {
+  main = {
+    name     = "myexampletstwafpolicymain"
+    sku_name = "Standard_AzureFrontDoor"
+    mode     = "Prevention"
+    enabled  = true
+    # Note: Standard SKU only supports custom rules, not managed rule sets
+    # Managed rules require Premium SKU
+  },
 
-endpoint_frontend_name = "myexample-tst-frontend"
-endpoint_backend_name  = "myexample-tst-backend"
+  dev = {
+    name     = "myexampletstwafpolicydev"
+    sku_name = "Standard_AzureFrontDoor"
+    mode     = "Prevention"
+    enabled  = true
+    # Note: Standard SKU only supports custom rules, not managed rule sets
+    # Managed rules require Premium SKU
+  },
 
-origin_group_frontend_name = "myexample-tst-frontend-origin-group"
-origin_group_backend_name  = "myexample-tst-backend-origin-group"
+  stage = {
+    name     = "myexampletstwafpolicystage"
+    sku_name = "Standard_AzureFrontDoor"
+    mode     = "Prevention"
+    enabled  = true
+    # Note: Standard SKU only supports custom rules, not managed rule sets
+    # Managed rules require Premium SKU
+  }
+}
 
-origin_frontend_name = "myexample-tst-frontend-origin"
-origin_backend_name  = "myexample-tst-backend-origin"
+#--------------------------------------------------------------------------------------------------
+# 15.02-FrontDoor
+#--------------------------------------------------------------------------------------------------
 
-origin_host_frontend_name = "myexample-tst-frontend.web.core.windows.net"
-origin_host_backend_name  = "myexample-tst-backend-code.azurewebsites.net"
+front_doors = {
+  main = {
+    front_door_name                   = "myexample-tst-afd"
+    front_door_sku_name               = "Standard_AzureFrontDoor"
+    endpoint_frontend_name            = "myexample-tst-frontend"
+    endpoint_backend_name             = "myexample-tst-backend"
+    origin_group_frontend_name        = "myexample-tst-frontend-origin-group"
+    origin_group_backend_name         = "myexample-tst-backend-origin-group"
+    origin_frontend_name              = "myexample-tst-frontend-origin"
+    origin_backend_name               = "myexample-tst-backend-origin"
+    route_frontend_name               = "myexample-tst-frontend-route"
+    route_backend_name                = "myexample-tst-backend-route"
+    origin_host_frontend_name         = "myexample-tst-frontend.web.core.windows.net"
+    origin_host_backend_name          = "myexample-tst-backend-code.azurewebsites.net"
+    custome_domain_frontend_name      = "myexample-tst-frontend"
+    custome_domain_backend_name       = "myexample-tst-backend"
+    host_custome_domain_frontend_name = "tst.myexample.co.in"
+    host_custome_domain_backend_name  = "api-tst.myexample.co.in"
+    enable_waf                        = true
+  },
 
-custome_domain_frontend_name = "myexample-tst-frontend"
-custome_domain_backend_name  = "myexample-tst-backend"
+  dev = {
+    front_door_name                   = "myexample-dev-afd"
+    front_door_sku_name               = "Standard_AzureFrontDoor"
+    endpoint_frontend_name            = "myexample-dev-frontend"
+    endpoint_backend_name             = "myexample-dev-backend"
+    origin_group_frontend_name        = "myexample-dev-frontend-origin-group"
+    origin_group_backend_name         = "myexample-dev-backend-origin-group"
+    origin_frontend_name              = "myexample-dev-frontend-origin"
+    origin_backend_name               = "myexample-dev-backend-origin"
+    route_frontend_name               = "myexample-dev-frontend-route"
+    route_backend_name                = "myexample-dev-backend-route"
+    origin_host_frontend_name         = "myexample-dev-frontend.web.core.windows.net"
+    origin_host_backend_name          = "myexample-dev-backend-code.azurewebsites.net"
+    custome_domain_frontend_name      = "myexample-dev-frontend"
+    custome_domain_backend_name       = "myexample-dev-backend"
+    host_custome_domain_frontend_name = "dev.myexample.co.in"
+    host_custome_domain_backend_name  = "api-dev.myexample.co.in"
+    enable_waf                        = true
+  },
 
-host_custome_domain_frontend_name = "tst.myexample.co.in"
-host_custome_domain_backend_name  = "api-tst.myexample.co.in"
-
-route_frontend_name = "myexample-tst-frontend-route"
-route_backend_name  = "myexample-tst-backend-route"
+  stage = {
+    front_door_name                   = "myexample-stage-afd"
+    front_door_sku_name               = "Standard_AzureFrontDoor"
+    endpoint_frontend_name            = "myexample-stage-frontend"
+    endpoint_backend_name             = "myexample-stage-backend"
+    origin_group_frontend_name        = "myexample-stage-frontend-origin-group"
+    origin_group_backend_name         = "myexample-stage-backend-origin-group"
+    origin_frontend_name              = "myexample-stage-frontend-origin"
+    origin_backend_name               = "myexample-stage-backend-origin"
+    route_frontend_name               = "myexample-stage-frontend-route"
+    route_backend_name                = "myexample-stage-backend-route"
+    origin_host_frontend_name         = "myexample-stage-frontend.web.core.windows.net"
+    origin_host_backend_name          = "myexample-stage-backend-code.azurewebsites.net"
+    custome_domain_frontend_name      = "myexample-stage-frontend"
+    custome_domain_backend_name       = "myexample-stage-backend"
+    host_custome_domain_frontend_name = "stage.myexample.co.in"
+    host_custome_domain_backend_name  = "api-stage.myexample.co.in"
+    enable_waf                        = true
+  }
+}
 
 #--------------------------------------------------------------------------------------------------
 # 16-AppConfiguration

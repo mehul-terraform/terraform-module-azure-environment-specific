@@ -1,9 +1,9 @@
-output "virtual_network_gateway_id" {
-  description = "ID of the virtual network gateway"
-  value       = azurerm_virtual_network_gateway.vnet_gateway.id
+output "virtual_network_gateway_ids" {
+  description = "Map of Virtual Network Gateway IDs"
+  value       = { for k, v in azurerm_virtual_network_gateway.vnet_gateway : k => v.id }
 }
 
-output "virtual_network_gateway_ip_configuration" {
-  description = "IP configuration of the virtual network gateway"
-  value       = azurerm_virtual_network_gateway.vnet_gateway.ip_configuration
+output "virtual_network_gateway_ip_configurations" {
+  description = "Map of IP IP configurations of the virtual network gateways"
+  value       = { for k, v in azurerm_virtual_network_gateway.vnet_gateway : k => v.ip_configuration }
 }

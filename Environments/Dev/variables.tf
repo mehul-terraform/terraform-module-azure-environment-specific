@@ -36,6 +36,12 @@ variable "resource_groups" {
   type        = map(any)
 }
 
+variable "waf_policies" {
+  description = "Map of WAF Policies to create"
+  type        = any
+  default     = {}
+}
+
 #--------------------------------------------------------------------------------------------------
 # 02-Networking
 #--------------------------------------------------------------------------------------------------
@@ -79,39 +85,46 @@ variable "network_security_groups" {
 # 02.03-VirtualNetworkGateway
 #--------------------------------------------------------------------------------------------------
 
-variable "virtual_network_gateway_name" {
-  description = "Name of the virtual network gateway"
-  type        = string
-}
-
-variable "gateway_type" {
-  description = "Gateway type"
-  type        = string
-}
-
-variable "vpn_type" {
-  description = "VPN type"
-  type        = string
-}
-
-variable "active_active" {
-  description = "Active-active mode"
-  type        = bool
-}
-
-variable "virtual_network_gateway_sku" {
-  description = "Gateway SKU"
-  type        = string
-}
-
-variable "virtual_network_gateway_public_ip_name" {
-  description = "The name of the public IP resource"
-  type        = string
-}
-
-variable "virtual_network_gateway_public_ip_allocation_method" {
-  description = "Gateway SKU"
-  type        = string
+variable "virtual_network_gateways" {
+  description = "Map of Virtual Network Gateways to create"
+  type = map(object({
+    name                             = string
+    public_ip_name                   = string
+    public_ip_allocation_method      = optional(string, "Static")
+    gateway_type                     = optional(string, "Vpn")
+    vpn_type                         = optional(string, "RouteBased")
+    active_active                    = optional(bool, false)
+    sku                              = optional(string, "VpnGw1")
+    default_local_network_gateway_id = optional(string)
+    enable_bgp                       = optional(bool, false)
+    generation                       = optional(string, "Generation1")
+    private_ip_address_allocation    = optional(string, "Dynamic")
+    bgp_settings = optional(object({
+      asn         = number
+      peer_weight = number
+      peering_addresses = list(object({
+        ip_configuration_name = optional(string)
+        apipa_addresses       = list(string)
+      }))
+    }))
+    vpn_client_configuration = optional(object({
+      address_space = list(string)
+      root_certificate = list(object({
+        name             = string
+        public_cert_data = string
+      }))
+      revoked_certificate = list(object({
+        name       = string
+        thumbprint = string
+      }))
+      radius_server_address = optional(string)
+      radius_server_secret  = optional(string)
+      vpn_client_protocols  = optional(list(string))
+      vpn_auth_types        = optional(list(string))
+    }))
+    tags = optional(map(string), {})
+  }))
+  default = {}
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -182,7 +195,20 @@ variable "app_service" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.03-AppServiceWindows
+# 04.03-AppServiceContainer
+#--------------------------------------------------------------------------------------------------
+
+variable "app_service_container" {
+  type = map(object({
+    app_service_container_name = string
+    docker_image_name          = string
+    app_settings               = map(string)
+    tags                       = map(string)
+  }))
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.04-AppServiceWindows
 #--------------------------------------------------------------------------------------------------
 
 variable "app_service_windows" {
@@ -202,20 +228,7 @@ variable "app_service_windows" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.03-AppServiceContainer
-#--------------------------------------------------------------------------------------------------
-
-variable "app_service_container" {
-  type = map(object({
-    app_service_container_name = string
-    docker_image_name          = string
-    app_settings               = map(string)
-    tags                       = map(string)
-  }))
-}
-
-#--------------------------------------------------------------------------------------------------
-# 04.04-StaticWebApp
+# 04.05-StaticWebApp
 #--------------------------------------------------------------------------------------------------
 
 variable "static_web_apps" {
@@ -224,7 +237,7 @@ variable "static_web_apps" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.05-FunctionsAppLinux
+# 04.06-FunctionsAppLinux
 #--------------------------------------------------------------------------------------------------
 
 variable "function_apps_linux" {
@@ -246,7 +259,7 @@ variable "function_apps_linux" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.06-FunctionsAppWindows
+# 04.07-FunctionsAppWindows
 #--------------------------------------------------------------------------------------------------
 
 variable "function_apps_windows" {
@@ -268,7 +281,7 @@ variable "function_apps_windows" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.07-FunctionsAppFlexConsumption
+# 04.08-FunctionsAppFlexConsumption
 #--------------------------------------------------------------------------------------------------
 
 variable "function_apps_flex" {
@@ -540,84 +553,29 @@ variable "eventhub_namespaces" {
 # 15.01-FrontDoor
 #--------------------------------------------------------------------------------------------------
 
-variable "front_door_sku_name" {
-  description = "Azure SKU"
-  type        = string
-}
-
-variable "front_door_name" {
-  description = "Azure Front Door Name"
-  type        = string
-}
-
-variable "endpoint_frontend_name" {
-  description = "backend domain"
-  type        = string
-}
-
-variable "endpoint_backend_name" {
-  description = "backend domain"
-  type        = string
-}
-
-variable "origin_group_frontend_name" {
-  description = "frontend-origin-group"
-  type        = string
-}
-
-variable "origin_group_backend_name" {
-  description = "backend-origin-group"
-  type        = string
-}
-
-variable "origin_frontend_name" {
-  description = "frontend_origin_name"
-  type        = string
-}
-
-variable "origin_backend_name" {
-  description = "backend_origin_name"
-  type        = string
-}
-
-variable "route_frontend_name" {
-  description = "frontend route"
-  type        = string
-}
-
-variable "route_backend_name" {
-  description = "backend route"
-  type        = string
-}
-
-variable "origin_host_frontend_name" {
-  description = "Frontend Domain"
-  type        = string
-}
-
-variable "origin_host_backend_name" {
-  description = "backend domain"
-  type        = string
-}
-
-variable "host_custome_domain_frontend_name" {
-  description = "Frontend Domain"
-  type        = string
-}
-
-variable "host_custome_domain_backend_name" {
-  description = "backend domain"
-  type        = string
-}
-
-variable "custome_domain_frontend_name" {
-  description = "Frontend Domain"
-  type        = string
-}
-
-variable "custome_domain_backend_name" {
-  description = "backend domain"
-  type        = string
+variable "front_doors" {
+  description = "Map of Front Door profiles to create"
+  type = map(object({
+    front_door_name                   = string
+    front_door_sku_name               = string
+    endpoint_frontend_name            = string
+    endpoint_backend_name             = string
+    origin_group_frontend_name        = string
+    origin_group_backend_name         = string
+    origin_frontend_name              = string
+    origin_backend_name               = string
+    route_frontend_name               = string
+    route_backend_name                = string
+    origin_host_frontend_name         = string
+    origin_host_backend_name          = string
+    host_custome_domain_frontend_name = string
+    host_custome_domain_backend_name  = string
+    custome_domain_frontend_name      = string
+    custome_domain_backend_name       = string
+    waf_policy_link_id                = optional(string)
+    enable_waf                        = optional(bool, false)
+    tags                              = optional(map(string), {})
+  }))
 }
 
 #--------------------------------------------------------------------------------------------------
