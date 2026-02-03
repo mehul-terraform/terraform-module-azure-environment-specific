@@ -78,7 +78,7 @@ module "virtual_machine_windows" {
   key_vault_id        = module.keyvault.ids["backend"]
   tags                = local.tags
 
-  depends_on = [module.keyvault]
+  depends_on = [module.keyvault.terraform_kv_secrets_officer_role_assignment_ids]
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ module "virtual_machine_linux" {
   key_vault_id        = module.keyvault.ids["backend"]
   tags                = local.tags
 
-  depends_on = [module.keyvault]
+  depends_on = [module.keyvault.terraform_kv_secrets_officer_role_assignment_ids]
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -307,9 +307,6 @@ module "example_dns_zone" {
           # Dev
           "api-dev" = module.azure_front_door.backend_endpoint["dev"]
           "dev"     = module.azure_front_door.frontend_endpoint["dev"]
-          # Stage
-          "api-stage" = module.azure_front_door.backend_endpoint["stage"]
-          "stage"     = module.azure_front_door.frontend_endpoint["stage"]
         })
         txt_records = merge(try(zone.txt_records, {}), {
           # Main (tst)
@@ -318,9 +315,6 @@ module "example_dns_zone" {
           # Dev
           "_dnsauth.dev"     = module.azure_front_door.frontdoor_frontend_validation_token["dev"]
           "_dnsauth.api-dev" = module.azure_front_door.frontdoor_backend_validation_token["dev"]
-          # Stage
-          "_dnsauth.stage"     = module.azure_front_door.frontdoor_frontend_validation_token["stage"]
-          "_dnsauth.api-stage" = module.azure_front_door.frontdoor_backend_validation_token["stage"]
         })
       }) : zone
     )
@@ -493,17 +487,34 @@ module "azure_front_door" {
   front_doors = {
     for k, v in var.front_doors : k => merge(v, {
       waf_policy_link_id = try(module.waf_policy.ids[k], null)
+
+      # Dynamic Hostnames: Container > WebApp > Static
+      origin_host_frontend_name = (
+        v.origin_frontend_container_key != null ?
+        # module.app_service_container.default_hostnames[v.origin_frontend_container_key] :
+        # v.origin_frontend_webapp_key != null ?
+        module.app_service.default_hostnames[v.origin_frontend_webapp_key] :
+        v.origin_host_frontend_name
+      )
+      origin_host_backend_name = (
+        v.origin_backend_container_key != null ?
+        # module.app_service_container.default_hostnames[v.origin_backend_container_key] :
+        # v.origin_backend_webapp_key != null ?
+        module.app_service.default_hostnames[v.origin_backend_webapp_key] :
+        v.origin_host_backend_name
+      )
     })
   }
+
   resource_group_name = module.resource_group.names["main"]
   location            = module.resource_group.locations["main"]
   tags                = local.tags
 
-  depends_on = [module.waf_policy]
+  depends_on = [module.waf_policy, module.app_service_container, module.app_service]
 }
 
 #--------------------------------------------------------------------------------------------------
-# 16-AppConfiguration (commented)
+# 16-AppConfiguration
 #--------------------------------------------------------------------------------------------------
 
 # module "app_configurations" {

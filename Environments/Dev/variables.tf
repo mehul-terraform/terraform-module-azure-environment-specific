@@ -566,13 +566,17 @@ variable "front_doors" {
     origin_backend_name               = string
     route_frontend_name               = string
     route_backend_name                = string
-    origin_host_frontend_name         = string
-    origin_host_backend_name          = string
+    origin_host_frontend_name         = optional(string)
+    origin_host_backend_name          = optional(string)
     host_custome_domain_frontend_name = string
     host_custome_domain_backend_name  = string
     custome_domain_frontend_name      = string
     custome_domain_backend_name       = string
     waf_policy_link_id                = optional(string)
+    origin_frontend_container_key     = optional(string)
+    origin_backend_container_key      = optional(string)
+    origin_frontend_webapp_key        = optional(string) # For standard Linux App Service
+    origin_backend_webapp_key         = optional(string) # For standard Linux App Service
     enable_waf                        = optional(bool, false)
     tags                              = optional(map(string), {})
   }))

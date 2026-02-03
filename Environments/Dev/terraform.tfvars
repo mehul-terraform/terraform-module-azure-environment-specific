@@ -918,15 +918,6 @@ waf_policies = {
     enabled  = true
     # Note: Standard SKU only supports custom rules, not managed rule sets
     # Managed rules require Premium SKU
-  },
-
-  stage = {
-    name     = "myexampletstwafpolicystage"
-    sku_name = "Standard_AzureFrontDoor"
-    mode     = "Prevention"
-    enabled  = true
-    # Note: Standard SKU only supports custom rules, not managed rule sets
-    # Managed rules require Premium SKU
   }
 }
 
@@ -936,18 +927,21 @@ waf_policies = {
 
 front_doors = {
   main = {
-    front_door_name                   = "myexample-tst-afd"
-    front_door_sku_name               = "Standard_AzureFrontDoor"
-    endpoint_frontend_name            = "myexample-tst-frontend"
-    endpoint_backend_name             = "myexample-tst-backend"
-    origin_group_frontend_name        = "myexample-tst-frontend-origin-group"
-    origin_group_backend_name         = "myexample-tst-backend-origin-group"
-    origin_frontend_name              = "myexample-tst-frontend-origin"
-    origin_backend_name               = "myexample-tst-backend-origin"
-    route_frontend_name               = "myexample-tst-frontend-route"
-    route_backend_name                = "myexample-tst-backend-route"
-    origin_host_frontend_name         = "myexample-tst-frontend.web.core.windows.net"
-    origin_host_backend_name          = "myexample-tst-backend-code.azurewebsites.net"
+    front_door_name            = "myexample-tst-afd"
+    front_door_sku_name        = "Standard_AzureFrontDoor"
+    endpoint_frontend_name     = "myexample-tst-frontend"
+    endpoint_backend_name      = "myexample-tst-backend"
+    origin_group_frontend_name = "myexample-tst-frontend-origin-group"
+    origin_group_backend_name  = "myexample-tst-backend-origin-group"
+    origin_frontend_name       = "myexample-tst-frontend-origin"
+    origin_backend_name        = "myexample-tst-backend-origin"
+    route_frontend_name        = "myexample-tst-frontend-route"
+    route_backend_name         = "myexample-tst-backend-route"
+    # Dynamic hostnames (use container_key for containers, webapp_key for standard App Service)
+    origin_frontend_container_key     = "frontend-container"
+    origin_backend_container_key      = "backend-container"
+    origin_frontend_webapp_key        = "frontend" 
+    origin_backend_webapp_key         = "backend"  
     custome_domain_frontend_name      = "myexample-tst-frontend"
     custome_domain_backend_name       = "myexample-tst-backend"
     host_custome_domain_frontend_name = "tst.myexample.co.in"
@@ -956,42 +950,25 @@ front_doors = {
   },
 
   dev = {
-    front_door_name                   = "myexample-dev-afd"
-    front_door_sku_name               = "Standard_AzureFrontDoor"
-    endpoint_frontend_name            = "myexample-dev-frontend"
-    endpoint_backend_name             = "myexample-dev-backend"
-    origin_group_frontend_name        = "myexample-dev-frontend-origin-group"
-    origin_group_backend_name         = "myexample-dev-backend-origin-group"
-    origin_frontend_name              = "myexample-dev-frontend-origin"
-    origin_backend_name               = "myexample-dev-backend-origin"
-    route_frontend_name               = "myexample-dev-frontend-route"
-    route_backend_name                = "myexample-dev-backend-route"
-    origin_host_frontend_name         = "myexample-dev-frontend.web.core.windows.net"
-    origin_host_backend_name          = "myexample-dev-backend-code.azurewebsites.net"
+    front_door_name            = "myexample-dev-afd"
+    front_door_sku_name        = "Standard_AzureFrontDoor"
+    endpoint_frontend_name     = "myexample-dev-frontend"
+    endpoint_backend_name      = "myexample-dev-backend"
+    origin_group_frontend_name = "myexample-dev-frontend-origin-group"
+    origin_group_backend_name  = "myexample-dev-backend-origin-group"
+    origin_frontend_name       = "myexample-dev-frontend-origin"
+    origin_backend_name        = "myexample-dev-backend-origin"
+    route_frontend_name        = "myexample-dev-frontend-route"
+    route_backend_name         = "myexample-dev-backend-route"
+    # Dynamic hostnames (use container_key for containers, webapp_key for standard App Service)
+    origin_frontend_container_key     = "frontend-container"
+    origin_backend_container_key      = "backend-container"
+    origin_frontend_webapp_key        = "frontend" 
+    origin_backend_webapp_key         = "backend"
     custome_domain_frontend_name      = "myexample-dev-frontend"
     custome_domain_backend_name       = "myexample-dev-backend"
     host_custome_domain_frontend_name = "dev.myexample.co.in"
     host_custome_domain_backend_name  = "api-dev.myexample.co.in"
-    enable_waf                        = true
-  },
-
-  stage = {
-    front_door_name                   = "myexample-stage-afd"
-    front_door_sku_name               = "Standard_AzureFrontDoor"
-    endpoint_frontend_name            = "myexample-stage-frontend"
-    endpoint_backend_name             = "myexample-stage-backend"
-    origin_group_frontend_name        = "myexample-stage-frontend-origin-group"
-    origin_group_backend_name         = "myexample-stage-backend-origin-group"
-    origin_frontend_name              = "myexample-stage-frontend-origin"
-    origin_backend_name               = "myexample-stage-backend-origin"
-    route_frontend_name               = "myexample-stage-frontend-route"
-    route_backend_name                = "myexample-stage-backend-route"
-    origin_host_frontend_name         = "myexample-stage-frontend.web.core.windows.net"
-    origin_host_backend_name          = "myexample-stage-backend-code.azurewebsites.net"
-    custome_domain_frontend_name      = "myexample-stage-frontend"
-    custome_domain_backend_name       = "myexample-stage-backend"
-    host_custome_domain_frontend_name = "stage.myexample.co.in"
-    host_custome_domain_backend_name  = "api-stage.myexample.co.in"
     enable_waf                        = true
   }
 }

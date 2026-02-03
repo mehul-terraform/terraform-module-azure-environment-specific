@@ -12,8 +12,8 @@ variable "front_doors" {
     origin_backend_name               = string
     route_frontend_name               = string
     route_backend_name                = string
-    origin_host_frontend_name         = string
-    origin_host_backend_name          = string
+    origin_host_frontend_name         = optional(string)
+    origin_host_backend_name          = optional(string)
     host_custome_domain_frontend_name = string
     host_custome_domain_backend_name  = string
     custome_domain_frontend_name      = string
