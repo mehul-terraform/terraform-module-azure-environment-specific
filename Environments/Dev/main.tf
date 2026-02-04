@@ -66,22 +66,6 @@ module "virtual_network_gateway" {
 #--------------------------------------------------------------------------------------------------
 
 #--------------------------------------------------------------------------------------------------
-# 03.01-VirtualMachineWindows
-#--------------------------------------------------------------------------------------------------
-
-module "virtual_machine_windows" {
-  source              = "../../Modules/03-Compute/01-VirtualMachineWindows"
-  resource_group_name = module.resource_group.names["main"]
-  location            = module.resource_group.locations["main"]
-  subnet_id           = module.virtual_network.subnet_ids["main-vm"]
-  virtual_machines    = var.virtual_machines_windows
-  key_vault_id        = module.keyvault.ids["backend"]
-  tags                = local.tags
-
-  depends_on = [module.keyvault.terraform_kv_secrets_officer_role_assignment_ids]
-}
-
-#--------------------------------------------------------------------------------------------------
 # 03.01-VirtualMachineLinux
 #--------------------------------------------------------------------------------------------------
 
@@ -98,15 +82,54 @@ module "virtual_machine_linux" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 03.02-ContainerRegistry
+# 03.02-VirtualMachineWindows
+#--------------------------------------------------------------------------------------------------
+
+module "virtual_machine_windows" {
+  source              = "../../Modules/03-Compute/02-VirtualMachineWindows"
+  resource_group_name = module.resource_group.names["main"]
+  location            = module.resource_group.locations["main"]
+  subnet_id           = module.virtual_network.subnet_ids["main-vm"]
+  virtual_machines    = var.virtual_machines_windows
+  key_vault_id        = module.keyvault.ids["backend"]
+  tags                = local.tags
+
+  depends_on = [module.keyvault.terraform_kv_secrets_officer_role_assignment_ids]
+}
+
+#--------------------------------------------------------------------------------------------------
+# 03.03-ContainerRegistry
 #--------------------------------------------------------------------------------------------------
 
 module "container_registry" {
-  source               = "../../Modules/03-Compute/02-ContainerRegistry"
+  source               = "../../Modules/03-Compute/03-ContainerRegistry"
   resource_group_name  = module.resource_group.names["main"]
   location             = module.resource_group.locations["main"]
   container_registries = var.container_registries
   tags                 = local.tags
+}
+
+#--------------------------------------------------------------------------------------------------
+# 03.04-AKS
+#--------------------------------------------------------------------------------------------------
+
+module "aks" {
+  source = "../../Modules/03-Compute/04-AKS"
+  aks_clusters = {
+    for k, v in var.aks_clusters : k => merge(v, {
+      default_node_pool = merge(v.default_node_pool, {
+        vnet_subnet_id = (
+          v.default_node_pool.subnet_name != null ?
+          module.virtual_network.subnet_ids["main-${v.default_node_pool.subnet_name}"] :
+          v.default_node_pool.vnet_subnet_id
+        )
+      })
+    })
+  }
+
+  resource_group_name = module.resource_group.names["main"]
+  location            = module.resource_group.locations["main"]
+  tags                = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------

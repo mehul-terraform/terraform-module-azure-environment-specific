@@ -79,6 +79,10 @@ virtual_networks = {
         address_prefix = "10.250.254.0/24"
       },
       {
+        name           = "aks"
+        address_prefix = "10.250.253.0/24"
+      },
+      {
         name           = "GatewaySubnet"
         address_prefix = "10.250.255.0/24"
       }
@@ -253,6 +257,42 @@ container_registries = {
     public_network_access_enabled = true
     quarantine_policy_enabled     = false
     zone_redundancy_enabled       = false
+  }
+}
+
+
+#--------------------------------------------------------------------------------------------------
+# 03.03-AKS
+#--------------------------------------------------------------------------------------------------
+
+aks_clusters = {
+  cluster1 = {
+    name               = "myexample-tst-aks01"
+    dns_prefix         = "myexample-tst-aks01"
+    kubernetes_version = "1.28.5"
+    sku_tier           = "Standard"
+
+    default_node_pool = {
+      name            = "default"
+      node_count      = 2
+      vm_size         = "Standard_DS2_v2"
+      type            = "VirtualMachineScaleSets"
+      os_disk_size_gb = 50
+      subnet_name     = "aks"
+    }
+
+    identity = {
+      type = "SystemAssigned"
+    }
+
+    network_profile = {
+      network_plugin    = "azure"
+      load_balancer_sku = "standard"
+    }
+
+    tags = {
+      environment = "tst"
+    }
   }
 }
 
@@ -940,8 +980,8 @@ front_doors = {
     # Dynamic hostnames (use container_key for containers, webapp_key for standard App Service)
     origin_frontend_container_key     = "frontend-container"
     origin_backend_container_key      = "backend-container"
-    origin_frontend_webapp_key        = "frontend" 
-    origin_backend_webapp_key         = "backend"  
+    origin_frontend_webapp_key        = "frontend"
+    origin_backend_webapp_key         = "backend"
     custome_domain_frontend_name      = "myexample-tst-frontend"
     custome_domain_backend_name       = "myexample-tst-backend"
     host_custome_domain_frontend_name = "tst.myexample.co.in"
@@ -963,7 +1003,7 @@ front_doors = {
     # Dynamic hostnames (use container_key for containers, webapp_key for standard App Service)
     origin_frontend_container_key     = "frontend-container"
     origin_backend_container_key      = "backend-container"
-    origin_frontend_webapp_key        = "frontend" 
+    origin_frontend_webapp_key        = "frontend"
     origin_backend_webapp_key         = "backend"
     custome_domain_frontend_name      = "myexample-dev-frontend"
     custome_domain_backend_name       = "myexample-dev-backend"
