@@ -305,7 +305,29 @@ aks_clusters = {
 #--------------------------------------------------------------------------------------------------
 
 service_plans = {
-  linux = {
+  auth-backend = {
+    name                     = "myexample-tst-auth-backendasp"
+    os_type                  = "Linux"
+    sku_name                 = "B1"
+    per_site_scaling_enabled = false
+    worker_count             = 2
+    tags = {
+      os = "linux"
+    }
+  },
+
+  onboarding-backend = {
+    name                     = "myexample-tst-onboarding-backend-asp"
+    os_type                  = "Linux"
+    sku_name                 = "B1"
+    per_site_scaling_enabled = false
+    worker_count             = 2
+    tags = {
+      os = "linux"
+    }
+  },
+
+  gateway-backend = {
     name                     = "myexample-tst-linux-asp"
     os_type                  = "Linux"
     sku_name                 = "B1"
@@ -314,7 +336,18 @@ service_plans = {
     tags = {
       os = "linux"
     }
-  }
+  },
+
+  subscription-backend = {
+    name                     = "myexample-tst-subscription-backend-asp"
+    os_type                  = "Linux"
+    sku_name                 = "B1"
+    per_site_scaling_enabled = false
+    worker_count             = 2
+    tags = {
+      os = "linux"
+    }
+  },
 
   windows = {
     name                     = "myexample-tst-win-asp"
@@ -385,40 +418,56 @@ app_service = {
 #--------------------------------------------------------------------------------------------------
 
 app_service_container = {
-  frontend-container = {
-    app_service_container_name = "myexample-tst-container-frontend"
+
+  auth-backend = {
+    app_service_container_name = "myexample-uat-auth-api-backend"
     docker_image_name          = "nginx:alpine"
-    app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-      JWT_ISSUER                   = "myexample-auth-api"
-      JWT_AUDIENCE                 = "myexample-client"
-      JWT_TOKEN_LIFETIME_MINUTES   = "15"
-      ALLOWED_HOSTS                = "*"
-      LOGGING_DEFAULT              = "Information"
-      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
-    }
+    service_plan_key           = "auth-backend"
+    app_settings               = {}
+
     tags = {
-      projectname = "myexample"
-      environment = "tst"
+      environment = "uat"
+      project     = "myexample"
+
     }
   }
 
-  backend-container = {
-    app_service_container_name = "myexample-tst-container-backend"
+  onboarding-backend = {
+    app_service_container_name = "myexample-uat-onboarding-api-backend"
     docker_image_name          = "nginx:alpine"
-    app_settings = {
-      DATABASE_URL               = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-      JWT_SECRET                 = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-      JWT_ISSUER                 = "myexample-auth-api"
-      JWT_AUDIENCE               = "myexample-client"
-      JWT_TOKEN_LIFETIME_MINUTES = "15"
-      ALLOWED_HOSTS              = "*"
-      LOGGING_DEFAULT            = "Information"
-    }
+    service_plan_key           = "onboarding-backend"
+    app_settings               = {}
+
     tags = {
-      projectname = "myexample"
-      environment = "tst"
+      environment = "uat"
+      project     = "myexample"
+
+    }
+  }
+
+  gateway-backend = {
+    app_service_container_name = "myexample-uat-gateway-api-backend"
+    docker_image_name          = "nginx:alpine"
+    service_plan_key           = "gateway-backend"
+    app_settings               = {}
+
+    tags = {
+      environment = "uat"
+      project     = "myexample"
+
+    }
+  }
+
+  subscription-backend = {
+    app_service_container_name = "myexample-uat-subscription-api-backend"
+    docker_image_name          = "nginx:alpine"
+    service_plan_key           = "subscription-backend"
+    app_settings               = {}
+
+    tags = {
+      environment = "uat"
+      project     = "myexample"
+
     }
   }
 }

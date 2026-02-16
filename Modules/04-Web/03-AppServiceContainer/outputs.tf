@@ -13,3 +13,10 @@ output "default_hostnames" {
   }
 }
 
+output "identity_principal_id" {
+  description = "Map of App Service system-assigned identity principal IDs"
+  value = {
+    for key, app in azurerm_linux_web_app.app_service_container :
+    key => app.identity[0].principal_id
+  }
+}
