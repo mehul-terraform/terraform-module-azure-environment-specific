@@ -269,8 +269,8 @@ aks_clusters = {
   cluster1 = {
     name               = "myexample-tst-aks01"
     dns_prefix         = "myexample-tst-aks01"
-    kubernetes_version = "1.28.5"
-    sku_tier           = "Standard"
+    kubernetes_version = "1.32.10"
+    sku_tier           = "Free"
 
     default_node_pool = {
       name            = "default"
