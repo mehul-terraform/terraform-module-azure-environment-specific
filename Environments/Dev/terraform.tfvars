@@ -366,52 +366,68 @@ service_plans = {
 #--------------------------------------------------------------------------------------------------
 
 app_service = {
-  frontend = {
-    app_service_name = "myexample-tst-frontend"
+
+  auth-backend = {
+    app_service_name = "myexample-tst-auth-api-linux"
+    service_plan_key = "auth-backend"
     runtime = {
+      dotnet_version = "8.0"
       node_version   = null
       python_version = null
-      dotnet_version = "10.0"
     }
-    app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-      JWT_ISSUER                   = "myexample-auth-api"
-      JWT_AUDIENCE                 = "myexample-client"
-      JWT_TOKEN_LIFETIME_MINUTES   = "15"
-      ALLOWED_HOSTS                = "*"
-      LOGGING_DEFAULT              = "Information"
-      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
-    }
+    app_settings = {}
     tags = {
       environment = "tst"
-      team        = "tstops"
+      project     = "myexample"
     }
   }
 
-  backend = {
-    app_service_name = "myexample-tst-backend"
+  onboarding-backend = {
+    app_service_name = "myexample-tst-onboarding-api-linux"
+    service_plan_key = "onboarding-backend"
     runtime = {
-      node_version   = "22-lts"
+      dotnet_version = "8.0"
+      node_version   = null
       python_version = null
-      dotnet_version = null
     }
-    app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-      JWT_ISSUER                   = "myexample-auth-api"
-      JWT_AUDIENCE                 = "myexample-client"
-      JWT_TOKEN_LIFETIME_MINUTES   = "15"
-      ALLOWED_HOSTS                = "*"
-      LOGGING_DEFAULT              = "Information"
-      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
-    }
+    app_settings = {}
     tags = {
       environment = "tst"
-      team        = "tstops"
+      project     = "myexample"
+    }
+  }
+
+  gateway-backend = {
+    app_service_name = "myexample-tst-gateway-api-linux"
+    service_plan_key = "gateway-backend"
+    runtime = {
+      dotnet_version = "8.0"
+      node_version   = null
+      python_version = null
+    }
+    app_settings = {}
+    tags = {
+      environment = "tst"
+      project     = "myexample"
+    }
+  }
+
+  subscription-backend = {
+    app_service_name = "myexample-tst-subscription-api-linux"
+    service_plan_key = "subscription-backend"
+    runtime = {
+      dotnet_version = "8.0"
+      node_version   = null
+      python_version = null
+    }
+    app_settings = {}
+    tags = {
+      environment = "tst"
+      project     = "myexample"
     }
   }
 }
+
 
 #--------------------------------------------------------------------------------------------------
 # 04.03-AppServiceContainer
@@ -479,6 +495,7 @@ app_service_container = {
 app_service_windows = {
   frontend = {
     app_service_name = "myexample-tst-win-frontend"
+    service_plan_key = "windows"
     runtime = {
       node_version   = null
       python_version = null
@@ -722,6 +739,10 @@ private_dns_zones = {
   keyvault = {
     name = "privatelink.vaultcore.azure.net"
   }
+
+  cosmosdb = {
+    name = "privatelink.documents.azure.com"
+  }
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -778,33 +799,34 @@ private_endpoints = {
   webapp-frontend = {
     name              = "myexample-tst-webapp-frontend-pe"
     service           = "webapp"
-    instance          = "frontend"
+    instance          = "auth-backend"
     subresource_names = ["sites"]
   }
 
   webapp-backend = {
     name              = "myexample-tst-webapp-backend-pe"
     service           = "webapp"
-    instance          = "backend"
+    instance          = "gateway-backend"
     subresource_names = ["sites"]
   }
 
   webapp-container-frontend = {
     name              = "myexample-tst-webapp-container-frontend-pe"
     service           = "webapp-container"
-    instance          = "frontend-container"
+    instance          = "auth-backend"
     subresource_names = ["sites"]
   }
 
   webapp-container-backend = {
     name              = "myexample-tst-webapp-container-backend-pe"
     service           = "webapp-container"
-    instance          = "backend-container"
+    instance          = "gateway-backend"
     subresource_names = ["sites"]
   }
 
   keyvault-backend = {
     name              = "myexample-tst-keyvault-backend-pe"
+    instance          = "backend"
     service           = "keyvault"
     subresource_names = ["vault"]
   }

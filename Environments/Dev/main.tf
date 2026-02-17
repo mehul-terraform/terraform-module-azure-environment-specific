@@ -153,16 +153,16 @@ module "app_service_plan" {
 # 04.02-AppServiceLinux
 #--------------------------------------------------------------------------------------------------
 
-# module "app_service" {
-#   source = "../../Modules/04-Web/02-AppServiceLinux"
+module "app_service_linux" {
+  source = "../../Modules/04-Web/02-AppServiceLinux"
 
-#   app_service         = var.app_service
-#   resource_group_name = module.resource_group.names["main"]
-#   location            = module.resource_group.locations["main"]
-#   service_plan_id     = module.app_service_plan.ids["linux"]
-#   subnet_id           = module.virtual_network.subnet_ids["main-webapp"]
-#   tags                = local.tags
-# }
+  app_service         = var.app_service
+  resource_group_name = module.resource_group.names["main"]
+  location            = module.resource_group.locations["main"]
+  service_plan_ids    = module.app_service_plan.ids
+  subnet_id           = module.virtual_network.subnet_ids["main-webapp"]
+  tags                = local.tags
+}
 
 #--------------------------------------------------------------------------------------------------
 # 04.03-AppServiceContainer
@@ -190,16 +190,16 @@ resource "azurerm_role_assignment" "webapp_keyvault_access" {
 # 04.04-AppServiceWindows
 #--------------------------------------------------------------------------------------------------
 
-# module "app_service_windows" {
-#   source              = "../../Modules/04-Web/04-AppServiceWindows"
-#   app_service_windows = var.app_service_windows
+module "app_service_windows" {
+  source              = "../../Modules/04-Web/04-AppServiceWindows"
+  app_service_windows = var.app_service_windows
 
-#   location            = module.resource_group.locations["main"]
-#   resource_group_name = module.resource_group.names["main"]
-#   service_plan_id     = module.app_service_plan.ids["windows"]
-#   subnet_id           = module.virtual_network.subnet_ids["main-webapp"]
-#   tags                = local.tags
-# }
+  location            = module.resource_group.locations["main"]
+  resource_group_name = module.resource_group.names["main"]
+  service_plan_ids    = module.app_service_plan.ids
+  subnet_id           = module.virtual_network.subnet_ids["main-webapp"]
+  tags                = local.tags
+}
 
 #--------------------------------------------------------------------------------------------------
 # 04.05-StaticWebApp
@@ -270,35 +270,36 @@ module "storage_account" {
 # 06.01-PostgresSQLFlexible
 #--------------------------------------------------------------------------------------------------
 
-# module "postgres_sql_flexible" {
-#   source = "../../Modules/06-Database/01-PostgreSQLFlexible"
+module "postgres_sql_flexible" {
+  source = "../../Modules/06-Database/01-PostgreSQLFlexible"
 
-#   postgre_sql         = var.postgres_sql
-#   location            = module.resource_group.locations["main"]
-#   resource_group_name = module.resource_group.names["main"]
+  postgre_sql         = var.postgres_sql
+  location            = module.resource_group.locations["main"]
+  resource_group_name = module.resource_group.names["main"]
 
-#   delegated_subnet_id = null
-#   private_dns_zone_id = null
-#   key_vault_id        = module.keyvault.ids["backend"]
+  delegated_subnet_id = null
+  private_dns_zone_id = null
+  key_vault_id        = module.keyvault.ids["backend"]
 
-#   depends_on = [
-#     module.keyvault.terraform_kv_secrets_officer_role_assignment_ids
-#   ]
+  depends_on = [
+    module.keyvault.terraform_kv_secrets_officer_role_assignment_ids
+  ]
 
-#   tags = var.tags
-# }
+  tags = var.tags
+}
 
 #--------------------------------------------------------------------------------------------------
 # 06.02-CosmosDB
 #--------------------------------------------------------------------------------------------------
 
-# module "cosmosdb" {
-#   source              = "../../Modules/06-Database/02-CosmosDB"
-#   resource_group_name = module.resource_group.names["main"]
-#   location            = module.resource_group.locations["main"]
-#   cosmos_dbs          = var.cosmos_dbs
-#   tags                = local.tags
-# }
+module "cosmosdb" {
+  source              = "../../Modules/06-Database/02-CosmosDB"
+  resource_group_name = module.resource_group.names["main"]
+  location            = module.resource_group.locations["main"]
+  cosmos_dbs          = var.cosmos_dbs
+  subnet_id           = module.virtual_network.subnet_ids["main-private-endpoint"]
+  tags                = local.tags
+}
 
 #--------------------------------------------------------------------------------------------------
 # 07-DNSZone
@@ -308,16 +309,16 @@ module "storage_account" {
 # 07.01-PrivateDNSZone
 #--------------------------------------------------------------------------------------------------
 
-# module "private_dns_zones" {
-#   source = "../../Modules/07-DNSZone/7.1-PrivateDNSZone"
+module "private_dns_zones" {
+  source = "../../Modules/07-DNSZone/7.1-PrivateDNSZone"
 
-#   resource_group_name = module.resource_group.names["main"]
-#   virtual_network_id  = module.virtual_network.ids["main"]
-#   tags                = local.tags
+  resource_group_name = module.resource_group.names["main"]
+  virtual_network_id  = module.virtual_network.ids["main"]
+  tags                = local.tags
 
-#   private_dns_zones = var.private_dns_zones
-#   depends_on        = [module.resource_group]
-# }
+  private_dns_zones = var.private_dns_zones
+  depends_on        = [module.resource_group]
+}
 
 #--------------------------------------------------------------------------------------------------
 # 07.02-DNSZone
@@ -361,40 +362,42 @@ module "storage_account" {
 # 08-PrivateEndPoints
 #--------------------------------------------------------------------------------------------------
 
-# module "private_endpoints" {
-#   source = "../../Modules/08-PrivateEndPoints"
+module "private_endpoints" {
+  source = "../../Modules/08-PrivateEndPoints"
 
-#   private_endpoints = {
-#     for k, v in var.private_endpoints : k => {
-#       name                = v.name
-#       location            = module.resource_group.locations["main"]
-#       resource_group_name = module.resource_group.names["main"]
-#       subresource_names   = v.subresource_names
-#       tags                = v.tags
+  private_endpoints = {
+    for k, v in var.private_endpoints : k => {
+      name                = v.name
+      location            = module.resource_group.locations["main"]
+      resource_group_name = module.resource_group.names["main"]
+      subresource_names   = v.subresource_names
+      tags                = v.tags
 
-#       # Use NON-delegated PE subnet
-#       subnet_id = module.virtual_network.subnet_ids["main-private-endpoint"]
+      # Use NON-delegated PE subnet
+      subnet_id = module.virtual_network.subnet_ids["main-private-endpoint"]
 
-#       resource_id = (
-#         v.service == "postgres" ? module.postgres_sql_flexible.ids[v.instance] :
-#         v.service == "storage" ? module.storage_account.storage_account_ids[v.instance] :
-#         v.service == "webapp" ? module.app_service.app_service_ids[v.instance] :
-#         v.service == "webapp-container" ? module.app_service_container.app_service_ids[v.instance] :
-#         v.service == "keyvault" ? module.keyvault.ids["backend"] :
-#         null
-#       )
+      resource_id = (
+        v.service == "postgres" ? module.postgres_sql_flexible.ids[v.instance] :
+        v.service == "storage" ? module.storage_account.storage_account_ids[v.instance] :
+        v.service == "webapp" ? module.app_service_linux.app_service_ids[v.instance] :
+        v.service == "webapp-container" ? module.app_service_container.app_service_ids[v.instance] :
+        v.service == "cosmosdb" ? module.cosmosdb.cosmosdb_account_ids[v.instance] :
+        v.service == "keyvault" ? module.keyvault.ids[v.instance] :
+        null
+      )
 
-#       private_dns_zone_ids = [
-#         v.service == "postgres" ? module.private_dns_zones.private_dns_zone_ids["postgres"] :
-#         v.service == "storage" ? module.private_dns_zones.private_dns_zone_ids["blob"] :
-#         v.service == "webapp" ? module.private_dns_zones.private_dns_zone_ids["webapp"] :
-#         v.service == "webapp-container" ? module.private_dns_zones.private_dns_zone_ids["webapp"] :
-#         v.service == "keyvault" ? module.private_dns_zones.private_dns_zone_ids["keyvault"] :
-#         null
-#       ]
-#     }
-#   }
-# }
+      private_dns_zone_ids = [
+        v.service == "postgres" ? module.private_dns_zones.private_dns_zone_ids["postgres"] :
+        v.service == "storage" ? module.private_dns_zones.private_dns_zone_ids["blob"] :
+        v.service == "webapp" ? module.private_dns_zones.private_dns_zone_ids["webapp"] :
+        v.service == "webapp-container" ? module.private_dns_zones.private_dns_zone_ids["webapp"] :
+        v.service == "cosmosdb" ? module.private_dns_zones.private_dns_zone_ids["cosmosdb"] :
+        v.service == "keyvault" ? module.private_dns_zones.private_dns_zone_ids["keyvault"] :
+        null
+      ]
+    }
+  }
+}
 
 #--------------------------------------------------------------------------------------------------
 # 09-CacheRedis

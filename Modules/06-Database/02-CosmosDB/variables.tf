@@ -22,6 +22,17 @@ variable "cosmos_dbs" {
   default = {}
 }
 
+variable "subnet_id" {
+  description = "Subnet ID for private endpoint"
+  type        = string
+}
+
+variable "private_dns_zone_id" {
+  description = "Private DNS Zone ID for Cosmos DB private endpoint"
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   type        = map(string)
   default     = {}

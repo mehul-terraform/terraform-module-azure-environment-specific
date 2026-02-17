@@ -12,3 +12,8 @@ output "cosmosdb_database_ids" {
   description = "Map of Cosmos DB SQL database IDs"
   value       = { for k, v in azurerm_cosmosdb_sql_database.sqldb : k => v.id }
 }
+
+output "private_endpoint_ids" {
+  description = "Map of Cosmos DB private endpoint IDs"
+  value       = { for k, v in azurerm_private_endpoint.cosmosdb_pe : k => v.id }
+}

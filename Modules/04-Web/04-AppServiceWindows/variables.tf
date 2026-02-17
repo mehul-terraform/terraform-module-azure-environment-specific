@@ -8,9 +8,8 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "service_plan_id" {
-  description = "Windows App Service Plan ID"
-  type        = string
+variable "service_plan_ids" {
+  type = map(string)
 }
 
 variable "subnet_id" {
@@ -28,6 +27,7 @@ variable "app_service_windows" {
   description = "Windows Web Apps configuration"
   type = map(object({
     app_service_name = string
+    service_plan_key = string
 
     runtime = object({
       dotnet_version = optional(string)

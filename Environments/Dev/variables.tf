@@ -231,6 +231,7 @@ variable "service_plans" {
 variable "app_service" {
   type = map(object({
     app_service_name = string
+    service_plan_key = string
 
     runtime = object({
       node_version   = optional(string)
@@ -265,6 +266,7 @@ variable "app_service_windows" {
   description = "Windows Web Apps configuration"
   type = map(object({
     app_service_name = string
+    service_plan_key = string
 
     runtime = object({
       dotnet_version = optional(string)

@@ -6,8 +6,8 @@ variable "location" {
   type = string
 }
 
-variable "service_plan_id" {
-  type = string
+variable "service_plan_ids" {
+  type = map(string)
 }
 
 variable "subnet_id" {
@@ -22,6 +22,7 @@ variable "tags" {
 variable "app_service" {
   type = map(object({
     app_service_name = string
+    service_plan_key = string
 
     runtime = object({
       node_version   = optional(string)

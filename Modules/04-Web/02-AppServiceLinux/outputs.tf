@@ -1,6 +1,8 @@
 output "app_service_ids" {
+  description = "Map of App Service IDs"
   value = {
-    for k, v in azurerm_linux_web_app.app_service : k => v.id
+    for key, app in azurerm_linux_web_app.app_service :
+    key => app.id
   }
 }
 
@@ -11,3 +13,10 @@ output "default_hostnames" {
   }
 }
 
+output "identity_principal_id" {
+  description = "Map of App Service system-assigned identity principal IDs"
+  value = {
+    for key, app in azurerm_linux_web_app.app_service :
+    key => app.identity[0].principal_id
+  }
+}

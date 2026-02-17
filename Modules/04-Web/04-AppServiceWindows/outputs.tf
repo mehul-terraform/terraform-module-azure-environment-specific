@@ -1,15 +1,22 @@
-output "ids" {
-  description = "Windows Web App IDs"
+output "app_service_ids" {
+  description = "Map of Windows App Service IDs"
   value = {
-    for k, v in azurerm_windows_web_app.app_service :
-    k => v.id
+    for key, app in azurerm_windows_web_app.app_service :
+    key => app.id
   }
 }
 
-output "names" {
-  description = "Windows Web App names"
+output "default_hostnames" {
   value = {
-    for k, v in azurerm_windows_web_app.app_service :
-    k => v.name
+    for key, app in azurerm_windows_web_app.app_service :
+    key => app.default_hostname
+  }
+}
+
+output "identity_principal_id" {
+  description = "Map of App Service system-assigned identity principal IDs"
+  value = {
+    for key, app in azurerm_windows_web_app.app_service :
+    key => app.identity[0].principal_id
   }
 }
