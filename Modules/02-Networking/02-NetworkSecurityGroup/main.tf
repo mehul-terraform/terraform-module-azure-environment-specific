@@ -27,10 +27,10 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg" {
   for_each = {
     for item in flatten([
       for nsg_key, nsg in var.network_security_groups : [
-        for subnet_key, subnet_id in lookup(nsg, "subnet_ids", {}) : {
-          key       = "${nsg_key}-${subnet_key}"
+        for subnet_name in lookup(nsg, "subnet_names", []) : {
+          key       = "${nsg_key}-${subnet_name}"
           nsg_key   = nsg_key
-          subnet_id = subnet_id
+          subnet_id = var.vnet_subnet_ids["${var.vnet_key}-${subnet_name}"]
         }
       ]
     ]) : item.key => item

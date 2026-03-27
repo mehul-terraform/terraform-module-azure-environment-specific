@@ -32,7 +32,10 @@ resource "azurerm_windows_web_app" "app_service" {
 
   app_settings = each.value.app_settings
 
-  identity { type = "SystemAssigned" }
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [var.managed_identity_id]
+  }
 
   tags = each.value.tags
 }

@@ -8,6 +8,11 @@ variable "location" {
   type        = string
 }
 
+variable "subnet_id" {
+  description = "Subnet ID for VNet integration"
+  type        = string
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)
@@ -30,4 +35,9 @@ variable "function_apps" {
     tags                 = optional(map(string), {})
   }))
   default = {}
+}
+
+variable "managed_identity_id" {
+  description = "The ID of the User Assigned Managed Identity."
+  type        = string
 }

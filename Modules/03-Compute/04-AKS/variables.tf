@@ -14,6 +14,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "subnet_id" {
+  description = "Virtual Network Subnet ID for AKS clusters (applied if not specified in aks_clusters map)"
+  type        = string
+  default     = null
+}
+
 variable "aks_clusters" {
   description = "Map of variables for AKS clusters to create"
   type = map(object({

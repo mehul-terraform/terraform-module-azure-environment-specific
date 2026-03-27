@@ -6,6 +6,26 @@ project     = "myexample"
 environment = "tst"
 
 #--------------------------------------------------------------------------------------------------
+# 00-Tags
+#--------------------------------------------------------------------------------------------------
+
+tags = {
+  environment = "tst"
+  projectname = "myexample"
+}
+
+#--------------------------------------------------------------------------------------------------
+# 00-Governance
+#--------------------------------------------------------------------------------------------------
+
+allowed_locations = ["WEST US 3"]
+
+required_tags = {
+  "Project"     = "Myexample"
+  "Environment" = "tst"
+}
+
+#--------------------------------------------------------------------------------------------------
 # 01-ResourceGroup
 #--------------------------------------------------------------------------------------------------
 
@@ -175,7 +195,7 @@ virtual_network_gateways = {
 #--------------------------------------------------------------------------------------------------
 
 virtual_machines_windows = {
-  vm1 = {
+  windows-vm1 = {
     name           = "myexampletstvm1"
     size           = "Standard_F2"
     admin_username = "myexample"
@@ -193,7 +213,7 @@ virtual_machines_windows = {
     image_version                = "latest"
   },
 
-  vm2 = {
+  windows-vm2 = {
     name           = "myexampletstvm2"
     size           = "Standard_F2"
     admin_username = "myexample"
@@ -292,6 +312,37 @@ aks_clusters = {
 
     tags = {
       environment = "tst"
+      projectname = "myexample"
+    }
+  }
+
+  cluster2 = {
+    name               = "myexample-tst-aks02"
+    dns_prefix         = "myexample-tst-aks02"
+    kubernetes_version = "1.32.10"
+    sku_tier           = "Free"
+
+    default_node_pool = {
+      name            = "default"
+      node_count      = 2
+      vm_size         = "Standard_DS2_v2"
+      type            = "VirtualMachineScaleSets"
+      os_disk_size_gb = 50
+      subnet_name     = "aks"
+    }
+
+    identity = {
+      type = "SystemAssigned"
+    }
+
+    network_profile = {
+      network_plugin    = "azure"
+      load_balancer_sku = "standard"
+    }
+
+    tags = {
+      environment = "tst"
+      projectname = "myexample"
     }
   }
 }
@@ -305,8 +356,8 @@ aks_clusters = {
 #--------------------------------------------------------------------------------------------------
 
 service_plans = {
-  auth-backend = {
-    name                     = "myexample-tst-auth-backendasp"
+  linux-asp1 = {
+    name                     = "myexample-tst-linux-asp1"
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
@@ -316,8 +367,8 @@ service_plans = {
     }
   },
 
-  onboarding-backend = {
-    name                     = "myexample-tst-onboarding-backend-asp"
+  linux-asp2 = {
+    name                     = "myexample-tst-linux-asp2"
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
@@ -327,30 +378,8 @@ service_plans = {
     }
   },
 
-  gateway-backend = {
-    name                     = "myexample-tst-linux-asp"
-    os_type                  = "Linux"
-    sku_name                 = "B1"
-    per_site_scaling_enabled = false
-    worker_count             = 2
-    tags = {
-      os = "linux"
-    }
-  },
-
-  subscription-backend = {
-    name                     = "myexample-tst-subscription-backend-asp"
-    os_type                  = "Linux"
-    sku_name                 = "B1"
-    per_site_scaling_enabled = false
-    worker_count             = 2
-    tags = {
-      os = "linux"
-    }
-  },
-
-  windows = {
-    name                     = "myexample-tst-win-asp"
+  windows-asp1 = {
+    name                     = "myexample-tst-windows-asp1"
     os_type                  = "Windows"
     sku_name                 = "B1"
     per_site_scaling_enabled = true
@@ -365,11 +394,11 @@ service_plans = {
 # 04.02-AppServiceLinux
 #--------------------------------------------------------------------------------------------------
 
-app_service = {
+app_service_linux = {
 
-  auth-backend = {
-    app_service_name = "myexample-tst-auth-api-linux"
-    service_plan_key = "auth-backend"
+  linux-webapp1 = {
+    app_service_name = "myexample-tst-webapp1"
+    service_plan_key = "linux-asp1"
     runtime = {
       dotnet_version = "8.0"
       node_version   = null
@@ -382,42 +411,12 @@ app_service = {
     }
   }
 
-  onboarding-backend = {
-    app_service_name = "myexample-tst-onboarding-api-linux"
-    service_plan_key = "onboarding-backend"
+  linux-webapp2 = {
+    app_service_name = "myexample-tst-webapp2"
+    service_plan_key = "linux-asp2"
     runtime = {
-      dotnet_version = "8.0"
-      node_version   = null
-      python_version = null
-    }
-    app_settings = {}
-    tags = {
-      environment = "tst"
-      project     = "myexample"
-    }
-  }
-
-  gateway-backend = {
-    app_service_name = "myexample-tst-gateway-api-linux"
-    service_plan_key = "gateway-backend"
-    runtime = {
-      dotnet_version = "8.0"
-      node_version   = null
-      python_version = null
-    }
-    app_settings = {}
-    tags = {
-      environment = "tst"
-      project     = "myexample"
-    }
-  }
-
-  subscription-backend = {
-    app_service_name = "myexample-tst-subscription-api-linux"
-    service_plan_key = "subscription-backend"
-    runtime = {
-      dotnet_version = "8.0"
-      node_version   = null
+      dotnet_version = null
+      node_version   = "24-lts"
       python_version = null
     }
     app_settings = {}
@@ -428,119 +427,75 @@ app_service = {
   }
 }
 
-
 #--------------------------------------------------------------------------------------------------
-# 04.03-AppServiceContainer
-#--------------------------------------------------------------------------------------------------
-
-app_service_container = {
-
-  auth-backend = {
-    app_service_container_name = "myexample-uat-auth-api-backend"
-    docker_image_name          = "nginx:alpine"
-    service_plan_key           = "auth-backend"
-    app_settings               = {}
-
-    tags = {
-      environment = "uat"
-      project     = "myexample"
-
-    }
-  }
-
-  onboarding-backend = {
-    app_service_container_name = "myexample-uat-onboarding-api-backend"
-    docker_image_name          = "nginx:alpine"
-    service_plan_key           = "onboarding-backend"
-    app_settings               = {}
-
-    tags = {
-      environment = "uat"
-      project     = "myexample"
-
-    }
-  }
-
-  gateway-backend = {
-    app_service_container_name = "myexample-uat-gateway-api-backend"
-    docker_image_name          = "nginx:alpine"
-    service_plan_key           = "gateway-backend"
-    app_settings               = {}
-
-    tags = {
-      environment = "uat"
-      project     = "myexample"
-
-    }
-  }
-
-  subscription-backend = {
-    app_service_container_name = "myexample-uat-subscription-api-backend"
-    docker_image_name          = "nginx:alpine"
-    service_plan_key           = "subscription-backend"
-    app_settings               = {}
-
-    tags = {
-      environment = "uat"
-      project     = "myexample"
-
-    }
-  }
-}
-
-#--------------------------------------------------------------------------------------------------
-# 04.04-AppServiceWindows
+# 04.03-AppServiceWindows
 #--------------------------------------------------------------------------------------------------
 
 app_service_windows = {
-  frontend = {
-    app_service_name = "myexample-tst-win-frontend"
-    service_plan_key = "windows"
+  windows-webapp1 = {
+    app_service_name = "myexample-tst-win-webapp1"
+    service_plan_key = "windows-asp1"
     runtime = {
       node_version   = null
       python_version = null
       dotnet_version = "v10.0"
     }
-    app_settings = {
-      DATABASE_URL                 = "@Microsoft.KeyVault(SecretUri=https://myexample-tst-bkd-kv.vault.azure.net/secrets/DBPASSWORD)"
-      JWT_SECRET                   = "rUY98gz5Uq3elTgNtZZsqH1J9kTAF2UEUvhFapQXsU6eNlaPblZXFSksdJ+A+HM81e6gl5JQ/a/IN02jsMW1jw=="
-      JWT_ISSUER                   = "myexample-auth-api"
-      JWT_AUDIENCE                 = "myexample-client"
-      JWT_TOKEN_LIFETIME_MINUTES   = "15"
-      ALLOWED_HOSTS                = "*"
-      LOGGING_DEFAULT              = "Information"
-      LOGGING_MICROSOFT_ASPNETCORE = "Warning"
-    }
+    app_settings = {}
     tags = {
       environment = "tst"
-      team        = "tstops"
+      project     = "myexample"
     }
   }
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.05-StaticWebApp
+# 04.04-AppServiceContainerLinux
 #--------------------------------------------------------------------------------------------------
 
-static_web_apps = {
-  app1 = {
-    name              = "myexample-tst-static-webapp1"
-    location          = "westus2"
-    sku_tier          = "Free"
-    sku_size          = "Free"
-    repository_url    = "https://myexample.co.in/github"
-    repository_branch = "tstelop"
-    repository_token  = "ABCDEFGHIJKLMNOPQ"
+app_service_container_linux = {
+
+  container-linux-webapp1 = {
+    app_service_container_name = "myexample-tst-container-linux-webapp1"
+    docker_image_name          = "nginx:alpine"
+    service_plan_key           = "linux-asp1"
+    app_settings               = {}
+
+    tags = {
+      environment = "tst"
+      project     = "myexample"
+
+    }
   },
 
-  app2 = {
-    name              = "myexample-tst-static-webapp2"
-    location          = "westus2"
-    sku_tier          = "Free"
-    sku_size          = "Free"
-    repository_url    = "https://myexample.co.in/github"
-    repository_branch = "tstelop"
-    repository_token  = "ABCDEFGHIJKLMNOPQ"
+  container-linux-webapp2 = {
+    app_service_container_name = "myexample-tst-container-linux-webapp2"
+    docker_image_name          = "nginx:alpine"
+    service_plan_key           = "linux-asp2"
+    app_settings               = {}
+
+    tags = {
+      environment = "tst"
+      project     = "myexample"
+
+    }
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.05-AppServiceContainerWindows
+#--------------------------------------------------------------------------------------------------
+
+app_service_container_windows = {
+  container-windows-webapp1 = {
+    app_service_container_name = "myexample-tst-container-windows-webapp1"
+    docker_image_name          = "nginx:alpine"
+    service_plan_key           = "windows-asp1"
+    app_settings               = {}
+
+    tags = {
+      environment = "tst"
+      project     = "myexample"
+    }
   }
 }
 
@@ -548,10 +503,10 @@ static_web_apps = {
 # 04.06-FunctionsAppLinux
 #--------------------------------------------------------------------------------------------------
 
-function_apps_linux = {
-  func-linux = {
-    function_app_name    = "myexample-tst-lnx-funcapp1"
-    service_plan_name    = "myexample-tst-lnx-funcapp1-asp"
+function_app_linux = {
+  functionapp-linux-webapp1 = {
+    function_app_name    = "myexample-tst-lnx-funcwebapp1"
+    service_plan_name    = "myexample-tst-lnx-funcwebapp1-asp"
     storage_account_name = "tstlnxfuncappstg1"
     sku_name             = "B1"
     runtime_stack        = "dotnet"
@@ -564,10 +519,10 @@ function_apps_linux = {
 # 04.07-FunctionsAppWindows
 #--------------------------------------------------------------------------------------------------
 
-function_apps_windows = {
-  func-win = {
-    function_app_name    = "myexample-tst-win-funcapp1"
-    service_plan_name    = "myexample-tst-win-funcapp1-asp"
+function_app_windows = {
+  functionapp-windows-webapp1 = {
+    function_app_name    = "myexample-tst-win-funcwebapp1"
+    service_plan_name    = "myexample-tst-win-funcwebapp1-asp"
     storage_account_name = "tstwinfuncappstg1"
     sku_name             = "B1"
     runtime_stack        = "dotnet"
@@ -577,13 +532,13 @@ function_apps_windows = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.08-FunctionsAppFlexConsumption
+# 04.08-FunctionsAppFlexConsumption (OnlySupportLinux)
 #--------------------------------------------------------------------------------------------------
 
-function_apps_flex = {
-  func-1 = {
-    function_app_name      = "myexample-tst-func1"
-    service_plan_name      = "myexample-tst-func1-asp"
+function_app_flex = {
+  function-flex1 = {
+    function_app_name      = "myexample-tst-func-flex1"
+    service_plan_name      = "myexample-tst-func-flex-asp1"
     storage_account_name   = "tstfuncflexstg1"
     storage_container_name = "tstfuncflexstg1"
     runtime_name           = "dotnet-isolated"
@@ -591,11 +546,12 @@ function_apps_flex = {
     os_type                = "Linux"
     maximum_instance_count = 40
     instance_memory_in_mb  = 4096
+    sku_name               = "FC1"
   }
 
-  func-2 = {
-    function_app_name      = "myexample-tst-func2"
-    service_plan_name      = "myexample-tst-func2-asp"
+  function-flex2 = {
+    function_app_name      = "myexample-tst-func-flex2"
+    service_plan_name      = "myexample-tst-func-flex-asp2"
     storage_account_name   = "tstfuncflexstg2"
     storage_container_name = "tstfuncflexstg2"
     runtime_name           = "node"
@@ -603,6 +559,33 @@ function_apps_flex = {
     os_type                = "Linux"
     maximum_instance_count = 40
     instance_memory_in_mb  = 2048
+    sku_name               = "FC1"
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.09-StaticWebApp
+#--------------------------------------------------------------------------------------------------
+
+static_web_app = {
+  swa1 = {
+    name              = "myexample-tst-static-webwebapp1"
+    location          = "westus2"
+    sku_tier          = "Free"
+    sku_size          = "Free"
+    repository_url    = "https://myexample.co.in/github"
+    repository_branch = "tst"
+    repository_token  = "ABCDEFGHIJKLMNOPQ"
+  },
+
+  swa2 = {
+    name              = "myexample-tst-static-webwebapp2"
+    location          = "westus2"
+    sku_tier          = "Free"
+    sku_size          = "Free"
+    repository_url    = "https://myexample.co.in/github"
+    repository_branch = "tst"
+    repository_token  = "ABCDEFGHIJKLMNOPQ"
   }
 }
 
@@ -645,7 +628,7 @@ storage_accounts = {
 #--------------------------------------------------------------------------------------------------
 
 postgres_sql = {
-  server1 = {
+  postgres1 = {
     name                         = "myexample-tst-pgsql-svr01"
     sku_name                     = "B_Standard_B1ms"
     tier                         = "Burstable"
@@ -664,7 +647,7 @@ postgres_sql = {
     }
   },
 
-  server2 = {
+  postgres2 = {
     name                         = "myexample-tst-pgsql-svr02"
     sku_name                     = "B_Standard_B2ms"
     tier                         = "Burstable"
@@ -682,11 +665,6 @@ postgres_sql = {
       }
     }
   }
-}
-
-tags = {
-  environment = "prod"
-  owner       = "platform"
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -724,8 +702,8 @@ cosmos_dbs = {
 #--------------------------------------------------------------------------------------------------
 
 private_dns_zones = {
-  webapp = {
-    name = "privatelink.azurewebsites.net"
+  sites = {
+    name = "privatelink.azurewebsites.net" # for all webapps 
   }
 
   blob = {
@@ -768,18 +746,32 @@ dns_zones = {
 #--------------------------------------------------------------------------------------------------
 
 private_endpoints = {
-  postgres-server1 = {
-    name              = "myexample-tst-db-svr01-pe"
+  postgres1 = {
+    name              = "myexample-tst-db-postgres1-pe"
     service           = "postgres"
-    instance          = "server1"
+    instance          = "postgres1"
     subresource_names = ["postgresqlServer"]
   }
 
-  postgres-server2 = {
-    name              = "myexample-tst-db-svr02-pe"
+  postgres2 = {
+    name              = "myexample-tst-db-postgres2-pe"
     service           = "postgres"
-    instance          = "server2"
+    instance          = "postgres2"
     subresource_names = ["postgresqlServer"]
+  }
+
+  cosmos1 = {
+    name              = "myexample-tst-cosmosdb1-pe"
+    service           = "cosmosdb"
+    instance          = "cosmos1"
+    subresource_names = ["sql"]
+  }
+
+  cosmos2 = {
+    name              = "myexample-tst-cosmosdb2-pe"
+    service           = "cosmosdb"
+    instance          = "cosmos2"
+    subresource_names = ["sql"]
   }
 
   storage-frontend = {
@@ -796,31 +788,73 @@ private_endpoints = {
     subresource_names = ["blob"]
   }
 
-  webapp-frontend = {
-    name              = "myexample-tst-webapp-frontend-pe"
-    service           = "webapp"
-    instance          = "auth-backend"
+  linux-webapp1 = {
+    name              = "myexample-tst-linux-webapp1-pe"
+    service           = "webapp-linux"
+    instance          = "linux-webapp1"
     subresource_names = ["sites"]
   }
 
-  webapp-backend = {
-    name              = "myexample-tst-webapp-backend-pe"
-    service           = "webapp"
-    instance          = "gateway-backend"
+  linux-webapp2 = {
+    name              = "myexample-tst-linux-webapp2-pe"
+    service           = "webapp-linux"
+    instance          = "linux-webapp2"
     subresource_names = ["sites"]
   }
 
-  webapp-container-frontend = {
-    name              = "myexample-tst-webapp-container-frontend-pe"
-    service           = "webapp-container"
-    instance          = "auth-backend"
+  windows-webapp1 = {
+    name              = "myexample-tst-windows-webapp1-pe"
+    service           = "webapp-windows"
+    instance          = "windows-webapp1"
     subresource_names = ["sites"]
   }
 
-  webapp-container-backend = {
-    name              = "myexample-tst-webapp-container-backend-pe"
-    service           = "webapp-container"
-    instance          = "gateway-backend"
+  container-linux-webapp1 = {
+    name              = "myexample-tst-container-linux-webapp1-pe"
+    service           = "webapp-container-linux"
+    instance          = "container-linux-webapp1"
+    subresource_names = ["sites"]
+  }
+
+  container-linux-webapp2 = {
+    name              = "myexample-tst-container-linux-webapp2-pe"
+    service           = "webapp-container-linux"
+    instance          = "container-linux-webapp2"
+    subresource_names = ["sites"]
+  }
+
+  container-windows-webapp1 = {
+    name              = "myexample-tst-container-windows-webapp1-pe"
+    service           = "webapp-container-windows"
+    instance          = "container-windows-webapp1"
+    subresource_names = ["sites"]
+  }
+
+  functionapp-linux-webapp1 = {
+    name              = "myexample-tst-function-webapp1-pe"
+    service           = "functionapp-linux"
+    instance          = "functionapp-linux-webapp1"
+    subresource_names = ["sites"]
+  }
+
+  functionapp-windows-webapp1 = {
+    name              = "myexample-tst-function-webapp2-pe"
+    service           = "functionapp-windows"
+    instance          = "functionapp-windows-webapp1"
+    subresource_names = ["sites"]
+  }
+
+  functionapp-flex1 = {
+    name              = "myexample-tst-function-webapp1-pe"
+    service           = "functionapp-flex"
+    instance          = "function-flex1"
+    subresource_names = ["sites"]
+  }
+
+  functionapp-flex2 = {
+    name              = "myexample-tst-function-webapp2-pe"
+    service           = "functionapp-flex"
+    instance          = "function-flex2"
     subresource_names = ["sites"]
   }
 
@@ -981,12 +1015,12 @@ eventhub_namespaces = {
 #       env = "dev"
 #     }
 #   }
-#
+
 #   payments = {
 #     name = "eg-payments-topic"
 #   }
 # }
-#
+
 # eventgrid_subscriptions = {
 #   orders-webhook = {
 #     topic_key        = "orders"
@@ -996,7 +1030,7 @@ eventhub_namespaces = {
 #       "Microsoft.Storage.BlobCreated"
 #     ]
 #   }
-#
+
 #   payments-function = {
 #     topic_key         = "payments"
 #     name              = "payments-func-sub"
@@ -1020,15 +1054,6 @@ waf_policies = {
     enabled  = true
     # Note: Standard SKU only supports custom rules, not managed rule sets
     # Managed rules require Premium SKU
-  },
-
-  dev = {
-    name     = "myexampletstwafpolicydev"
-    sku_name = "Standard_AzureFrontDoor"
-    mode     = "Prevention"
-    enabled  = true
-    # Note: Standard SKU only supports custom rules, not managed rule sets
-    # Managed rules require Premium SKU
   }
 }
 
@@ -1038,48 +1063,22 @@ waf_policies = {
 
 front_doors = {
   main = {
-    front_door_name            = "myexample-tst-afd"
-    front_door_sku_name        = "Standard_AzureFrontDoor"
-    endpoint_frontend_name     = "myexample-tst-frontend"
-    endpoint_backend_name      = "myexample-tst-backend"
-    origin_group_frontend_name = "myexample-tst-frontend-origin-group"
-    origin_group_backend_name  = "myexample-tst-backend-origin-group"
-    origin_frontend_name       = "myexample-tst-frontend-origin"
-    origin_backend_name        = "myexample-tst-backend-origin"
-    route_frontend_name        = "myexample-tst-frontend-route"
-    route_backend_name         = "myexample-tst-backend-route"
-    # Dynamic hostnames (use container_key for containers, webapp_key for standard App Service)
-    origin_frontend_container_key     = "frontend-container"
-    origin_backend_container_key      = "backend-container"
-    origin_frontend_webapp_key        = "frontend"
-    origin_backend_webapp_key         = "backend"
+    front_door_name                   = "myexample-tst-afd"
+    front_door_sku_name               = "Standard_AzureFrontDoor"
+    endpoint_frontend_name            = "myexample-tst-frontend"
+    endpoint_backend_name             = "myexample-tst-backend"
+    origin_group_frontend_name        = "myexample-tst-frontend-origin-group"
+    origin_group_backend_name         = "myexample-tst-backend-origin-group"
+    origin_frontend_name              = "myexample-tst-frontend-origin"
+    origin_backend_name               = "myexample-tst-backend-origin"
+    route_frontend_name               = "myexample-tst-frontend-route"
+    route_backend_name                = "myexample-tst-backend-route"
+    origin_frontend_key               = "swa1"                    # your frontend app name
+    origin_backend_key                = "container-linux-webapp1" # you backend app name
     custome_domain_frontend_name      = "myexample-tst-frontend"
     custome_domain_backend_name       = "myexample-tst-backend"
     host_custome_domain_frontend_name = "tst.myexample.co.in"
     host_custome_domain_backend_name  = "api-tst.myexample.co.in"
-    enable_waf                        = true
-  },
-
-  dev = {
-    front_door_name            = "myexample-dev-afd"
-    front_door_sku_name        = "Standard_AzureFrontDoor"
-    endpoint_frontend_name     = "myexample-dev-frontend"
-    endpoint_backend_name      = "myexample-dev-backend"
-    origin_group_frontend_name = "myexample-dev-frontend-origin-group"
-    origin_group_backend_name  = "myexample-dev-backend-origin-group"
-    origin_frontend_name       = "myexample-dev-frontend-origin"
-    origin_backend_name        = "myexample-dev-backend-origin"
-    route_frontend_name        = "myexample-dev-frontend-route"
-    route_backend_name         = "myexample-dev-backend-route"
-    # Dynamic hostnames (use container_key for containers, webapp_key for standard App Service)
-    origin_frontend_container_key     = "frontend-container"
-    origin_backend_container_key      = "backend-container"
-    origin_frontend_webapp_key        = "frontend"
-    origin_backend_webapp_key         = "backend"
-    custome_domain_frontend_name      = "myexample-dev-frontend"
-    custome_domain_backend_name       = "myexample-dev-backend"
-    host_custome_domain_frontend_name = "dev.myexample.co.in"
-    host_custome_domain_backend_name  = "api-dev.myexample.co.in"
     enable_waf                        = true
   }
 }
@@ -1112,3 +1111,18 @@ app_configurations = {
 }
 
 #--------------------------------------------------------------------------------------------------
+# 17-ManagedIdentity
+#--------------------------------------------------------------------------------------------------
+
+managed_identities = {
+  main = {
+    name = "myexample-tst-uami"
+    tags = {
+      Environment = "tst"
+      Projectname = "MyExample"
+    }
+  }
+}
+
+#-----------------------------------------------------------
+

@@ -28,6 +28,20 @@ variable "extra_tags" {
 }
 
 #--------------------------------------------------------------------------------------------------
+# 00-Governance
+#--------------------------------------------------------------------------------------------------
+
+variable "allowed_locations" {
+  description = "List of allowed locations for resource deployment"
+  type        = list(string)
+}
+
+variable "required_tags" {
+  description = "Map of required tags to enforce"
+  type        = map(string)
+}
+
+#--------------------------------------------------------------------------------------------------
 # 01-ResourceGroup
 #--------------------------------------------------------------------------------------------------
 
@@ -176,7 +190,6 @@ variable "aks_clusters" {
       os_disk_size_gb              = optional(number)
       type                         = optional(string, "VirtualMachineScaleSets")
       vnet_subnet_id               = optional(string)
-      subnet_name                  = optional(string) # Added for dynamic lookup
       only_critical_addons_enabled = optional(bool)
       zones                        = optional(list(string))
     })
@@ -228,7 +241,7 @@ variable "service_plans" {
 # 04.02-AppServiceLinux
 #--------------------------------------------------------------------------------------------------
 
-variable "app_service" {
+variable "app_service_linux" {
   type = map(object({
     app_service_name = string
     service_plan_key = string
@@ -245,21 +258,7 @@ variable "app_service" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.03-AppServiceContainer
-#--------------------------------------------------------------------------------------------------
-
-variable "app_service_container" {
-  type = map(object({
-    app_service_container_name = string
-    docker_image_name          = string
-    service_plan_key           = string
-    app_settings               = map(string)
-    tags                       = map(string)
-  }))
-}
-
-#--------------------------------------------------------------------------------------------------
-# 04.04-AppServiceWindows
+# 04.03-AppServiceWindows
 #--------------------------------------------------------------------------------------------------
 
 variable "app_service_windows" {
@@ -280,19 +279,39 @@ variable "app_service_windows" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 04.05-StaticWebApp
+# 04.04-AppServiceContainerLinux
 #--------------------------------------------------------------------------------------------------
 
-variable "static_web_apps" {
-  description = "Map of Static Web Apps to create"
-  type        = map(any)
+variable "app_service_container_linux" {
+  type = map(object({
+    app_service_container_name = string
+    docker_image_name          = string
+    service_plan_key           = string
+    app_settings               = map(string)
+    tags                       = map(string)
+  }))
 }
+
+#--------------------------------------------------------------------------------------------------
+# 04.05-AppServiceContainerWindows
+#--------------------------------------------------------------------------------------------------
+
+variable "app_service_container_windows" {
+  type = map(object({
+    app_service_container_name = string
+    docker_image_name          = string
+    service_plan_key           = string
+    app_settings               = map(string)
+    tags                       = map(string)
+  }))
+}
+
 
 #--------------------------------------------------------------------------------------------------
 # 04.06-FunctionsAppLinux
 #--------------------------------------------------------------------------------------------------
 
-variable "function_apps_linux" {
+variable "function_app_linux" {
   description = "Map of Linux Function Apps to create"
   type = map(object({
     function_app_name    = string
@@ -314,7 +333,7 @@ variable "function_apps_linux" {
 # 04.07-FunctionsAppWindows
 #--------------------------------------------------------------------------------------------------
 
-variable "function_apps_windows" {
+variable "function_app_windows" {
   description = "Map of Windows Function Apps to create"
   type = map(object({
     function_app_name    = string
@@ -336,7 +355,7 @@ variable "function_apps_windows" {
 # 04.08-FunctionsAppFlexConsumption
 #--------------------------------------------------------------------------------------------------
 
-variable "function_apps_flex" {
+variable "function_app_flex" {
   type = map(object({
     function_app_name      = string
     service_plan_name      = string
@@ -345,10 +364,20 @@ variable "function_apps_flex" {
     runtime_name           = string
     runtime_version        = string
     os_type                = string
+    sku_name               = optional(string, "FC1")
     subnet_id              = optional(string)
     maximum_instance_count = optional(number)
     instance_memory_in_mb  = optional(number)
   }))
+}
+
+#--------------------------------------------------------------------------------------------------
+# 04.09-StaticWebApp
+#--------------------------------------------------------------------------------------------------
+
+variable "static_web_app" {
+  description = "Map of Static Web Apps to create"
+  type        = map(any)
 }
 
 #--------------------------------------------------------------------------------------------------
@@ -627,8 +656,11 @@ variable "front_doors" {
     waf_policy_link_id                = optional(string)
     origin_frontend_container_key     = optional(string)
     origin_backend_container_key      = optional(string)
-    origin_frontend_webapp_key        = optional(string) # For standard Linux App Service
-    origin_backend_webapp_key         = optional(string) # For standard Linux App Service
+    origin_frontend_webapp_key        = optional(string) # Deprecated
+    origin_backend_webapp_key         = optional(string) # Deprecated
+    origin_frontend_static_key        = optional(string) # Deprecated
+    origin_frontend_key               = optional(string) # New: Generic resource key
+    origin_backend_key                = optional(string) # New: Generic resource key
     enable_waf                        = optional(bool, false)
     tags                              = optional(map(string), {})
   }))
@@ -649,3 +681,15 @@ variable "app_configurations" {
 }
 
 #--------------------------------------------------------------------------------------------------
+# 17-ManagedIdentity
+#--------------------------------------------------------------------------------------------------
+variable "managed_identities" {
+  description = "Map of user assigned managed identities"
+  type = map(object({
+    name = string
+    tags = optional(map(string), {})
+  }))
+  default = {}
+}
+
+#-----------------------------------------------------------------------------

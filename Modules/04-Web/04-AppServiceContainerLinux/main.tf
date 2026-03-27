@@ -1,6 +1,6 @@
-resource "azurerm_linux_web_app" "app_service" {
-  for_each                                       = var.app_service
-  name                                           = each.value.app_service_name
+resource "azurerm_linux_web_app" "app_service_container" {
+  for_each                                       = var.app_service_container
+  name                                           = each.value.app_service_container_name
   location                                       = var.location
   resource_group_name                            = var.resource_group_name
   service_plan_id                                = var.service_plan_ids[each.value.service_plan_key]
@@ -22,14 +22,8 @@ resource "azurerm_linux_web_app" "app_service" {
   }
 
   site_config {
-    dynamic "application_stack" {
-      for_each = length(each.value.runtime) > 0 ? [each.value.runtime] : []
-
-      content {
-        dotnet_version = lookup(each.value.runtime, "dotnet_version", null)
-        node_version   = lookup(each.value.runtime, "node_version", null)
-        python_version = lookup(each.value.runtime, "python_version", null)
-      }
+    application_stack {
+      docker_image_name = each.value.docker_image_name
     }
     always_on              = true
     vnet_route_all_enabled = true

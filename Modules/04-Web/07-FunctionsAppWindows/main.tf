@@ -26,10 +26,11 @@ resource "azurerm_service_plan" "this" {
 resource "azurerm_windows_function_app" "this" {
   for_each = var.function_apps
 
-  name                = each.value.function_app_name
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  service_plan_id     = azurerm_service_plan.this[each.key].id
+  name                      = each.value.function_app_name
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
+  service_plan_id           = azurerm_service_plan.this[each.key].id
+  virtual_network_subnet_id = var.subnet_id
 
   storage_account_name       = azurerm_storage_account.this[each.key].name
   storage_account_access_key = azurerm_storage_account.this[each.key].primary_access_key
@@ -49,5 +50,10 @@ resource "azurerm_windows_function_app" "this" {
   }
 
   app_settings = lookup(each.value, "app_settings", {})
-  tags         = merge(var.tags, lookup(each.value, "tags", {}))
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [var.managed_identity_id]
+  }
+
+  tags = merge(var.tags, lookup(each.value, "tags", {}))
 }

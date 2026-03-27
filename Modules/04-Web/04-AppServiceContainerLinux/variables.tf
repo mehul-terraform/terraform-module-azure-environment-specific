@@ -19,19 +19,13 @@ variable "tags" {
   default = {}
 }
 
-variable "app_service" {
+variable "app_service_container" {
   type = map(object({
-    app_service_name = string
-    service_plan_key = string
-
-    runtime = object({
-      node_version   = optional(string)
-      python_version = optional(string)
-      dotnet_version = optional(string)
-    })
-
-    app_settings = map(string)
-    tags         = map(string)
+    app_service_container_name = string
+    docker_image_name          = string
+    service_plan_key           = string
+    app_settings               = map(string)
+    tags                       = map(string)
   }))
 }
 

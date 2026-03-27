@@ -1,4 +1,4 @@
-az group create --location eastus --name terraform
+az group create -location eastus --name terraform
 
 az storage account create --name myexamplestorage01 --resource-group terraform --location eastus --sku Standard_ZRS --encryption-services blob
 

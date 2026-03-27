@@ -1,5 +1,6 @@
-resource "azurerm_linux_web_app" "app_service_container" {
-  for_each                                       = var.app_service_container
+resource "azurerm_windows_web_app" "app_service_container" {
+  for_each = var.app_service_container_windows
+
   name                                           = each.value.app_service_container_name
   location                                       = var.location
   resource_group_name                            = var.resource_group_name
@@ -7,8 +8,6 @@ resource "azurerm_linux_web_app" "app_service_container" {
   virtual_network_subnet_id                      = var.subnet_id
   https_only                                     = true
   webdeploy_publish_basic_authentication_enabled = true
-  vnet_image_pull_enabled                        = true
-  virtual_network_backup_restore_enabled         = true
 
   lifecycle {
     ignore_changes = [
@@ -32,7 +31,10 @@ resource "azurerm_linux_web_app" "app_service_container" {
 
   app_settings = each.value.app_settings
 
-  identity { type = "SystemAssigned" }
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [var.managed_identity_id]
+  }
 
-  tags = each.value.tags
+  tags = merge(var.tags, each.value.tags)
 }

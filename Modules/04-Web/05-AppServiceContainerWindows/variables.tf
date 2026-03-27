@@ -19,7 +19,7 @@ variable "tags" {
   default = {}
 }
 
-variable "app_service_container" {
+variable "app_service_container_windows" {
   type = map(object({
     app_service_container_name = string
     docker_image_name          = string
@@ -27,4 +27,9 @@ variable "app_service_container" {
     app_settings               = map(string)
     tags                       = map(string)
   }))
+}
+
+variable "managed_identity_id" {
+  description = "The ID of the User Assigned Managed Identity."
+  type        = string
 }

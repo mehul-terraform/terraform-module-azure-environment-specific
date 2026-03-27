@@ -39,3 +39,8 @@ variable "app_service_windows" {
     tags         = map(string)
   }))
 }
+
+variable "managed_identity_id" {
+  description = "The ID of the User Assigned Managed Identity."
+  type        = string
+}

@@ -24,7 +24,7 @@ resource "azurerm_service_plan" "this" {
   resource_group_name = var.resource_group_name
   location            = var.location
   os_type             = each.value.os_type
-  sku_name            = "FC1"
+  sku_name            = lookup(each.value, "sku_name", "FC1")
   tags                = var.tags
 }
 
@@ -36,7 +36,7 @@ resource "azurerm_function_app_flex_consumption" "this" {
   location            = var.location
   service_plan_id     = azurerm_service_plan.this[each.key].id
 
-  virtual_network_subnet_id = lookup(each.value, "subnet_id", null)
+  virtual_network_subnet_id = lookup(each.value, "subnet_id", var.subnet_id)
 
   storage_container_type      = "blobContainer"
   storage_container_endpoint  = "${azurerm_storage_account.this[each.key].primary_blob_endpoint}${azurerm_storage_container.this[each.key].name}"
@@ -49,4 +49,8 @@ resource "azurerm_function_app_flex_consumption" "this" {
   instance_memory_in_mb  = lookup(each.value, "instance_memory_in_mb", 4096)
 
   site_config {}
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [var.managed_identity_id]
+  }
 }

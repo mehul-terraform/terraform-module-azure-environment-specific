@@ -16,7 +16,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vm_size                      = each.value.default_node_pool.vm_size
     os_disk_size_gb              = each.value.default_node_pool.os_disk_size_gb
     type                         = each.value.default_node_pool.type
-    vnet_subnet_id               = each.value.default_node_pool.vnet_subnet_id
+    vnet_subnet_id               = each.value.default_node_pool.vnet_subnet_id != null ? each.value.default_node_pool.vnet_subnet_id : var.subnet_id
     only_critical_addons_enabled = each.value.default_node_pool.only_critical_addons_enabled
     zones                        = each.value.default_node_pool.zones
   }

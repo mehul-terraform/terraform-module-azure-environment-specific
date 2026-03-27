@@ -18,3 +18,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "vnet_subnet_ids" {
+  description = "Map of all subnet IDs for lookup (usually from module.virtual_network.subnet_ids)"
+  type        = map(string)
+  default     = {}
+}
+
+variable "vnet_key" {
+  description = "Key of the VNet to use for subnet lookup (defaults to main)"
+  type        = string
+  default     = "main"
+}
