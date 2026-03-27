@@ -19,5 +19,4 @@ resource "azurerm_monitor_diagnostic_setting" "app_insights" {
   enabled_log {
     category_group = "allLogs"
   }
-
 }
