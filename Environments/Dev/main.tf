@@ -78,7 +78,7 @@ module "virtual_machine_linux" {
   location            = module.resource_group.locations["main"]
   subnet_id           = module.virtual_network.subnet_ids["main-vm"]
   virtual_machines    = var.virtual_machines_linux
-  key_vault_id        = module.keyvault.ids["backend"]
+  key_vault_id        = module.keyvault.ids["main-backend"]
   tags                = local.tags
 
   depends_on = [module.keyvault.terraform_kv_secrets_officer_role_assignment_ids]
@@ -94,7 +94,7 @@ module "virtual_machine_windows" {
   location            = module.resource_group.locations["main"]
   subnet_id           = module.virtual_network.subnet_ids["main-vm"]
   virtual_machines    = var.virtual_machines_windows
-  key_vault_id        = module.keyvault.ids["backend"]
+  key_vault_id        = module.keyvault.ids["main-backend"]
   tags                = local.tags
 
   depends_on = [module.keyvault.terraform_kv_secrets_officer_role_assignment_ids]
@@ -290,7 +290,7 @@ module "postgres_sql_flexible" {
 
   delegated_subnet_id = null
   private_dns_zone_id = null
-  key_vault_id        = module.keyvault.ids["backend"]
+  key_vault_id        = module.keyvault.ids["main-backend"]
 
   depends_on = [
     module.keyvault.terraform_kv_secrets_officer_role_assignment_ids
@@ -520,10 +520,16 @@ module "eventhub" {
 # }
 
 #--------------------------------------------------------------------------------------------------
-# 14-Monitor (commented)
+# 14.01-Monitor-Log Analytics workspaces
 #--------------------------------------------------------------------------------------------------
 
-# Add monitor module here when ready
+module "log_analytics" {
+  source              = "../../Modules/14-Monitor/02-LogAnalyticsWorkspaces"
+  resource_group_name = module.resource_group.names["main"]
+  location            = module.resource_group.locations["main"]
+  workspaces          = var.log_analytics_workspaces
+  tags                = local.tags
+}
 
 #--------------------------------------------------------------------------------------------------
 # 15-LoadBalancer
@@ -611,7 +617,7 @@ module "managed_identity" {
 }
 
 resource "azurerm_role_assignment" "keyvault_access" {
-  scope                = module.keyvault.ids["backend"]
+  scope                = module.keyvault.ids["main-backend"]
   role_definition_name = "Key Vault Secrets User"
   principal_id         = module.managed_identity.principal_ids["main"]
 }

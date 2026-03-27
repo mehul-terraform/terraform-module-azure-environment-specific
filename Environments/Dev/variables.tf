@@ -627,6 +627,29 @@ variable "eventhub_namespaces" {
 # }
 
 #--------------------------------------------------------------------------------------------------
+# 14-Monitor
+#--------------------------------------------------------------------------------------------------
+
+variable "log_analytics_workspaces" {
+  type = map(object({
+    name              = string
+    sku               = optional(string, "PerGB2018")
+    retention_in_days = optional(number, 30)
+    tags              = optional(map(string), {})
+  }))
+  default = {}
+}
+
+variable "app_insights" {
+  type = map(object({
+    name             = string
+    application_type = optional(string, "web")
+    tags             = optional(map(string), {})
+  }))
+  default = {}
+}
+
+#--------------------------------------------------------------------------------------------------
 # 15-LoadBalancer
 #--------------------------------------------------------------------------------------------------
 

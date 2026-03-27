@@ -21,7 +21,7 @@ tags = {
 allowed_locations = ["WEST US 3"]
 
 required_tags = {
-  "Project"     = "Myexample"
+  "Project"     = "myexample"
   "Environment" = "tst"
 }
 
@@ -361,7 +361,7 @@ service_plans = {
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
-    worker_count             = 2
+    worker_count             = 1
     tags = {
       os = "linux"
     }
@@ -372,7 +372,7 @@ service_plans = {
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
-    worker_count             = 2
+    worker_count             = 1
     tags = {
       os = "linux"
     }
@@ -382,7 +382,7 @@ service_plans = {
     name                     = "myexample-tst-windows-asp1"
     os_type                  = "Windows"
     sku_name                 = "B1"
-    per_site_scaling_enabled = true
+    per_site_scaling_enabled = false
     worker_count             = 1
     tags = {
       os = "windows"
@@ -860,7 +860,7 @@ private_endpoints = {
 
   keyvault-backend = {
     name              = "myexample-tst-keyvault-backend-pe"
-    instance          = "backend"
+    instance          = "main-backend"
     service           = "keyvault"
     subresource_names = ["vault"]
   }
@@ -901,7 +901,7 @@ redis_caches = {
 #--------------------------------------------------------------------------------------------------
 
 key_vaults = {
-  backend = {
+  main-backend = {
     name                        = "myexample-tst-be-kv"
     sku_name                    = "standard"
     soft_delete_retention_days  = 7
@@ -1037,6 +1037,34 @@ eventhub_namespaces = {
 #     azure_function_id = "/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.Web/sites/app/functions/ProcessPayment"
 #   }
 # }
+
+#--------------------------------------------------------------------------------------------------
+# 14.01-ApplicationInsights
+#--------------------------------------------------------------------------------------------------
+app_insights = {
+  main = {
+    name             = "myexample-tst-appinsights"
+    application_type = "web"
+    tags = {
+      usage = "web-tracking"
+    }
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 14.02-Monitor-Log Analytics workspaces
+#--------------------------------------------------------------------------------------------------
+
+log_analytics_workspaces = {
+  main = {
+    name              = "myexample-tst-law"
+    sku               = "PerGB2018"
+    retention_in_days = 30
+    tags = {
+      usage = "central-logs"
+    }
+  }
+}
 
 #--------------------------------------------------------------------------------------------------
 # 15-LoadBalancer
