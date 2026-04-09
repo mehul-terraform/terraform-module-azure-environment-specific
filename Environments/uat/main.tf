@@ -115,17 +115,17 @@ module "aks" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 03.05-ContainerApps
+# 03.05-AzureContainerApps
 #--------------------------------------------------------------------------------------------------
 
 module "container_apps" {
-  source                     = "../../Modules/03-Compute/05-ContainerApps"
+  source                     = "../../Modules/03-Compute/05-AzureContainerApps"
   container_app_environments = var.container_app_environments
   container_apps             = var.container_apps
   log_analytics_workspace_id = module.log_analytics.ids["main"]
   resource_group_name        = module.resource_group.names["main"]
   location                   = module.resource_group.locations["main"]
-  tags                       = local.tags
+  tags                = local.tags
 }
 
 #--------------------------------------------------------------------------------------------------

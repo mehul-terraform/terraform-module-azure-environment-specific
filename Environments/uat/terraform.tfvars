@@ -3,14 +3,14 @@
 #--------------------------------------------------------------------------------------------------
 
 project     = "myexample"
-environment = "tst"
+environment = "uat"
 
 #--------------------------------------------------------------------------------------------------
 # 00-Tags
 #--------------------------------------------------------------------------------------------------
 
 tags = {
-  environment = "tst"
+  environment = "uat"
   projectname = "myexample"
 }
 
@@ -20,7 +20,7 @@ tags = {
 
 resource_groups = {
   main = {
-    name     = "myexample-tst-rg"
+    name     = "myexample-uat-rg"
     location = "WEST US 3"
     tags     = {}
   },
@@ -42,7 +42,7 @@ resource_groups = {
 
 virtual_networks = {
   main = {
-    name          = "myexample-tst-vnet1"
+    name          = "myexample-uat-vnet1"
     address_space = ["10.250.0.0/16"]
     subnets = [
       {
@@ -342,7 +342,7 @@ aks_clusters = {
 
 container_app_environments = {
   main = {
-    name = "myexample-tst-aca-env"
+    name = "myexample-uat-aca-env"
     workload_profiles = [
       {
         name                  = "Consumption"
@@ -354,7 +354,7 @@ container_app_environments = {
 
 container_apps = {
   containerapp01 = {
-    name            = "myexample-tst-app01"
+    name            = "myexample-uat-app01"
     environment_key = "main"
     revision_mode   = "Single"
     containers = [
@@ -378,7 +378,7 @@ container_apps = {
   }
 
   containerapp02 = {
-    name            = "myexample-tst-app02"
+    name            = "myexample-uat-app02"
     environment_key = "main"
     revision_mode   = "Single"
     containers = [
@@ -650,7 +650,7 @@ static_web_app = {
 
 storage_accounts = {
   frontend = {
-    name                     = "myexampletstfrontend"
+    name                     = "myexampleuatfrontend"
     account_tier             = "Standard"
     account_replication_type = "LRS"
 
@@ -665,7 +665,7 @@ storage_accounts = {
   }
 
   backend = {
-    name                     = "myexampletstbackend"
+    name                     = "myexampleuatbackend"
     account_tier             = "Standard"
     account_replication_type = "GRS"
     tags = {
@@ -728,7 +728,7 @@ postgres_sql = {
 
 cosmos_dbs = {
   cosmos1 = {
-    name                    = "myexample-tst-cosmosdb1"
+    name                    = "myexample-uat-cosmosdb1"
     database_name           = "myexampledb"
     consistency_level       = "Session"
     max_interval_in_seconds = 5
@@ -738,7 +738,7 @@ cosmos_dbs = {
   }
 
   cosmos2 = {
-    name                    = "myexample-tst-cosmosdb2"
+    name                    = "myexample-uat-cosmosdb2"
     database_name           = "myexampledb"
     consistency_level       = "Session"
     max_interval_in_seconds = 5
@@ -754,7 +754,7 @@ cosmos_dbs = {
 
 managed_redis_instances = {
   main = {
-    name     = "myexample-tst-managed-redis"
+    name     = "myexample-uat-managed-redis"
     sku_name = "Basic" # AMR SKU
     capacity = 1
     family   = "C"
@@ -1185,18 +1185,18 @@ front_doors = {
 
 app_configurations = {
   backend = {
-    name = "myexample-tst-appconfig-backend"
+    name = "myexample-uat-appconfig-backend"
 
     key_values = {
       "Jwt:Issuer" = {
         value = "auth-api"
-        label = "tst"
+        label = "uat"
       }
     }
   }
 
   frontend = {
-    name = "myexample-tst-appconfig-frontend"
+    name = "myexample-uat-appconfig-frontend"
 
     key_values = {
       "Api:BaseUrl" = {
@@ -1212,9 +1212,9 @@ app_configurations = {
 
 managed_identities = {
   main = {
-    name = "myexample-tst-uami"
+    name = "myexample-uat-uami"
     tags = {
-      Environment = "tst"
+      Environment = "uat"
       Projectname = "MyExample"
     }
   }
@@ -1226,7 +1226,7 @@ managed_identities = {
 
 openai_accounts = {
   main = {
-    name     = "myexample-tst-openai"
+    name     = "myexample-uat-openai"
     sku_name = "S0"
   }
 }

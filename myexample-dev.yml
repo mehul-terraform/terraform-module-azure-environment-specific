@@ -1,0 +1,108 @@
+trigger:
+  branches:
+    include:
+      - develop   # change if needed
+
+pr:
+  branches:
+    include:
+      - develop
+
+variables:
+- group: myexample-iac-terraform-dev   # Azure DevOps Variable Group
+
+- name: TF_VERSION
+  value: '1.6.6'
+
+- name: ENV
+  value: 'Dev'
+
+stages:
+
+# -------------------------
+# STAGE 1: VALIDATE + PLAN
+# -------------------------
+- stage: Plan
+  displayName: "Terraform Plan - DEV"
+  jobs:
+  - job: terraform_plan
+    displayName: "Run Terraform Plan"
+    pool:
+      vmImage: 'ubuntu-latest'
+    
+    steps:
+    - checkout: self
+
+    # Install Terraform
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: $(TF_VERSION)
+
+    # Terraform Init
+    - script: |
+        terraform init
+      displayName: "Terraform Init"
+      workingDirectory: Environments/$(ENV)
+
+    # Terraform Format Check
+    - script: terraform fmt -check
+      displayName: "Terraform Format Check"
+      workingDirectory: Environments/$(ENV)
+
+    # Terraform Validate
+    - script: terraform validate
+      displayName: "Terraform Validate"
+      workingDirectory: Environments/$(ENV)
+
+    # Terraform Plan
+    - script: |
+        terraform plan \
+          -var-file=terraform.tfvars \
+          -out=tfplan
+      displayName: "Terraform Plan"
+      workingDirectory: Environments/$(ENV)
+
+    # Publish Plan Artifact
+    - publish: Environments/$(ENV)/tfplan
+      artifact: deploy_artifact
+
+# -------------------------
+# STAGE 2: APPLY (AUTO DEV)
+# -------------------------
+- stage: Apply
+  displayName: "Terraform Apply - Dev"
+  dependsOn: Plan
+  condition: succeeded()
+
+  jobs:
+  - deployment: terraform_apply
+    displayName: "Apply Infrastructure"
+    environment: dev   # Azure DevOps Environment
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - checkout: self
+
+          # Install Terraform
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: $(TF_VERSION)
+
+          # Download Plan Artifact
+          - download: current
+            artifact: deploy_artifact
+
+          # Terraform Init
+          - script: |
+              terraform init
+            displayName: "Terraform Init"
+            workingDirectory: Environments/$(ENV)
+
+          # Terraform Apply using saved plan
+          - script: |
+              terraform apply -auto-approve $(Pipeline.Workspace)/deploy_artifact/tfplan
+            displayName: "Terraform Apply"
+            workingDirectory: Environments/$(ENV)
