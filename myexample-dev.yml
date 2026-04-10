@@ -45,7 +45,7 @@ stages:
             inlineScript: |
               az group create --location eastus --name myexample-tf-rg
               az provider register --namespace Microsoft.Storage --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27 --wait
-              az storage account create --name myexampletfstorage --resource-group myexample-tf-rg --location westus2 --sku Standard_LRS --encryption-services blob --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27
+              az storage account create --name myexampletfstorage --resource-group myexample-tf-rg --location westus3 --sku Standard_LRS --encryption-services blob --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27
               az storage container create --account-name myexampletfstorage --name myexample-dev-tfstate --auth-mode login --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27
 
     - deployment: Terraform_Deploy
