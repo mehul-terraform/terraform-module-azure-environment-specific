@@ -104,6 +104,7 @@ stages:
             displayName: "Azure Login"
             inputs:
               azureSubscription: 'MyExample-Azure'
+              addSpnToEnvironment: true
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
