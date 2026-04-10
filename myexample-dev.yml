@@ -43,55 +43,50 @@ stages:
             scriptType: pscore
             scriptLocation: inlineScript
             inlineScript: |
-              az group create --location eastus --name myexample-tf-rg
-              az provider register --namespace Microsoft.Storage --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27 --wait
-              az storage account create --name myexampletfstorage --resource-group myexample-tf-rg --location westus3 --sku Standard_LRS --encryption-services blob --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27
-              az storage container create --account-name myexampletfstorage --name myexample-dev-tfstate --auth-mode login --subscription b0c50143-4c20-46d0-a337-6d4a65cd1b27
+              az group create --location $(tf_storage_location) --name $(tf_resource_group_name)
+              az provider register --namespace Microsoft.Storage --subscription $(subscription) --wait
+              az storage account create --name $(tf_storage_name) --resource-group $(tf_resource_group_name) --location $(tf_storage_location) --sku Standard_LRS --encryption-services blob --subscription $(subscription)
+              az storage container create --account-name $(tf_storage_name) --name tf_storage_container_name --auth-mode login --subscription $(subscription)
 
-    - deployment: Terraform_Deploy
+    - job: Terraform_Deploy
       displayName: 'Terraform Deploy'
       dependsOn: Bootstrap
-      environment: 'dev'
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - download: current
-                artifact: terraform_drop
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - download: current
+          artifact: terraform_drop
 
-              - script: |
-                  set -e
-                  wget -q https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
-                  unzip -o terraform_1.6.6_linux_amd64.zip
-                  sudo mv terraform /usr/local/bin/terraform
-                  terraform version
-                displayName: 'Install Terraform'
-              - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-                displayName: 'Terraform : init'
-                inputs:
-                  command: init
-                  provider: 'azurerm'
-                  workingDirectory: '$(Pipeline.Workspace)/terraform_drop/Environments/dev'
-                  backendServiceArm: '$(AzureServiceConnectionName)'
-                  backendAzureRmResourceGroupName: '$(tf_resource_group_name)'
-                  backendAzureRmStorageAccountName: '$(tf_storage_name)'
-                  backendAzureRmContainerName: '$(tf_storage_container_name)'
-                  backendAzureRmKey: '$(tf_storage_key)'
+        - task: AzureCLI@2
+          displayName: 'Terraform Init, Plan & Apply'
+          inputs:
+            azureSubscription: 'myexample-azure-iac'
+            scriptType: bash
+            scriptLocation: inlineScript
+            addSpnToEnvironment: true
+            inlineScript: |
+              set -e
 
-              - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-                displayName: 'Terraform : plan'
-                inputs:
-                  command: plan
-                  provider: 'azurerm'
-                  workingDirectory: '$(Pipeline.Workspace)/terraform_drop/Environments/dev'
-                  environmentServiceNameAzureRM: '$(AzureServiceConnectionName)'
-                  commandOptions: '-var-file=terraform.tfvars -out=tfplan'
+              # Install Terraform
+              wget -q https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+              unzip -o terraform_1.6.6_linux_amd64.zip
+              sudo mv terraform /usr/local/bin/terraform
+              terraform version
 
-              - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
-                displayName: 'Terraform : apply -auto-approve'
-                inputs:
-                  command: apply
-                  provider: 'azurerm'
-                  workingDirectory: '$(Pipeline.Workspace)/terraform_drop/Environments/dev'
-                  commandOptions: 'tfplan'
-                  environmentServiceNameAzureRM: '$(AzureServiceConnectionName)'
+              # Set ARM authentication env vars (WIF / OIDC)
+              export ARM_CLIENT_ID=$servicePrincipalId
+              export ARM_TENANT_ID=$tenantId
+              export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+              export ARM_USE_OIDC=true
+              export ARM_OIDC_TOKEN=$idToken
+
+              # Run Terraform
+              cd $(Pipeline.Workspace)/terraform_drop/Environments/dev
+              terraform init \
+                -backend-config="storage_account_name=myexampletfstorage" \
+                -backend-config="container_name=myexample-dev-tfstate" \
+                -backend-config="key=terraform.tfstate" \
+                -backend-config="resource_group_name=myexample-tf-rg"
+
+              terraform plan -var-file=terraform.tfvars -out=tfplan
+              terraform apply -auto-approve tfplan
