@@ -3,116 +3,30 @@ trigger:
     include:
       - main
 
+pool:
+  vmImage: 'ubuntu-latest'
+
 variables:
-- group: myexample-iac-terraform-dev   # Azure DevOps Variable Group
-
-- name: TF_VERSION
-  value: '1.6.6'
-
-- name: Environments
-  value: 'dev'
+- group: myexample-iac-terraform-dev
 
 stages:
-
-# -------------------------
-# STAGE 1: VALIDATE + PLAN
-# -------------------------
-- stage: Plan
-  displayName: "Terraform Plan - dev"
+- stage: Build
+  displayName: 'Build terraform code'
   jobs:
-  - job: terraform_plan
-    displayName: "Run Terraform Plan"
-    pool:
-      vmImage: 'ubuntu-latest'
-    
-    steps:
-    - checkout: self
+    - job: BuildJob
+      steps:  
 
-    # Install Terraform
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-      inputs:
-        terraformVersion: $(TF_VERSION)
+        - task: CopyFiles@2
+          displayName: 'Copy all repository contents to artifacts'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)' # This targets the root of your repository
+            Contents: '**' # Copies absolutely everything inside the root
+            TargetFolder: '$(Build.ArtifactStagingDirectory)' # Fixed path to ensure it matches the publish task!
 
-    # Terraform Init
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Init"
-      inputs:
-        command: 'init'
-        workingDirectory: 'Environments/$(Environments)'
-        backendType: 'azurerm'
-        backendServiceArm: 'MyExample-Azure'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Terraform Artifacts'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'terraform_drop'
 
-    # Terraform Format Check
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Format Check"
-      inputs:
-        command: 'fmt'
-        workingDirectory: 'Environments/$(Environments)'
-        commandOptions: '-check'
 
-    # Terraform Validate
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Validate"
-      inputs:
-        command: 'validate'
-        workingDirectory: 'Environments/$(Environments)'
-
-    # Terraform Plan
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Plan"
-      inputs:
-        command: 'plan'
-        workingDirectory: 'Environments/$(Environments)'
-        environmentServiceName: 'MyExample-Azure'
-        commandOptions: '-var-file=terraform.tfvars -out=tfplan'
-
-    # Publish Plan Artifact
-    - publish: Environments/$(Environments)/tfplan
-      artifact: deploy_artifact
-
-# -------------------------
-# STAGE 2: APPLY
-# -------------------------
-- stage: Apply
-  displayName: "Terraform Apply - Dev"
-  dependsOn: Plan
-  condition: succeeded()
-
-  jobs:
-  - deployment: terraform_apply
-    displayName: "Apply Infrastructure"
-    environment: $(Environments)
-
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-
-          - checkout: self
-
-          # Install Terraform
-          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-            inputs:
-              terraformVersion: $(TF_VERSION)
-
-          # Download Plan Artifact
-          - download: current
-            artifact: deploy_artifact
-
-          # Terraform Init
-          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-            displayName: "Terraform Init"
-            inputs:
-              command: 'init'
-              workingDirectory: 'Environments/$(Environments)'
-              backendType: 'azurerm'
-              backendServiceArm: 'MyExample-Azure'
-
-          # Terraform Apply using saved plan
-          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-            displayName: "Terraform Apply"
-            inputs:
-              command: 'apply'
-              workingDirectory: 'Environments/$(Environments)'
-              environmentServiceName: 'MyExample-Azure'
-              commandOptions: '$(Pipeline.Workspace)/deploy_artifact/tfplan'
