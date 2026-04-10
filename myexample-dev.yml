@@ -31,8 +31,26 @@ stages:
   displayName: 'Deploy Terraform Setup'
   dependsOn: Build
   jobs:
+    - job: Bootstrap
+      displayName: 'Bootstrap Azure Resources'
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - task: AzureCLI@2
+          displayName: 'Ensure Backend Storage Exists'
+          inputs:
+            azureSubscription: 'MyExample-Azure'
+            scriptType: bash
+            scriptLocation: inlineScript
+            addSpnToEnvironment: true
+            inlineScript: |
+              az group create --location eastus --name myexample-tf-rg
+              az storage account create --name myexamplestorage --resource-group myexample-tf-rg --location westus2 --sku Standard_ZRS --encryption-services blob
+              az storage container create --account-name myexamplestorage --name myexamplestorage
+
     - deployment: Terraform_Deploy
       displayName: 'Terraform Deploy'
+      dependsOn: Bootstrap
       environment: 'dev'
       strategy:
         runOnce:
@@ -40,17 +58,6 @@ stages:
             steps:
               - download: current
                 artifact: terraform_drop
-
-              - task: AzureCLI@2
-                displayName: 'Bootstrap Azure Resources'
-                inputs:
-                  azureSubscription: 'MyExample-Azure'
-                  scriptType: bash
-                  scriptLocation: inlineScript
-                  inlineScript: |
-                    az group create --location eastus --name myexample-tf-rg
-                    az storage account create --name myexamplestorage --resource-group myexample-tf-rg --location westus2 --sku Standard_ZRS --encryption-services blob
-                    az storage container create --account-name myexamplestorage --name myexamplestorage
 
               - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
                 displayName: 'Install Terraform'
