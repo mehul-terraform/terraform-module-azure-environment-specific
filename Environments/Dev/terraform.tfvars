@@ -21,7 +21,7 @@ tags = {
 resource_groups = {
   main = {
     name     = "myexample-dev-rg"
-    location = "WEST US 2"
+    location = "WEST US 3"
     tags     = {}
   }
 }
