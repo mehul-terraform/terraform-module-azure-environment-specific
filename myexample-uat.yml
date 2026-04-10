@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main
+      - uat
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -39,7 +39,7 @@ stages:
         - task: AzureCLI@2
           displayName: 'Ensure Backend Storage Exists'
           inputs:
-            azureSubscription: 'myexample-azure-iac'
+            azureSubscription: '$(AzureServiceConnectionName)'
             scriptType: pscore
             scriptLocation: inlineScript
             inlineScript: |
@@ -72,7 +72,7 @@ stages:
         - task: AzureCLI@2
           displayName: 'Terraform Init, Plan & Apply'
           inputs:
-            azureSubscription: 'myexample-azure-iac'
+            azureSubscription: '$(AzureServiceConnectionName)'
             scriptType: bash
             scriptLocation: inlineScript
             addSpnToEnvironment: true

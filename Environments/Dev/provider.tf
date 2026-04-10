@@ -11,8 +11,8 @@ terraform {
 provider "azurerm" {
   features {}
 
-  use_oidc = true
+  # use_oidc = true
 
-  disable_correlation_request_id = true
-  disable_terraform_partner_id   = true
+  # disable_correlation_request_id = true
+  # disable_terraform_partner_id   = true
 }
