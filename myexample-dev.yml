@@ -42,6 +42,9 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           az account show
+          az group create --location eastus --name myexample-tf-rg
+          az storage account create --name myexampletfstorage --resource-group myexample-tf-rg --location eastus --sku Standard_ZRS --encryption-services blob
+          az storage container create --account-name myexampletfstorage --name myexample-dev-tfstate
 
     # Terraform Init
     - script: |
@@ -105,6 +108,9 @@ stages:
               scriptLocation: inlineScript
               inlineScript: |
                 az account show
+                az group create --location eastus --name $(tf_resource_group_name)
+                az storage account create --name $(tf_storage_name) --resource-group $(tf.resourcegroupname) --location $(tf_storage_location) --sku Standard_ZRS --encryption-services blob
+                az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name)
 
           # Download Plan Artifact
           - download: current
