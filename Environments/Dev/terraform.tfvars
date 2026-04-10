@@ -36,7 +36,7 @@ resource_groups = {
 
 virtual_networks = {
   main = {
-    name          = "myexample-tst-vnet1"
+    name          = "myexample-dev-vnet1"
     address_space = ["10.250.0.0/16"]
     subnets = [
       {
