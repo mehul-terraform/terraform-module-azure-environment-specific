@@ -29,7 +29,7 @@ stages:
     - checkout: self
 
     # Install Terraform
-    - task: TerraformInstaller@1
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
       inputs:
         terraformVersion: $(TF_VERSION)
 
@@ -95,7 +95,7 @@ stages:
           - checkout: self
 
           # Install Terraform
-          - task: TerraformInstaller@1
+          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
             inputs:
               terraformVersion: $(TF_VERSION)
 
