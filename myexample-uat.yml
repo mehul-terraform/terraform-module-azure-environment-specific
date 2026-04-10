@@ -1,16 +1,16 @@
 trigger:
   branches:
     include:
-      - develop
+      - uat
 
 variables:
-- group: myexample-iac-terraform-uat   # Azure DevOps Variable Group
+- group: myexample-iac-terraform-uat   # Azure uatOps Variable Group
 
 - name: TF_VERSION
   value: '1.6.6'
 
 - name: ENV
-  value: 'UAT'
+  value: 'uat'
 
 stages:
 
@@ -18,7 +18,7 @@ stages:
 # STAGE 1: VALIDATE + PLAN
 # -------------------------
 - stage: Plan
-  displayName: "Terraform Plan - UAT"
+  displayName: "Terraform Plan - uat"
   jobs:
   - job: terraform_plan
     displayName: "Run Terraform Plan"
@@ -32,6 +32,16 @@ stages:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: $(TF_VERSION)
+
+    # Azure Login
+    - task: AzureCLI@2
+      displayName: "Azure Login"
+      inputs:
+        azureSubscription: '$(AzureServiceConnectionName)'
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az account show
 
     # Terraform Init
     - script: |
@@ -65,14 +75,14 @@ stages:
 # STAGE 2: APPLY
 # -------------------------
 - stage: Apply
-  displayName: "Terraform Apply - UAT"
+  displayName: "Terraform Apply - uat"
   dependsOn: Plan
   condition: succeeded()
 
   jobs:
   - deployment: terraform_apply
     displayName: "Apply Infrastructure"
-    environment: uat
+    environment: $(ENV)
 
     strategy:
       runOnce:
@@ -85,6 +95,16 @@ stages:
           - task: TerraformInstaller@1
             inputs:
               terraformVersion: $(TF_VERSION)
+
+          # Azure Login
+          - task: AzureCLI@2
+            displayName: "Azure Login"
+            inputs:
+              azureSubscription: '$(AzureServiceConnectionName)'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az account show
 
           # Download Plan Artifact
           - download: current
