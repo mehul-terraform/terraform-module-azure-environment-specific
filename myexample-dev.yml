@@ -33,43 +33,38 @@ stages:
       inputs:
         terraformVersion: $(TF_VERSION)
 
-    # Azure Login
-    - task: AzureCLI@2
-      displayName: "Azure Login"
-      inputs:
-        azureSubscription: 'MyExample-Azure'
-        addSpnToEnvironment: true
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          az account show
-          az group create --location eastus --name myexample-tf-rg
-          az storage account create --name myexampletfstorage --resource-group myexample-tf-rg --location eastus --sku Standard_ZRS --encryption-services blob
-          az storage container create --account-name myexampletfstorage --name myexample-dev-tfstate
-
     # Terraform Init
-    - script: |
-        terraform init
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
       displayName: "Terraform Init"
-      workingDirectory: Environments/$(Environments)
+      inputs:
+        command: 'init'
+        workingDirectory: 'Environments/$(Environments)'
+        backendType: 'azurerm'
+        backendServiceArm: 'MyExample-Azure'
 
     # Terraform Format Check
-    - script: terraform fmt -check
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
       displayName: "Terraform Format Check"
-      workingDirectory: Environments/$(Environments)
+      inputs:
+        command: 'fmt'
+        workingDirectory: 'Environments/$(Environments)'
+        commandOptions: '-check'
 
     # Terraform Validate
-    - script: terraform validate
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
       displayName: "Terraform Validate"
-      workingDirectory: Environments/$(Environments)
+      inputs:
+        command: 'validate'
+        workingDirectory: 'Environments/$(Environments)'
 
     # Terraform Plan
-    - script: |
-        terraform plan \
-          -var-file=terraform.tfvars \
-          -out=tfplan
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
       displayName: "Terraform Plan"
-      workingDirectory: Environments/$(Environments)
+      inputs:
+        command: 'plan'
+        workingDirectory: 'Environments/$(Environments)'
+        environmentServiceName: 'MyExample-Azure'
+        commandOptions: '-var-file=terraform.tfvars -out=tfplan'
 
     # Publish Plan Artifact
     - publish: Environments/$(Environments)/tfplan
@@ -100,32 +95,24 @@ stages:
             inputs:
               terraformVersion: $(TF_VERSION)
 
-          # Azure Login
-          - task: AzureCLI@2
-            displayName: "Azure Login"
-            inputs:
-              azureSubscription: 'MyExample-Azure'
-              addSpnToEnvironment: true
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: |
-                az account show
-                az group create --location eastus --name $(tf_resource_group_name)
-                az storage account create --name $(tf_storage_name) --resource-group $(tf.resourcegroupname) --location $(tf_storage_location) --sku Standard_ZRS --encryption-services blob
-                az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name)
-
           # Download Plan Artifact
           - download: current
             artifact: deploy_artifact
 
           # Terraform Init
-          - script: |
-              terraform init
+          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
             displayName: "Terraform Init"
-            workingDirectory: Environments/$(Environments)
+            inputs:
+              command: 'init'
+              workingDirectory: 'Environments/$(Environments)'
+              backendType: 'azurerm'
+              backendServiceArm: 'MyExample-Azure'
 
           # Terraform Apply using saved plan
-          - script: |
-              terraform apply -auto-approve $(Pipeline.Workspace)/deploy_artifact/tfplan
+          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
             displayName: "Terraform Apply"
-            workingDirectory: Environments/$(Environments)
+            inputs:
+              command: 'apply'
+              workingDirectory: 'Environments/$(Environments)'
+              environmentServiceName: 'MyExample-Azure'
+              commandOptions: '$(Pipeline.Workspace)/deploy_artifact/tfplan'
