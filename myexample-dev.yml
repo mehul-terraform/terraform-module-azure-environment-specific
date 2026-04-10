@@ -39,7 +39,7 @@ stages:
         - task: AzureCLI@2
           displayName: 'Ensure Backend Storage Exists'
           inputs:
-            azureSubscription: 'MyExample-Azure'
+            azureSubscription: 'myexample-azure-iac'
             scriptType: pscore
             scriptLocation: inlineScript
             inlineScript: |
