@@ -2,11 +2,11 @@
 # 01-ResourceGroup
 #--------------------------------------------------------------------------------------------------
 
-module "resource_group" {
-  source          = "../../Modules/01-ResourceGroup"
-  resource_groups = var.resource_groups
-  tags            = local.tags
-}
+# module "resource_group" {
+#   source          = "../../Modules/01-ResourceGroup"
+#   resource_groups = var.resource_groups
+#   tags            = local.tags
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02-Networking
@@ -16,27 +16,27 @@ module "resource_group" {
 # 02.01-VirtualNetwork
 #--------------------------------------------------------------------------------------------------
 
-module "virtual_network" {
-  source              = "../../Modules/02-Networking/01-VirtualNetwork"
-  resource_group_name = module.resource_group.names["main"]
-  location            = module.resource_group.locations["main"]
-  virtual_networks    = var.virtual_networks
-  tags                = local.tags
-}
+# module "virtual_network" {
+#   source              = "../../Modules/02-Networking/01-VirtualNetwork"
+#   resource_group_name = module.resource_group.names["main"]
+#   location            = module.resource_group.locations["main"]
+#   virtual_networks    = var.virtual_networks
+#   tags                = local.tags
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02.02-NetworkSecurityGroup
 #--------------------------------------------------------------------------------------------------
 
-module "network_security_group" {
-  source                  = "../../Modules/02-Networking/02-NetworkSecurityGroup"
-  resource_group_name     = module.resource_group.names["main"]
-  location                = module.resource_group.locations["main"]
-  network_security_groups = var.network_security_groups
-  vnet_subnet_ids         = module.virtual_network.subnet_ids
-  tags                    = local.tags
-  depends_on              = [module.virtual_network]
-}
+# module "network_security_group" {
+#   source                  = "../../Modules/02-Networking/02-NetworkSecurityGroup"
+#   resource_group_name     = module.resource_group.names["main"]
+#   location                = module.resource_group.locations["main"]
+#   network_security_groups = var.network_security_groups
+#   vnet_subnet_ids         = module.virtual_network.subnet_ids
+#   tags                    = local.tags
+#   depends_on              = [module.virtual_network]
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02.03-VirtualNetworkGateway
