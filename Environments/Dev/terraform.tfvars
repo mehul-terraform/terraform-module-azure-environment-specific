@@ -99,7 +99,7 @@ virtual_networks = {
 
 network_security_groups = {
   main = {
-    name = "myexample-tst-nsg"
+    name = "myexample-dev-nsg"
     rules = [
       {
         name                       = "Allow-RDP"
