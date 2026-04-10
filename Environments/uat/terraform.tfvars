@@ -23,12 +23,6 @@ resource_groups = {
     name     = "myexample-uat-rg"
     location = "WEST US 3"
     tags     = {}
-  },
-
-  dev = {
-    name     = "myexample-dev-rg"
-    location = "WEST US 2"
-    tags     = {}
   }
 }
 
@@ -95,17 +89,6 @@ virtual_networks = {
         name           = "GatewaySubnet"
         address_prefix = "10.250.255.0/24"
       }
-    ]
-  },
-
-  vnet2 = {
-    name          = "myexample-tst-vnet2"
-    address_space = ["10.251.0.0/16"]
-    subnets = [
-      {
-        name           = "vm"
-        address_prefix = "10.251.1.0/24"
-      },
     ]
   }
 }

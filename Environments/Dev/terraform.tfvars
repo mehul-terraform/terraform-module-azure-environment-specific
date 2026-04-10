@@ -20,12 +20,6 @@ tags = {
 
 resource_groups = {
   main = {
-    name     = "myexample-tst-rg"
-    location = "WEST US 3"
-    tags     = {}
-  },
-
-  dev = {
     name     = "myexample-dev-rg"
     location = "WEST US 2"
     tags     = {}
