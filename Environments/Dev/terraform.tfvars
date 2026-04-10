@@ -138,7 +138,7 @@ network_security_groups = {
         description                = "Allow HTTP from any source"
       }
     ]
-    subnet_names = ["vm", "webapp", "db"]
+    subnet_names = ["vm", "webapp", "db", "aks"]
   }
 }
 
