@@ -2,11 +2,11 @@
 # 01-ResourceGroup
 #--------------------------------------------------------------------------------------------------
 
-module "resource_group" {
-  source          = "../../Modules/01-ResourceGroup"
-  resource_groups = var.resource_groups
-  tags            = local.tags
-}
+# module "resource_group" {
+#   source          = "../../Modules/01-ResourceGroup"
+#   resource_groups = var.resource_groups
+#   tags            = local.tags
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02-Networking
@@ -16,13 +16,13 @@ module "resource_group" {
 # 02.01-VirtualNetwork
 #--------------------------------------------------------------------------------------------------
 
-module "virtual_network" {
-  source              = "../../Modules/02-Networking/01-VirtualNetwork"
-  resource_group_name = module.resource_group.names["main"]
-  location            = module.resource_group.locations["main"]
-  virtual_networks    = var.virtual_networks
-  tags                = local.tags
-}
+# module "virtual_network" {
+#   source              = "../../Modules/02-Networking/01-VirtualNetwork"
+#   resource_group_name = module.resource_group.names["main"]
+#   location            = module.resource_group.locations["main"]
+#   virtual_networks    = var.virtual_networks
+#   tags                = local.tags
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02.02-NetworkSecurityGroup
