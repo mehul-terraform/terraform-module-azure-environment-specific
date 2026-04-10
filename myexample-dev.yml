@@ -86,21 +86,25 @@ stages:
               terraform version
 
               # Set ARM authentication env vars (WIF / OIDC)
-              export ARM_CLIENT_ID=$servicePrincipalId
-              export ARM_TENANT_ID=$tenantId
-              export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+              export ARM_CLIENT_ID="$servicePrincipalId"
+              export ARM_TENANT_ID="$tenantId"
+              export ARM_OIDC_TOKEN="$idToken"
               export ARM_USE_OIDC=true
-              export ARM_OIDC_TOKEN=$idToken
+              export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+              export ARM_SKIP_PROVIDER_REGISTRATION=true
+              echo "ARM_CLIENT_ID set: $(if [ -n "$ARM_CLIENT_ID" ]; then echo yes; else echo NO; fi)"
+              echo "ARM_OIDC_TOKEN set: $(if [ -n "$ARM_OIDC_TOKEN" ]; then echo yes; else echo NO; fi)"
+              echo "ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
 
               # Run Terraform
               TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "dev" -type d | head -1)
               echo "Terraform directory: $TF_DIR"
               cd "$TF_DIR"
               terraform init \
-                -backend-config="storage_account_name=myexampletfstorage" \
-                -backend-config="container_name=myexample-dev-tfstate" \
-                -backend-config="key=terraform.tfstate" \
-                -backend-config="resource_group_name=myexample-tf-rg"
+                -backend-config="storage_account_name=$(tf_storage_name)" \
+                -backend-config="container_name=$(tf_storage_container_name)" \
+                -backend-config="key=$(tf_storage_key)" \
+                -backend-config="resource_group_name=$(tf_resource_group_name)"
 
               terraform plan -var-file=terraform.tfvars -out=tfplan
               terraform apply -auto-approve tfplan
