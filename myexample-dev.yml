@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - develop
+      - main
 
 variables:
 - group: myexample-iac-terraform-dev   # Azure DevOps Variable Group
