@@ -93,7 +93,9 @@ stages:
               export ARM_OIDC_TOKEN=$idToken
 
               # Run Terraform
-              cd $(Pipeline.Workspace)/terraform_drop/Environments/dev
+              TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "dev" -type d | head -1)
+              echo "Terraform directory: $TF_DIR"
+              cd "$TF_DIR"
               terraform init \
                 -backend-config="storage_account_name=myexampletfstorage" \
                 -backend-config="container_name=myexample-dev-tfstate" \
