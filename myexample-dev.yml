@@ -44,7 +44,7 @@ stages:
               - task: AzureCLI@2
                 displayName: 'Bootstrap Azure Resources'
                 inputs:
-                  azureSubscription: '$(AzureServiceConnectionName)'
+                  azureSubscription: 'MyExample-Azure'
                   scriptType: bash
                   scriptLocation: inlineScript
                   inlineScript: |
