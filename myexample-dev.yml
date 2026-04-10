@@ -46,7 +46,7 @@ stages:
               az group create --location $(tf_storage_location) --name $(tf_resource_group_name)
               az provider register --namespace Microsoft.Storage --subscription $(subscription) --wait
               az storage account create --name $(tf_storage_name) --resource-group $(tf_resource_group_name) --location $(tf_storage_location) --sku Standard_LRS --encryption-services blob --subscription $(subscription)
-              az storage container create --account-name $(tf_storage_name) --name tf_storage_container_name --auth-mode login --subscription $(subscription)
+              az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login --subscription $(subscription)
 
     - job: Terraform_Deploy
       displayName: 'Terraform Deploy'
