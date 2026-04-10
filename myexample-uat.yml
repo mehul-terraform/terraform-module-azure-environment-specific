@@ -1,118 +1,107 @@
 trigger:
   branches:
     include:
-      - uat
+      - main
+pool:
+  vmImage: 'ubuntu-latest'
 
 variables:
-- group: myexample-iac-terraform-uat   # Azure uatOps Variable Group
-
-- name: TF_VERSION
-  value: '1.6.6'
-
-- name: ENV
-  value: 'uat'
+- group: myexample-iac-terraform-uat
 
 stages:
-
-# -------------------------
-# STAGE 1: VALIDATE + PLAN
-# -------------------------
-- stage: Plan
-  displayName: "Terraform Plan - uat"
+- stage: Build
+  displayName: 'Build terraform code'
   jobs:
-  - job: terraform_plan
-    displayName: "Run Terraform Plan"
-    pool:
-      vmImage: 'ubuntu-latest'
-    
-    steps:
-    - checkout: self
+    - job: BuildJob
+      steps: 
+        - task: CopyFiles@2
+          displayName: 'Copy all repository contents to artifacts'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)'
+            Contents: '**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-    # Install Terraform
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-      inputs:
-        terraformVersion: $(TF_VERSION)
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Terraform Artifacts'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'terraform_drop'
 
-    # Terraform Init
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Init"
-      inputs:
-        command: 'init'
-        workingDirectory: 'Environments/$(ENV)'
-        backendType: 'azurerm'
-        backendServiceArm: 'MyExample-Azure'
-
-    # Terraform Format Check
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Format Check"
-      inputs:
-        command: 'fmt'
-        workingDirectory: 'Environments/$(ENV)'
-        commandOptions: '-check'
-
-    # Terraform Validate
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Validate"
-      inputs:
-        command: 'validate'
-        workingDirectory: 'Environments/$(ENV)'
-
-    # Terraform Plan
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-      displayName: "Terraform Plan"
-      inputs:
-        command: 'plan'
-        workingDirectory: 'Environments/$(ENV)'
-        environmentServiceName: 'MyExample-Azure'
-        commandOptions: '-var-file=terraform.tfvars -out=tfplan'
-
-    # Publish Plan Artifact
-    - publish: Environments/$(ENV)/tfplan
-      artifact: deploy_artifact
-
-# -------------------------
-# STAGE 2: APPLY
-# -------------------------
-- stage: Apply
-  displayName: "Terraform Apply - uat"
-  dependsOn: Plan
-  condition: succeeded()
-
+- stage: Deploy
+  displayName: 'Deploy Terraform Setup'
+  dependsOn: Build
   jobs:
-  - deployment: terraform_apply
-    displayName: "Apply Infrastructure"
-    environment: $(ENV)
+    - job: Bootstrap
+      displayName: 'Bootstrap Azure Resources'
+      pool:
+        vmImage: 'windows-latest'
+      steps:
+        - task: AzureCLI@2
+          displayName: 'Ensure Backend Storage Exists'
+          inputs:
+            azureSubscription: 'myexample-azure-iac'
+            scriptType: pscore
+            scriptLocation: inlineScript
+            inlineScript: |
+              # Only create RG if it doesn't already exist
+              if (-not (az group show --name $(tf_resource_group_name) 2>$null)) {
+                az group create --location $(tf_storage_location) --name $(tf_resource_group_name)
+              } else { Write-Host "Resource group already exists, skipping." }
 
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+              az provider register --namespace Microsoft.Storage --subscription $(subscription) --wait
 
-          - checkout: self
+              # Only create storage account if it doesn't already exist
+              if (-not (az storage account show --name $(tf_storage_name) --resource-group $(tf_resource_group_name) 2>$null)) {
+                az storage account create --name $(tf_storage_name) --resource-group $(tf_resource_group_name) --location $(tf_storage_location) --sku Standard_LRS --encryption-services blob --subscription $(subscription)
+              } else { Write-Host "Storage account already exists, skipping." }
 
-          # Install Terraform
-          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-            inputs:
-              terraformVersion: $(TF_VERSION)
+              # Only create container if it doesn't already exist
+              if (-not (az storage container show --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login 2>$null)) {
+                az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login --subscription $(subscription)
+              } else { Write-Host "Container already exists, skipping." }
 
-          # Download Plan Artifact
-          - download: current
-            artifact: deploy_artifact
+    - job: Terraform_Deploy
+      displayName: 'Terraform Deploy'
+      dependsOn: Bootstrap
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - download: current
+          artifact: terraform_drop
 
-          # Terraform Init
-          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-            displayName: "Terraform Init"
-            inputs:
-              command: 'init'
-              workingDirectory: 'Environments/$(ENV)'
-              backendType: 'azurerm'
-              backendServiceArm: 'MyExample-Azure'
+        - task: AzureCLI@2
+          displayName: 'Terraform Init, Plan & Apply'
+          inputs:
+            azureSubscription: 'myexample-azure-iac'
+            scriptType: bash
+            scriptLocation: inlineScript
+            addSpnToEnvironment: true
+            inlineScript: |
+              set -e
 
-          # Terraform Apply using saved plan
-          - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
-            displayName: "Terraform Apply"
-            inputs:
-              command: 'apply'
-              workingDirectory: 'Environments/$(ENV)'
-              environmentServiceName: 'MyExample-Azure'
-              commandOptions: '$(Pipeline.Workspace)/deploy_artifact/tfplan'
+              # Install Terraform
+              wget -q https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+              unzip -o terraform_1.6.6_linux_amd64.zip
+              sudo mv terraform /usr/local/bin/terraform
+              terraform version
+
+              # Set ARM authentication env vars (WIF / OIDC)
+              export ARM_CLIENT_ID="$servicePrincipalId"
+              export ARM_TENANT_ID="$tenantId"
+              export ARM_OIDC_TOKEN="$idToken"
+              export ARM_USE_OIDC=true
+              export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+              export ARM_SKIP_PROVIDER_REGISTRATION=true
+              
+              # Run Terraform
+              TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "uat" -type d | head -1)
+              echo "Terraform directory: $TF_DIR"
+              cd "$TF_DIR"
+              terraform init \
+                -backend-config="storage_account_name=$(tf_storage_name)" \
+                -backend-config="container_name=$(tf_storage_container_name)" \
+                -backend-config="key=$(tf_storage_key)" \
+                -backend-config="resource_group_name=$(tf_resource_group_name)"
+
+              terraform plan -var-file=terraform.tfvars -out=tfplan
+              terraform apply -auto-approve tfplan
