@@ -21,7 +21,7 @@ tags = {
 resource_groups = {
   main = {
     name     = "myexample-dev-rg"
-    location = "WEST US 2"
+    location = "WEST US 3"
     tags     = {}
   }
 }
@@ -36,7 +36,7 @@ resource_groups = {
 
 virtual_networks = {
   main = {
-    name          = "myexample-tst-vnet1"
+    name          = "myexample-dev-vnet1"
     address_space = ["10.250.0.0/16"]
     subnets = [
       {
@@ -99,7 +99,7 @@ virtual_networks = {
 
 network_security_groups = {
   main = {
-    name = "myexample-tst-nsg"
+    name = "myexample-dev-nsg"
     rules = [
       {
         name                       = "Allow-RDP"
@@ -138,7 +138,7 @@ network_security_groups = {
         description                = "Allow HTTP from any source"
       }
     ]
-    subnet_names = ["vm", "webapp", "db"]
+    subnet_names = ["vm", "webapp", "db", "aks"]
   }
 }
 
