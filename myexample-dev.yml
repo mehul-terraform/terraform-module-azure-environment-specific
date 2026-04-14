@@ -38,7 +38,7 @@ stages:
     - job: Bootstrap
       displayName: 'Bootstrap Azure Resources'
       pool:
-        vmImage: 'windows-latest'
+        vmImage: 'ubuntu-lates'
       steps:
         - task: AzureCLI@2
           displayName: 'Ensure Backend Storage Exists'
