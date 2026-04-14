@@ -1,8 +1,11 @@
 trigger:
   branches:
     include:
+      - dev      
+pr:
+  branches:
+    include:
       - dev
-pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -28,8 +31,8 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             artifactName: 'terraform_drop'
 
-- stage: Deploy
-  displayName: 'Deploy Terraform Setup'
+- stage: Plan
+  displayName: 'Terraform Plan'
   dependsOn: Build
   jobs:
     - job: Bootstrap
@@ -49,7 +52,7 @@ stages:
                 az group create --location $(tf_storage_location) --name $(tf_resource_group_name)
               } else { Write-Host "Resource group already exists, skipping." }
 
-              az provider register --namespace Microsoft.Storage --subscription $(subscription) --wait
+              az provider register --namespace Microsoft.Storage --subscription $(subscription_id) --wait
 
               # Only create storage account if it doesn't already exist
               if (-not (az storage account show --name $(tf_storage_name) --resource-group $(tf_resource_group_name) 2>$null)) {
@@ -61,8 +64,8 @@ stages:
                 az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login --subscription $(subscription)
               } else { Write-Host "Container already exists, skipping." }
 
-    - job: Terraform_Deploy
-      displayName: 'Terraform Deploy'
+    - job: Terraform_Plan
+      displayName: 'Terraform Plan'
       dependsOn: Bootstrap
       pool:
         vmImage: 'ubuntu-latest'
@@ -71,7 +74,7 @@ stages:
           artifact: terraform_drop
 
         - task: AzureCLI@2
-          displayName: 'Terraform Init, Plan & Apply'
+          displayName: 'Terraform Init & Plan'
           inputs:
             azureSubscription: '$(AzureServiceConnectionName)'
             scriptType: bash
@@ -93,9 +96,6 @@ stages:
               export ARM_USE_OIDC=true
               export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
               export ARM_SKIP_PROVIDER_REGISTRATION=true
-              echo "ARM_CLIENT_ID set: $(if [ -n "$ARM_CLIENT_ID" ]; then echo yes; else echo NO; fi)"
-              echo "ARM_OIDC_TOKEN set: $(if [ -n "$ARM_OIDC_TOKEN" ]; then echo yes; else echo NO; fi)"
-              echo "ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
 
               # Run Terraform
               TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "dev" -type d | head -1)
@@ -108,4 +108,50 @@ stages:
                 -backend-config="resource_group_name=$(tf_resource_group_name)"
 
               terraform plan -var-file=terraform.tfvars -out=tfplan
-              terraform apply -auto-approve tfplan
+
+- stage: Apply
+  displayName: 'Terraform Apply'
+  dependsOn: Plan
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/dev'), ne(variables['Build.Reason'], 'PullRequest'))
+  jobs:
+    - job: Terraform_Apply
+      displayName: 'Terraform Apply'
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - download: current
+          artifact: terraform_drop
+
+        - task: AzureCLI@2
+          displayName: 'Terraform Init & Apply'
+          inputs:
+            azureSubscription: '$(AzureServiceConnectionName)'
+            scriptType: bash
+            scriptLocation: inlineScript
+            addSpnToEnvironment: true
+            inlineScript: |
+              set -e
+
+              # Install Terraform
+              wget -q https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+              unzip -o terraform_1.6.6_linux_amd64.zip
+              sudo mv terraform /usr/local/bin/terraform
+
+              # Set ARM authentication env vars (WIF / OIDC)
+              export ARM_CLIENT_ID="$servicePrincipalId"
+              export ARM_TENANT_ID="$tenantId"
+              export ARM_OIDC_TOKEN="$idToken"
+              export ARM_USE_OIDC=true
+              export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+              export ARM_SKIP_PROVIDER_REGISTRATION=true
+
+              # Run Terraform
+              TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "dev" -type d | head -1)
+              cd "$TF_DIR"
+              terraform init \
+                -backend-config="storage_account_name=$(tf_storage_name)" \
+                -backend-config="container_name=$(tf_storage_container_name)" \
+                -backend-config="key=$(tf_storage_key)" \
+                -backend-config="resource_group_name=$(tf_resource_group_name)"
+
+              terraform apply -auto-approve -var-file=terraform.tfvars
