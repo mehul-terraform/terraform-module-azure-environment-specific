@@ -2,11 +2,11 @@
 # 01-ResourceGroup
 #--------------------------------------------------------------------------------------------------
 
-# module "resource_group" {
-#   source          = "../../Modules/01-ResourceGroup"
-#   resource_groups = var.resource_groups
-#   tags            = local.tags
-# }
+ module "resource_group" {
+   source          = "../../Modules/01-ResourceGroup"
+   resource_groups = var.resource_groups
+   tags            = local.tags
+ }
 
 #--------------------------------------------------------------------------------------------------
 # 02-Networking
