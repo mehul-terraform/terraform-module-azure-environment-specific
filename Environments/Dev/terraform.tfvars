@@ -3,14 +3,14 @@
 #--------------------------------------------------------------------------------------------------
 
 project     = "myexample"
-environment = "tst"
+environment = "dev"
 
 #--------------------------------------------------------------------------------------------------
 # 00-Tags
 #--------------------------------------------------------------------------------------------------
 
 tags = {
-  environment = "tst"
+  environment = "dev"
   projectname = "myexample"
 }
 
@@ -148,8 +148,8 @@ network_security_groups = {
 
 virtual_network_gateways = {
   gw1 = {
-    name                        = "myexample-tst-vnet-gateway01"
-    public_ip_name              = "myexample-tst-vnet-gateway-ip"
+    name                        = "myexample-dev-vnet-gateway01"
+    public_ip_name              = "myexample-dev-vnet-gateway-ip"
     gateway_type                = "Vpn"
     vpn_type                    = "RouteBased"
     active_active               = false
@@ -168,14 +168,14 @@ virtual_network_gateways = {
 
 virtual_machines_windows = {
   windows-vm1 = {
-    name           = "myexampletstvm1"
+    name           = "myexampledevvm1"
     size           = "Standard_F2"
     admin_username = "myexample"
 
-    public_ip_name               = "myexample-tst-vm1-ip"
+    public_ip_name               = "myexample-dev-vm1-ip"
     public_ip_allocation_method  = "Static"
-    network_interface_name       = "myexample-tst-vm1-nic"
-    private_ip_name              = "myexample-tst-vm1-private-ip"
+    network_interface_name       = "myexample-dev-vm1-nic"
+    private_ip_name              = "myexample-dev-vm1-private-ip"
     private_ip_allocation        = "Dynamic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
@@ -186,14 +186,14 @@ virtual_machines_windows = {
   },
 
   windows-vm2 = {
-    name           = "myexampletstvm2"
+    name           = "myexampledevvm2"
     size           = "Standard_F2"
     admin_username = "myexample"
 
-    public_ip_name               = "myexample-tst-vm2-ip"
+    public_ip_name               = "myexample-dev-vm2-ip"
     public_ip_allocation_method  = "Static"
-    network_interface_name       = "myexample-tst-vm2-nic"
-    private_ip_name              = "myexample-tst-vm2-private-ip"
+    network_interface_name       = "myexample-dev-vm2-nic"
+    private_ip_name              = "myexample-dev-vm2-private-ip"
     private_ip_allocation        = "Dynamic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
@@ -210,14 +210,14 @@ virtual_machines_windows = {
 
 virtual_machines_linux = {
   linux-vm1 = {
-    name           = "myexampletstlinux1"
+    name           = "myexampledevlinux1"
     size           = "Standard_F2"
     admin_username = "azureuser"
 
-    public_ip_name               = "myexample-tst-linux-vm1-ip"
+    public_ip_name               = "myexample-dev-linux-vm1-ip"
     public_ip_allocation_method  = "Static"
-    network_interface_name       = "myexample-tst-linux-vm1-nic"
-    private_ip_name              = "myexample-tst-linux-vm1-private-ip"
+    network_interface_name       = "myexample-dev-linux-vm1-nic"
+    private_ip_name              = "myexample-dev-linux-vm1-private-ip"
     private_ip_allocation        = "Dynamic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
@@ -234,7 +234,7 @@ virtual_machines_linux = {
 
 container_registries = {
   acr1 = {
-    name                          = "myexampletstacr01"
+    name                          = "myexampledevacr01"
     sku                           = "Basic"
     admin_enabled                 = true
     public_network_access_enabled = true
@@ -243,7 +243,7 @@ container_registries = {
   },
 
   acr2 = {
-    name                          = "myexampletstacr02"
+    name                          = "myexampledevacr02"
     sku                           = "Basic"
     admin_enabled                 = true
     public_network_access_enabled = true
@@ -259,8 +259,8 @@ container_registries = {
 
 aks_clusters = {
   cluster1 = {
-    name               = "myexample-tst-aks01"
-    dns_prefix         = "myexample-tst-aks01"
+    name               = "myexample-dev-aks01"
+    dns_prefix         = "myexample-dev-aks01"
     kubernetes_version = "1.32.10"
     sku_tier           = "Free"
 
@@ -283,14 +283,14 @@ aks_clusters = {
     }
 
     tags = {
-      environment = "tst"
+      environment = "dev"
       projectname = "myexample"
     }
   }
 
   cluster2 = {
-    name               = "myexample-tst-aks02"
-    dns_prefix         = "myexample-tst-aks02"
+    name               = "myexample-dev-aks02"
+    dns_prefix         = "myexample-dev-aks02"
     kubernetes_version = "1.32.10"
     sku_tier           = "Free"
 
@@ -313,7 +313,7 @@ aks_clusters = {
     }
 
     tags = {
-      environment = "tst"
+      environment = "dev"
       projectname = "myexample"
     }
   }
@@ -325,7 +325,7 @@ aks_clusters = {
 
 container_app_environments = {
   main = {
-    name = "myexample-tst-aca-env"
+    name = "myexample-dev-aca-env"
     workload_profiles = [
       {
         name                  = "Consumption"
@@ -337,9 +337,12 @@ container_app_environments = {
 
 container_apps = {
   containerapp01 = {
-    name            = "myexample-tst-app01"
+    name            = "myexample-dev-app01"
     environment_key = "main"
     revision_mode   = "Single"
+    identity = {
+      type = "SystemAssigned"
+    }
     containers = [
       {
         name   = "hello-world"
@@ -361,9 +364,12 @@ container_apps = {
   }
 
   containerapp02 = {
-    name            = "myexample-tst-app02"
+    name            = "myexample-dev-app02"
     environment_key = "main"
     revision_mode   = "Single"
+    identity = {
+      type = "SystemAssigned"
+    }
     containers = [
       {
         name   = "hello-world"
@@ -395,7 +401,7 @@ container_apps = {
 
 service_plans = {
   linux-asp1 = {
-    name                     = "myexample-tst-linux-asp1"
+    name                     = "myexample-dev-linux-asp1"
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
@@ -406,7 +412,7 @@ service_plans = {
   },
 
   linux-asp2 = {
-    name                     = "myexample-tst-linux-asp2"
+    name                     = "myexample-dev-linux-asp2"
     os_type                  = "Linux"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
@@ -417,7 +423,7 @@ service_plans = {
   },
 
   windows-asp1 = {
-    name                     = "myexample-tst-windows-asp1"
+    name                     = "myexample-dev-windows-asp1"
     os_type                  = "Windows"
     sku_name                 = "B1"
     per_site_scaling_enabled = false
@@ -435,7 +441,7 @@ service_plans = {
 app_service_linux = {
 
   linux-webapp1 = {
-    app_service_name = "myexample-tst-webapp1"
+    app_service_name = "myexample-dev-webapp1"
     service_plan_key = "linux-asp1"
     runtime = {
       dotnet_version = "8.0"
@@ -444,13 +450,13 @@ app_service_linux = {
     }
     app_settings = {}
     tags = {
-      environment = "tst"
+      environment = "dev"
       project     = "myexample"
     }
   }
 
   linux-webapp2 = {
-    app_service_name = "myexample-tst-webapp2"
+    app_service_name = "myexample-dev-webapp2"
     service_plan_key = "linux-asp2"
     runtime = {
       dotnet_version = null
@@ -459,7 +465,7 @@ app_service_linux = {
     }
     app_settings = {}
     tags = {
-      environment = "tst"
+      environment = "dev"
       project     = "myexample"
     }
   }
@@ -471,7 +477,7 @@ app_service_linux = {
 
 app_service_windows = {
   windows-webapp1 = {
-    app_service_name = "myexample-tst-win-webapp1"
+    app_service_name = "myexample-dev-win-webapp1"
     service_plan_key = "windows-asp1"
     runtime = {
       node_version   = null
@@ -480,7 +486,7 @@ app_service_windows = {
     }
     app_settings = {}
     tags = {
-      environment = "tst"
+      environment = "dev"
       project     = "myexample"
     }
   }
@@ -493,28 +499,40 @@ app_service_windows = {
 app_service_container_linux = {
 
   container-linux-webapp1 = {
-    app_service_container_name = "myexample-tst-container-linux-webapp1"
+    app_service_container_name = "myexample-dev-container-linux-webapp1"
     docker_image_name          = "nginx:alpine"
     service_plan_key           = "linux-asp1"
     app_settings               = {}
 
     tags = {
-      environment = "tst"
+      environment = "dev"
       project     = "myexample"
-
+    }
+    cors = {
+      allowed_origins     = ["*"]
+      support_credentials = true
+    }
+    identity = {
+      type = "SystemAssigned"
     }
   },
 
   container-linux-webapp2 = {
-    app_service_container_name = "myexample-tst-container-linux-webapp2"
+    app_service_container_name = "myexample-dev-container-linux-webapp2"
     docker_image_name          = "nginx:alpine"
     service_plan_key           = "linux-asp2"
     app_settings               = {}
 
     tags = {
-      environment = "tst"
+      environment = "dev"
       project     = "myexample"
-
+    }
+    cors = {
+      allowed_origins     = ["*"]
+      support_credentials = false
+    }
+    identity = {
+      type = "SystemAssigned"
     }
   }
 }
@@ -525,13 +543,13 @@ app_service_container_linux = {
 
 app_service_container_windows = {
   container-windows-webapp1 = {
-    app_service_container_name = "myexample-tst-container-windows-webapp1"
+    app_service_container_name = "myexample-dev-container-windows-webapp1"
     docker_image_name          = "nginx:alpine"
     service_plan_key           = "windows-asp1"
     app_settings               = {}
 
     tags = {
-      environment = "tst"
+      environment = "dev"
       project     = "myexample"
     }
   }
@@ -543,9 +561,9 @@ app_service_container_windows = {
 
 function_app_linux = {
   functionapp-linux-webapp1 = {
-    function_app_name    = "myexample-tst-lnx-funcwebapp1"
-    service_plan_name    = "myexample-tst-lnx-funcwebapp1-asp"
-    storage_account_name = "tstlnxfuncappstg1"
+    function_app_name    = "myexample-dev-lnx-funcwebapp1"
+    service_plan_name    = "myexample-dev-lnx-funcwebapp1-asp"
+    storage_account_name = "devlnxfuncappstg1"
     sku_name             = "B1"
     runtime_stack        = "dotnet"
     runtime_version      = "8.0"
@@ -559,9 +577,9 @@ function_app_linux = {
 
 function_app_windows = {
   functionapp-windows-webapp1 = {
-    function_app_name    = "myexample-tst-win-funcwebapp1"
-    service_plan_name    = "myexample-tst-win-funcwebapp1-asp"
-    storage_account_name = "tstwinfuncappstg1"
+    function_app_name    = "myexample-dev-win-funcwebapp1"
+    service_plan_name    = "myexample-dev-win-funcwebapp1-asp"
+    storage_account_name = "devwinfuncappstg1"
     sku_name             = "B1"
     runtime_stack        = "dotnet"
     runtime_version      = "v8.0"
@@ -575,10 +593,10 @@ function_app_windows = {
 
 function_app_flex = {
   function-flex1 = {
-    function_app_name      = "myexample-tst-func-flex1"
-    service_plan_name      = "myexample-tst-func-flex-asp1"
-    storage_account_name   = "tstfuncflexstg1"
-    storage_container_name = "tstfuncflexstg1"
+    function_app_name      = "myexample-dev-func-flex1"
+    service_plan_name      = "myexample-dev-func-flex-asp1"
+    storage_account_name   = "devfuncflexstg1"
+    storage_container_name = "devfuncflexstg1"
     runtime_name           = "dotnet-isolated"
     runtime_version        = "8.0"
     os_type                = "Linux"
@@ -588,10 +606,10 @@ function_app_flex = {
   }
 
   function-flex2 = {
-    function_app_name      = "myexample-tst-func-flex2"
-    service_plan_name      = "myexample-tst-func-flex-asp2"
-    storage_account_name   = "tstfuncflexstg2"
-    storage_container_name = "tstfuncflexstg2"
+    function_app_name      = "myexample-dev-func-flex2"
+    service_plan_name      = "myexample-dev-func-flex-asp2"
+    storage_account_name   = "devfuncflexstg2"
+    storage_container_name = "devfuncflexstg2"
     runtime_name           = "node"
     runtime_version        = "20"
     os_type                = "Linux"
@@ -607,22 +625,22 @@ function_app_flex = {
 
 static_web_app = {
   swa1 = {
-    name              = "myexample-tst-static-webwebapp1"
+    name              = "myexample-dev-static-webwebapp1"
     location          = "westus2"
     sku_tier          = "Free"
     sku_size          = "Free"
     repository_url    = "https://myexample.co.in/github"
-    repository_branch = "tst"
+    repository_branch = "dev"
     repository_token  = "ABCDEFGHIJKLMNOPQ"
   },
 
   swa2 = {
-    name              = "myexample-tst-static-webwebapp2"
+    name              = "myexample-dev-static-webwebapp2"
     location          = "westus2"
     sku_tier          = "Free"
     sku_size          = "Free"
     repository_url    = "https://myexample.co.in/github"
-    repository_branch = "tst"
+    repository_branch = "dev"
     repository_token  = "ABCDEFGHIJKLMNOPQ"
   }
 }
@@ -633,7 +651,7 @@ static_web_app = {
 
 storage_accounts = {
   frontend = {
-    name                     = "myexampletstfrontend"
+    name                     = "myexampledevfrontend"
     account_tier             = "Standard"
     account_replication_type = "LRS"
 
@@ -648,7 +666,7 @@ storage_accounts = {
   }
 
   backend = {
-    name                     = "myexampletstbackend"
+    name                     = "myexampledevbackend"
     account_tier             = "Standard"
     account_replication_type = "GRS"
     tags = {
@@ -667,7 +685,7 @@ storage_accounts = {
 
 postgres_sql = {
   postgres1 = {
-    name                         = "myexample-tst-pgsql-svr01"
+    name                         = "myexample-dev-pgsql-svr01"
     sku_name                     = "B_Standard_B1ms"
     tier                         = "Burstable"
     version                      = "18"
@@ -686,7 +704,7 @@ postgres_sql = {
   },
 
   postgres2 = {
-    name                         = "myexample-tst-pgsql-svr02"
+    name                         = "myexample-dev-pgsql-svr02"
     sku_name                     = "B_Standard_B2ms"
     tier                         = "Burstable"
     version                      = "18"
@@ -711,7 +729,7 @@ postgres_sql = {
 
 cosmos_dbs = {
   cosmos1 = {
-    name                    = "myexample-tst-cosmosdb1"
+    name                    = "myexample-dev-cosmosdb1"
     database_name           = "myexampledb"
     consistency_level       = "Session"
     max_interval_in_seconds = 5
@@ -721,7 +739,7 @@ cosmos_dbs = {
   }
 
   cosmos2 = {
-    name                    = "myexample-tst-cosmosdb2"
+    name                    = "myexample-dev-cosmosdb2"
     database_name           = "myexampledb"
     consistency_level       = "Session"
     max_interval_in_seconds = 5
@@ -731,18 +749,6 @@ cosmos_dbs = {
   }
 }
 
-#--------------------------------------------------------------------------------------------------
-# 06.03-ManagedRedis
-#--------------------------------------------------------------------------------------------------
-
-managed_redis_instances = {
-  main = {
-    name     = "myexample-tst-managed-redis"
-    sku_name = "Basic" # AMR SKU
-    capacity = 1
-    family   = "C"
-  }
-}
 
 #--------------------------------------------------------------------------------------------------
 # 07-DNSZone
@@ -798,119 +804,119 @@ dns_zones = {
 
 private_endpoints = {
   postgres1 = {
-    name              = "myexample-tst-db-postgres1-pe"
+    name              = "myexample-dev-db-postgres1-pe"
     service           = "postgres"
     instance          = "postgres1"
     subresource_names = ["postgresqlServer"]
   }
 
   postgres2 = {
-    name              = "myexample-tst-db-postgres2-pe"
+    name              = "myexample-dev-db-postgres2-pe"
     service           = "postgres"
     instance          = "postgres2"
     subresource_names = ["postgresqlServer"]
   }
 
   cosmos1 = {
-    name              = "myexample-tst-cosmosdb1-pe"
+    name              = "myexample-dev-cosmosdb1-pe"
     service           = "cosmosdb"
     instance          = "cosmos1"
     subresource_names = ["sql"]
   }
 
   cosmos2 = {
-    name              = "myexample-tst-cosmosdb2-pe"
+    name              = "myexample-dev-cosmosdb2-pe"
     service           = "cosmosdb"
     instance          = "cosmos2"
     subresource_names = ["sql"]
   }
 
   storage-frontend = {
-    name              = "myexample-tst-storage-frontend-pe"
+    name              = "myexample-dev-storage-frontend-pe"
     service           = "storage"
     instance          = "frontend"
     subresource_names = ["blob"]
   }
 
   storage-backend = {
-    name              = "myexample-tst-storage-backend-pe"
+    name              = "myexample-dev-storage-backend-pe"
     service           = "storage"
     instance          = "backend"
     subresource_names = ["blob"]
   }
 
   linux-webapp1 = {
-    name              = "myexample-tst-linux-webapp1-pe"
+    name              = "myexample-dev-linux-webapp1-pe"
     service           = "webapp-linux"
     instance          = "linux-webapp1"
     subresource_names = ["sites"]
   }
 
   linux-webapp2 = {
-    name              = "myexample-tst-linux-webapp2-pe"
+    name              = "myexample-dev-linux-webapp2-pe"
     service           = "webapp-linux"
     instance          = "linux-webapp2"
     subresource_names = ["sites"]
   }
 
   windows-webapp1 = {
-    name              = "myexample-tst-windows-webapp1-pe"
+    name              = "myexample-dev-windows-webapp1-pe"
     service           = "webapp-windows"
     instance          = "windows-webapp1"
     subresource_names = ["sites"]
   }
 
   container-linux-webapp1 = {
-    name              = "myexample-tst-container-linux-webapp1-pe"
+    name              = "myexample-dev-container-linux-webapp1-pe"
     service           = "webapp-container-linux"
     instance          = "container-linux-webapp1"
     subresource_names = ["sites"]
   }
 
   container-linux-webapp2 = {
-    name              = "myexample-tst-container-linux-webapp2-pe"
+    name              = "myexample-dev-container-linux-webapp2-pe"
     service           = "webapp-container-linux"
     instance          = "container-linux-webapp2"
     subresource_names = ["sites"]
   }
 
   container-windows-webapp1 = {
-    name              = "myexample-tst-container-windows-webapp1-pe"
+    name              = "myexample-dev-container-windows-webapp1-pe"
     service           = "webapp-container-windows"
     instance          = "container-windows-webapp1"
     subresource_names = ["sites"]
   }
 
   functionapp-linux-webapp1 = {
-    name              = "myexample-tst-function-webapp1-pe"
+    name              = "myexample-dev-function-webapp1-pe"
     service           = "functionapp-linux"
     instance          = "functionapp-linux-webapp1"
     subresource_names = ["sites"]
   }
 
   functionapp-windows-webapp1 = {
-    name              = "myexample-tst-function-webapp2-pe"
+    name              = "myexample-dev-function-webapp2-pe"
     service           = "functionapp-windows"
     instance          = "functionapp-windows-webapp1"
     subresource_names = ["sites"]
   }
 
   functionapp-flex1 = {
-    name              = "myexample-tst-function-webapp1-pe"
+    name              = "myexample-dev-function-webapp1-pe"
     service           = "functionapp-flex"
     instance          = "function-flex1"
     subresource_names = ["sites"]
   }
 
   functionapp-flex2 = {
-    name              = "myexample-tst-function-webapp2-pe"
+    name              = "myexample-dev-function-webapp2-pe"
     service           = "functionapp-flex"
     instance          = "function-flex2"
     subresource_names = ["sites"]
   }
 
   keyvault-backend = {
-    name              = "myexample-tst-keyvault-backend-pe"
+    name              = "myexample-dev-keyvault-backend-pe"
     instance          = "main-backend"
     service           = "keyvault"
     subresource_names = ["vault"]
@@ -918,12 +924,16 @@ private_endpoints = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 09-CacheRedis
+# 09-Redis
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 09.01-CacheRedis
 #--------------------------------------------------------------------------------------------------
 
 redis_caches = {
   redis1 = {
-    name                          = "myexample-tst-redis-cache1"
+    name                          = "myexample-dev-redis-cache1"
     capacity                      = 2
     family                        = "C"
     sku                           = "Basic"
@@ -935,7 +945,7 @@ redis_caches = {
   }
 
   redis2 = {
-    name                          = "myexample-tst-redis-cache2"
+    name                          = "myexample-dev-redis-cache2"
     capacity                      = 2
     family                        = "C"
     sku                           = "Basic"
@@ -948,12 +958,23 @@ redis_caches = {
 }
 
 #--------------------------------------------------------------------------------------------------
+# 09.02-AzureManagedRedis
+#--------------------------------------------------------------------------------------------------
+
+managed_redis_instances = {
+  main = {
+    name     = "myexample-dev-managed-redis"
+    sku_name = "Balanced_B0" # Azure Managed Redis SKU
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
 # 10-KeyVault
 #--------------------------------------------------------------------------------------------------
 
 key_vaults = {
   main-backend = {
-    name                        = "myexample-tst-be-kv"
+    name                        = "myexample-dev-be-kv"
     sku_name                    = "standard"
     soft_delete_retention_days  = 7
     purge_protection_enabled    = false
@@ -964,7 +985,7 @@ key_vaults = {
   },
 
   frontend = {
-    name                        = "myexample-tst-fe-kv"
+    name                        = "myexample-dev-fe-kv"
     sku_name                    = "standard"
     soft_delete_retention_days  = 7
     purge_protection_enabled    = false
@@ -976,13 +997,17 @@ key_vaults = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 11-CommunicationServices
+# 11-MessagingAndNotifications
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 11.01-CommunicationServices
 #--------------------------------------------------------------------------------------------------
 
 communication_services = {
   service1 = {
-    communication_service_name      = "myexample-tst-acs"
-    email_service_name              = "myexample-tst-acs-email"
+    communication_service_name      = "myexample-dev-acs"
+    email_service_name              = "myexample-dev-acs-email"
     domain_name                     = "myexample.co.in"
     enable_user_engagement_tracking = true
     data_location                   = "United States"
@@ -991,20 +1016,33 @@ communication_services = {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 12-NotificationsHub
+# 11.02-NotificationsHub
 #--------------------------------------------------------------------------------------------------
 
 notification_hub_namespaces = {
   nh1 = {
-    name = "myexample-tst-nh-ns01"
+    name = "myexample-dev-nh-ns01"
     sku  = "Free"
     tags = {}
 
     notification_hubs = {
       hub1 = {
-        name = "myexample-tst-nh-hub1"
+        name = "myexample-dev-nh-hub1"
       }
     }
+  }
+}
+
+#--------------------------------------------------------------------------------------------------
+# 11.03-WebPubSub
+#--------------------------------------------------------------------------------------------------
+
+web_pubsubs = {
+  pubsub1 = {
+    name     = "myexample-dev-webpubsub01"
+    sku      = "Free_F1"
+    capacity = 1
+    tags     = {}
   }
 }
 
@@ -1018,18 +1056,18 @@ notification_hub_namespaces = {
 
 service_buses = {
   sb1 = {
-    name       = "myexample-tst-sb-ns01"
+    name       = "myexample-dev-sb-ns01"
     sku        = "Standard"
-    topic_name = "myexample-tst-sb-topic"
-    queue_name = "myexample-tst-sb-queue"
+    topic_name = "myexample-dev-sb-topic"
+    queue_name = "myexample-dev-sb-queue"
     tags       = {}
   },
 
   sb2 = {
-    name       = "myexample-tst-sb-ns02"
+    name       = "myexample-dev-sb-ns02"
     sku        = "Standard"
-    topic_name = "myexample-tst-sb-topic"
-    queue_name = "myexample-tst-sb-queue"
+    topic_name = "myexample-dev-sb-topic"
+    queue_name = "myexample-dev-sb-queue"
     tags       = {}
   }
 }
@@ -1040,13 +1078,13 @@ service_buses = {
 
 eventhub_namespaces = {
   eh1 = {
-    name = "myexample-tst-eh-ns01"
+    name = "myexample-dev-eh-ns01"
     sku  = "Standard"
     tags = {}
 
     eventhubs = {
       hub1 = {
-        name              = "myexample-tst-eh-hub1"
+        name              = "myexample-dev-eh-hub1"
         partition_count   = 2
         message_retention = 1
       }
@@ -1094,7 +1132,7 @@ eventhub_namespaces = {
 #--------------------------------------------------------------------------------------------------
 app_insights = {
   main = {
-    name             = "myexample-tst-appinsights"
+    name             = "myexample-dev-appinsights"
     application_type = "web"
     tags = {
       usage = "web-tracking"
@@ -1108,7 +1146,7 @@ app_insights = {
 
 log_analytics_workspaces = {
   main = {
-    name              = "myexample-tst-law"
+    name              = "myexample-dev-law"
     sku               = "PerGB2018"
     retention_in_days = 30
     tags = {
@@ -1127,7 +1165,7 @@ log_analytics_workspaces = {
 
 waf_policies = {
   main = {
-    name     = "myexampletstwafpolicymain"
+    name     = "myexampledevwafpolicymain"
     sku_name = "Standard_AzureFrontDoor"
     mode     = "Prevention"
     enabled  = true
@@ -1142,22 +1180,22 @@ waf_policies = {
 
 front_doors = {
   main = {
-    front_door_name                   = "myexample-tst-afd"
+    front_door_name                   = "myexample-dev-afd"
     front_door_sku_name               = "Standard_AzureFrontDoor"
-    endpoint_frontend_name            = "myexample-tst-frontend"
-    endpoint_backend_name             = "myexample-tst-backend"
-    origin_group_frontend_name        = "myexample-tst-frontend-origin-group"
-    origin_group_backend_name         = "myexample-tst-backend-origin-group"
-    origin_frontend_name              = "myexample-tst-frontend-origin"
-    origin_backend_name               = "myexample-tst-backend-origin"
-    route_frontend_name               = "myexample-tst-frontend-route"
-    route_backend_name                = "myexample-tst-backend-route"
+    endpoint_frontend_name            = "myexample-dev-frontend"
+    endpoint_backend_name             = "myexample-dev-backend"
+    origin_group_frontend_name        = "myexample-dev-frontend-origin-group"
+    origin_group_backend_name         = "myexample-dev-backend-origin-group"
+    origin_frontend_name              = "myexample-dev-frontend-origin"
+    origin_backend_name               = "myexample-dev-backend-origin"
+    route_frontend_name               = "myexample-dev-frontend-route"
+    route_backend_name                = "myexample-dev-backend-route"
     origin_frontend_key               = "swa1"                    # your frontend app name
     origin_backend_key                = "container-linux-webapp1" # you backend app name
-    custome_domain_frontend_name      = "myexample-tst-frontend"
-    custome_domain_backend_name       = "myexample-tst-backend"
-    host_custome_domain_frontend_name = "tst.myexample.co.in"
-    host_custome_domain_backend_name  = "api-tst.myexample.co.in"
+    custome_domain_frontend_name      = "myexample-dev-frontend"
+    custome_domain_backend_name       = "myexample-dev-backend"
+    host_custome_domain_frontend_name = "dev.myexample.co.in"
+    host_custome_domain_backend_name  = "api-dev.myexample.co.in"
     enable_waf                        = true
   }
 }
@@ -1168,18 +1206,18 @@ front_doors = {
 
 app_configurations = {
   backend = {
-    name = "myexample-tst-appconfig-backend"
+    name = "myexample-dev-appconfig-backend"
 
     key_values = {
       "Jwt:Issuer" = {
         value = "auth-api"
-        label = "tst"
+        label = "dev"
       }
     }
   }
 
   frontend = {
-    name = "myexample-tst-appconfig-frontend"
+    name = "myexample-dev-appconfig-frontend"
 
     key_values = {
       "Api:BaseUrl" = {
@@ -1195,9 +1233,9 @@ app_configurations = {
 
 managed_identities = {
   main = {
-    name = "myexample-tst-uami"
+    name = "myexample-dev-uami"
     tags = {
-      Environment = "tst"
+      Environment = "dev"
       Projectname = "MyExample"
     }
   }
@@ -1209,7 +1247,7 @@ managed_identities = {
 
 openai_accounts = {
   main = {
-    name     = "myexample-tst-openai"
+    name     = "myexample-dev-openai"
     sku_name = "S0"
   }
 }

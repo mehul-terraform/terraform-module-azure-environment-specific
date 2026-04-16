@@ -9,3 +9,7 @@ output "container_app_ids" {
 output "container_app_urls" {
   value = { for k, v in azurerm_container_app.app : k => v.latest_revision_fqdn }
 }
+
+output "principal_ids" {
+  value = { for k, v in azurerm_container_app.app : k => v.identity[0].principal_id if length(v.identity) > 0 }
+}

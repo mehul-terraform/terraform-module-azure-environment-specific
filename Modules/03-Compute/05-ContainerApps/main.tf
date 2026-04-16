@@ -26,6 +26,7 @@ resource "azurerm_container_app" "app" {
   container_app_environment_id = azurerm_container_app_environment.env[each.value.environment_key].id
   resource_group_name          = var.resource_group_name
   revision_mode                = lookup(each.value, "revision_mode", "Single")
+  workload_profile_name        = lookup(each.value, "workload_profile_name", "Consumption")
 
   template {
     dynamic "container" {
@@ -40,8 +41,8 @@ resource "azurerm_container_app" "app" {
           for_each = lookup(container.value, "env", [])
           content {
             name        = env.value.name
-            value       = env.value.value
-            secret_name = env.value.secret_name
+            value       = lookup(env.value, "value", null)
+            secret_name = lookup(env.value, "secret_name", null)
           }
         }
       }
@@ -52,7 +53,7 @@ resource "azurerm_container_app" "app" {
     for_each = lookup(each.value, "identity", null) != null ? [each.value.identity] : []
     content {
       type         = identity.value.type
-      identity_ids = identity.value.identity_ids
+      identity_ids = lookup(identity.value, "identity_ids", null)
     }
   }
 

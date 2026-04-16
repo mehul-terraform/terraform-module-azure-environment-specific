@@ -26,6 +26,14 @@ variable "app_service_container" {
     service_plan_key           = string
     app_settings               = map(string)
     tags                       = map(string)
+    cors = optional(object({
+      allowed_origins     = optional(list(string))
+      support_credentials = optional(bool)
+    }))
+    identity = optional(object({
+      type         = string
+      identity_ids = optional(list(string))
+    }))
   }))
 }
 

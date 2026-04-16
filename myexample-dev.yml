@@ -38,7 +38,7 @@ stages:
     - job: Bootstrap
       displayName: 'Bootstrap Azure Resources'
       pool:
-        vmImage: 'ubuntu-lates'
+        vmImage: 'ubuntu-latest'
       steps:
         - task: AzureCLI@2
           displayName: 'Ensure Backend Storage Exists'
@@ -56,12 +56,12 @@ stages:
 
               # Only create storage account if it doesn't already exist
               if (-not (az storage account show --name $(tf_storage_name) --resource-group $(tf_resource_group_name) 2>$null)) {
-                az storage account create --name $(tf_storage_name) --resource-group $(tf_resource_group_name) --location $(tf_storage_location) --sku Standard_LRS --encryption-services blob --subscription $(subscription)
+                az storage account create --name $(tf_storage_name) --resource-group $(tf_resource_group_name) --location $(tf_storage_location) --sku Standard_LRS --encryption-services blob --subscription $(subscription_id)
               } else { Write-Host "Storage account already exists, skipping." }
 
               # Only create container if it doesn't already exist
               if (-not (az storage container show --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login 2>$null)) {
-                az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login --subscription $(subscription)
+                az storage container create --account-name $(tf_storage_name) --name $(tf_storage_container_name) --auth-mode login --subscription $(subscription_id)
               } else { Write-Host "Container already exists, skipping." }
 
     - job: Terraform_Plan

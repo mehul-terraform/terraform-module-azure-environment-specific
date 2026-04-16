@@ -2,11 +2,11 @@
 # 01-ResourceGroup
 #--------------------------------------------------------------------------------------------------
 
-module "resource_group" {
-  source          = "../../Modules/01-ResourceGroup"
-  resource_groups = var.resource_groups
-  tags            = local.tags
-}
+# module "resource_group" {
+#   source          = "../../Modules/01-ResourceGroup"
+#   resource_groups = var.resource_groups
+#   tags            = local.tags
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02-Networking
@@ -16,27 +16,27 @@ module "resource_group" {
 # 02.01-VirtualNetwork
 #--------------------------------------------------------------------------------------------------
 
-module "virtual_network" {
-  source              = "../../Modules/02-Networking/01-VirtualNetwork"
-  resource_group_name = module.resource_group.names["main"]
-  location            = module.resource_group.locations["main"]
-  virtual_networks    = var.virtual_networks
-  tags                = local.tags
-}
+# module "virtual_network" {
+#   source              = "../../Modules/02-Networking/01-VirtualNetwork"
+#   resource_group_name = module.resource_group.names["main"]
+#   location            = module.resource_group.locations["main"]
+#   virtual_networks    = var.virtual_networks
+#   tags                = local.tags
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02.02-NetworkSecurityGroup
 #--------------------------------------------------------------------------------------------------
 
-module "network_security_group" {
-  source                  = "../../Modules/02-Networking/02-NetworkSecurityGroup"
-  resource_group_name     = module.resource_group.names["main"]
-  location                = module.resource_group.locations["main"]
-  network_security_groups = var.network_security_groups
-  vnet_subnet_ids         = module.virtual_network.subnet_ids
-  tags                    = local.tags
-  depends_on              = [module.virtual_network]
-}
+# module "network_security_group" {
+#   source                  = "../../Modules/02-Networking/02-NetworkSecurityGroup"
+#   resource_group_name     = module.resource_group.names["main"]
+#   location                = module.resource_group.locations["main"]
+#   network_security_groups = var.network_security_groups
+#   vnet_subnet_ids         = module.virtual_network.subnet_ids
+#   tags                    = local.tags
+#   depends_on              = [module.virtual_network]
+# }
 
 #--------------------------------------------------------------------------------------------------
 # 02.03-VirtualNetworkGateway
@@ -315,17 +315,6 @@ module "network_security_group" {
 #   tags                = local.tags
 # }
 
-#--------------------------------------------------------------------------------------------------
-# 06.03-ManagedRedis
-#--------------------------------------------------------------------------------------------------
-
-# module "managed_redis" {
-#   source                  = "../../Modules/06-Database/03-ManagedRedis"
-#   resource_group_name     = module.resource_group.names["main"]
-#   location                = module.resource_group.locations["main"]
-#   managed_redis_instances = var.managed_redis_instances
-#   tags                    = local.tags
-# }
 
 #--------------------------------------------------------------------------------------------------
 # 07-DNSZone
@@ -443,7 +432,11 @@ module "network_security_group" {
 # }
 
 #--------------------------------------------------------------------------------------------------
-# 09-CacheRedis
+# 09-Redis
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 09.01-CacheRedis
 #--------------------------------------------------------------------------------------------------
 
 # module "cache_redis" {
@@ -453,6 +446,18 @@ module "network_security_group" {
 #   resource_group_name  = module.resource_group.names["main"]
 #   location             = module.resource_group.locations["main"]
 #   tags                 = local.tags
+# }
+
+#--------------------------------------------------------------------------------------------------
+# 09.02-AzureManagedRedis
+#--------------------------------------------------------------------------------------------------
+
+# module "managed_redis" {
+#   source                  = "../../Modules/09-Redis/02-AzureManagedRedis"
+#   resource_group_name     = module.resource_group.names["main"]
+#   location                = module.resource_group.locations["main"]
+#   managed_redis_instances = var.managed_redis_instances
+#   tags                    = local.tags
 # }
 
 #--------------------------------------------------------------------------------------------------
@@ -471,26 +476,42 @@ module "network_security_group" {
 
 
 #--------------------------------------------------------------------------------------------------
-# 11-CommunicationServices
+# 11-MessagingAndNotifications
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 11.01-CommunicationServices
 #--------------------------------------------------------------------------------------------------
 
 # module "communication_services" {
-#   source                 = "../../Modules/11-CommunicationServices"
+#   source                 = "../../Modules/11-MessagingAndNotifications/01-CommunicationServices"
 #   communication_services = var.communication_services
 #   resource_group_name    = module.resource_group.names["main"]
 #   tags                   = local.tags
 # }
 
 #--------------------------------------------------------------------------------------------------
-# 12-NotificationsHub
+# 11.02-NotificationsHub
 #--------------------------------------------------------------------------------------------------
 
 # module "notification_hub" {
-#   source                      = "../../Modules/12-NotificationsHub"
+#   source                      = "../../Modules/11-MessagingAndNotifications/02-NotificationsHub"
 #   resource_group_name         = module.resource_group.names["main"]
 #   location                    = module.resource_group.locations["main"]
 #   notification_hub_namespaces = var.notification_hub_namespaces
 #   tags                        = var.tags
+# }
+
+#--------------------------------------------------------------------------------------------------
+# 11.03-WebPubSub
+#--------------------------------------------------------------------------------------------------
+
+# module "web_pubsub" {
+#   source              = "../../Modules/11-MessagingAndNotifications/03-WebPubSub"
+#   resource_group_name = module.resource_group.names["main"]
+#   location            = module.resource_group.locations["main"]
+#   web_pubsubs         = var.web_pubsubs
+#   tags                = local.tags
 # }
 
 #--------------------------------------------------------------------------------------------------

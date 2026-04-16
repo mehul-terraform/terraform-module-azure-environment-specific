@@ -17,8 +17,7 @@ resource "azurerm_linux_web_app" "app_service_container" {
       app_settings,
       sticky_settings,
       auth_settings,
-      site_config,
-      site_config[0].cors
+      site_config
     ]
   }
 
@@ -29,13 +28,24 @@ resource "azurerm_linux_web_app" "app_service_container" {
     always_on              = true
     vnet_route_all_enabled = true
     ftps_state             = "Disabled"
+
+    dynamic "cors" {
+      for_each = each.value.cors != null ? [each.value.cors] : []
+      content {
+        allowed_origins     = cors.value.allowed_origins
+        support_credentials = cors.value.support_credentials
+      }
+    }
   }
 
   app_settings = each.value.app_settings
 
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [var.managed_identity_id]
+  dynamic "identity" {
+    for_each = lookup(each.value, "identity", null) != null ? [each.value.identity] : []
+    content {
+      type         = identity.value.type
+      identity_ids = lookup(identity.value, "identity_ids", null)
+    }
   }
 
   tags = each.value.tags

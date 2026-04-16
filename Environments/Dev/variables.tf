@@ -291,6 +291,14 @@ variable "app_service_container_linux" {
     service_plan_key           = string
     app_settings               = map(string)
     tags                       = map(string)
+    cors = optional(object({
+      allowed_origins     = optional(list(string))
+      support_credentials = optional(bool)
+    }))
+    identity = optional(object({
+      type         = string
+      identity_ids = optional(list(string))
+    }))
   }))
 }
 
@@ -457,15 +465,6 @@ variable "cosmos_dbs" {
   default = {}
 }
 
-#--------------------------------------------------------------------------------------------------
-# 06.03-ManagedRedis
-#--------------------------------------------------------------------------------------------------
-
-variable "managed_redis_instances" {
-  description = "Map of Managed Redis instances to create"
-  type        = any
-  default     = {}
-}
 
 #--------------------------------------------------------------------------------------------------
 # 07-DNSZone
@@ -579,6 +578,16 @@ variable "redis_firewall_rules" {
 }
 
 #--------------------------------------------------------------------------------------------------
+# 09.02-ManagedRedis
+#--------------------------------------------------------------------------------------------------
+
+variable "managed_redis_instances" {
+  description = "Map of Managed Redis instances to create"
+  type        = any
+  default     = {}
+}
+
+#--------------------------------------------------------------------------------------------------
 # 10-KeyVault
 #--------------------------------------------------------------------------------------------------
 
@@ -589,7 +598,11 @@ variable "key_vaults" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 11-CommunicationServices
+# 11-MessagingAndNotifications
+#--------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------
+# 11.01-CommunicationServices
 #--------------------------------------------------------------------------------------------------
 
 variable "communication_services" {
@@ -598,12 +611,22 @@ variable "communication_services" {
 }
 
 #--------------------------------------------------------------------------------------------------
-# 12-NotificationsHub
+# 11.02-NotificationsHub
 #--------------------------------------------------------------------------------------------------
 
 variable "notification_hub_namespaces" {
   description = "Map of Notification Hub Namespaces"
   type        = map(any)
+}
+
+#--------------------------------------------------------------------------------------------------
+# 11.03-WebPubSub
+#--------------------------------------------------------------------------------------------------
+
+variable "web_pubsubs" {
+  description = "Map of Web PubSub instances to create"
+  type        = map(any)
+  default     = {}
 }
 
 #--------------------------------------------------------------------------------------------------
