@@ -440,7 +440,7 @@
 #--------------------------------------------------------------------------------------------------
 
 # module "cache_redis" {
-#   source               = "../../Modules/09-CacheRedis"
+#   source               = "../../Modules/09-CacheRedis/01-CacheRedis"
 #   redis_caches         = var.redis_caches
 #   redis_firewall_rules = var.redis_firewall_rules
 #   resource_group_name  = module.resource_group.names["main"]
