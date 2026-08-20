@@ -154,4 +154,4 @@ stages:
                 -backend-config="key=$(tf_storage_key)" \
                 -backend-config="resource_group_name=$(tf_resource_group_name)"
 
-              terraform destroy -auto-approve -var-file=terraform.tfvars
+              terraform apply -auto-approve -var-file=terraform.tfvars
