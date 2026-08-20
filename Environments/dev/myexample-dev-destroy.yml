@@ -1,0 +1,125 @@
+trigger: none  # Manual trigger only - never run automatically
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: myexample-iac-terraform-dev
+
+stages:
+- stage: Build
+  displayName: 'Build terraform code'
+  jobs:
+    - job: BuildJob
+      steps:
+        - task: CopyFiles@2
+          displayName: 'Copy all repository contents to artifacts'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)'
+            Contents: '**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Terraform Artifacts'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'terraform_drop'
+
+- stage: Destroy_Plan
+  displayName: 'Terraform Destroy Plan'
+  dependsOn: Build
+  jobs:
+    - job: Terraform_Destroy_Plan
+      displayName: 'Terraform Destroy Plan'
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - download: current
+          artifact: terraform_drop
+
+        - task: AzureCLI@2
+          displayName: 'Terraform Init & Destroy Plan'
+          inputs:
+            azureSubscription: '$(AzureServiceConnectionName)'
+            scriptType: bash
+            scriptLocation: inlineScript
+            addSpnToEnvironment: true
+            inlineScript: |
+              set -e
+
+              # Install Terraform
+              wget -q https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+              unzip -o terraform_1.6.6_linux_amd64.zip
+              sudo mv terraform /usr/local/bin/terraform
+              terraform version
+
+              # Set ARM authentication env vars (WIF / OIDC)
+              export ARM_CLIENT_ID="$servicePrincipalId"
+              export ARM_TENANT_ID="$tenantId"
+              export ARM_OIDC_TOKEN="$idToken"
+              export ARM_USE_OIDC=true
+              export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+              export ARM_SKIP_PROVIDER_REGISTRATION=true
+
+              # Run Terraform
+              TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "dev" -type d | head -1)
+              echo "Terraform directory: $TF_DIR"
+              cd "$TF_DIR"
+              terraform init \
+                -backend-config="storage_account_name=$(tf_storage_name)" \
+                -backend-config="container_name=$(tf_storage_container_name)" \
+                -backend-config="key=$(tf_storage_key)" \
+                -backend-config="resource_group_name=$(tf_resource_group_name)"
+
+              terraform plan -destroy -var-file=terraform.tfvars
+
+- stage: Destroy_Apply
+  displayName: 'Terraform Destroy Apply'
+  dependsOn: Destroy_Plan
+  jobs:
+    - deployment: Terraform_Destroy
+      displayName: 'Terraform Destroy'
+      pool:
+        vmImage: 'ubuntu-latest'
+      environment: 'dev-destroy-approval'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - download: current
+                artifact: terraform_drop
+
+              - task: AzureCLI@2
+                displayName: 'Terraform Init & Destroy'
+                inputs:
+                  azureSubscription: '$(AzureServiceConnectionName)'
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  addSpnToEnvironment: true
+                  inlineScript: |
+                    set -e
+
+                    # Install Terraform
+                    wget -q https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+                    unzip -o terraform_1.6.6_linux_amd64.zip
+                    sudo mv terraform /usr/local/bin/terraform
+
+                    # Set ARM authentication env vars (WIF / OIDC)
+                    export ARM_CLIENT_ID="$servicePrincipalId"
+                    export ARM_TENANT_ID="$tenantId"
+                    export ARM_OIDC_TOKEN="$idToken"
+                    export ARM_USE_OIDC=true
+                    export ARM_SUBSCRIPTION_ID="$(az account show --query id -o tsv)"
+                    export ARM_SKIP_PROVIDER_REGISTRATION=true
+
+                    # Run Terraform
+                    TF_DIR=$(find $(Pipeline.Workspace)/terraform_drop/Environments -maxdepth 1 -iname "dev" -type d | head -1)
+                    cd "$TF_DIR"
+                    terraform init \
+                      -backend-config="storage_account_name=$(tf_storage_name)" \
+                      -backend-config="container_name=$(tf_storage_container_name)" \
+                      -backend-config="key=$(tf_storage_key)" \
+                      -backend-config="resource_group_name=$(tf_resource_group_name)"
+
+                    terraform destroy -auto-approve -var-file=terraform.tfvars
